@@ -28,6 +28,7 @@
   },
   "dependencies": {
     "graphql": "^0.10.5",
-    "graphql-tools": "^1.2.1"
+    "graphql-tools": "^1.2.1",
+    "mongodb": "^2.2.31"
   }
 }
