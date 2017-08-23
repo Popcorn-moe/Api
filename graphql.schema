@@ -1,0 +1,130 @@
+scalar Url
+scalar Date
+
+type Anime implements Dated {
+	id: ID!
+	names: [String!]!
+	authors: [Author!]!
+	tags: [Tag!]!
+	status: AnimeStatus!
+	medias: [Media!]!
+	season: [Season!]!
+
+    release_date: Date
+	edit_date: Date!
+    posted_date: Date!
+}
+
+enum AnimeStatus {
+	PENDING
+	FINISHED
+	NOT_STARTED
+}
+
+type Author {
+	id: ID!
+	name: String!
+	picture: Url
+	bio: String!
+	organisation: Boolean!
+	animes(limit: Int, sort: Sort): [Anime!]!
+}
+
+type Tag {
+	id: ID!
+	name: String!
+	desc: String!
+}
+
+type Media implements Dated {
+    id: ID!
+	comments: [Comment!]!
+	type: MediaType!
+	rate: Float!
+
+    release_date: Date
+	edit_date: Date!
+    posted_date: Date!
+}
+
+enum MediaType {
+	EPISODE
+	TRAILER
+	SONG
+	FILM
+}
+
+type Season implements Dated {
+	name: String!
+	episodes: [Media!]!
+
+    release_date: Date
+	edit_date: Date!
+    posted_date: Date!
+}
+
+type Comment {
+	user: User!
+	content: String!
+	posted: Date!
+}
+
+interface Player {
+	type: PlayerType!
+}
+
+type GoogleDrivePlayer implements Player {
+    type: PlayerType!
+
+	url: Url
+}
+
+type OpenLoadPlayer implements Player {
+    type: PlayerType!
+
+	url: Url
+}
+
+enum PlayerType {
+	GOOGLE_DRIVE
+	OPENLOAD
+}
+
+interface Dated {
+	release_date: Date
+	edit_date: Date!
+    posted_date: Date!
+}
+
+type User {
+	id: ID!
+	login: String!
+	email: String!
+	group: Int!
+	newsletter: Boolean!
+	account_registered: Boolean!
+	ratings: [AnimeRating!]!
+	rating_for(id: ID!): AnimeRating
+}
+type AnimeRating {
+	anime: Anime!
+	rating: Float!
+}
+
+type Query {
+	me: User!
+	animes(limit: Int, sort: Sort): [Anime!]
+	author(id: ID!): Author
+	anime(id: ID!): Anime
+	tag(id: ID!): Tag
+	media(id: ID!): Media
+}
+enum Sort {
+	NONE,
+	ASC,
+	DSC
+}
+
+schema {
+	query: Query
+}

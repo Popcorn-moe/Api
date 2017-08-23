@@ -1,0 +1,33 @@
+{
+  "name": "popcorn.moe-backend",
+  "version": "1.0.0",
+  "description": "Popcorn.moe Backend",
+  "main": "index.js",
+  "scripts": {
+    "start": "babel-node index.js",
+    "flowgen": "babel-node build/flow.js",
+    "check": "flow check"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/SkyBeastMC/Popcorn.moe-Backend.git"
+  },
+  "author": "",
+  "license": "UNLICENSED",
+  "bugs": {
+    "url": "https://github.com/SkyBeastMC/Popcorn.moe-Backend/issues"
+  },
+  "homepage": "https://github.com/SkyBeastMC/Popcorn.moe-Backend#readme",
+  "devDependencies": {
+    "babel-cli": "^6.26.0",
+    "babel-preset-env": "^1.6.0",
+    "babel-preset-flow": "^6.23.0",
+    "flow-bin": "^0.53.1",
+    "gql2flow": "^0.4.5",
+    "graphql-to-json": "^1.1.2"
+  },
+  "dependencies": {
+    "graphql": "^0.10.5",
+    "graphql-tools": "^1.2.1"
+  }
+}
