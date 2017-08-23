@@ -3,7 +3,7 @@
 type ID = string
 type Context = any
 
-export function me(context: any): User {
+export function me(context: Context): User {
     return {
         id: "abc",
         login: "example",
@@ -15,19 +15,20 @@ export function me(context: any): User {
         rating_for: null
     }
 }
-export function animes(limit: number, sort: Sort, context: Context): ?Array<Anime> {
+export function animes(context: Context, { limit, sort } : { limit: number, sort: Sort }): ?Array<Anime> {
     return null;
 }
-export function author(id: ID, context: Context): ?Author {
+export function author(context: Context, { id } : { id : ID }): ?Author {
     return null;
 }
-export function anime(id: ID, context: Context): ?Anime {
+export function anime(context: Context, { id } : { id : ID }): ?Anime {
     return null;
 }
-export function tag(id: ID, context: Context): ?Tag {
+export function tag(context: Context, { id } : { id : ID }): ?Tag {
+    console.log(id)
     return null;
 
 }
-export function media(id: ID, context: Context): ?Media {
+export function media(context: Context, { id } : { id : ID }): ?Media {
     return null;
 }
