@@ -27,8 +27,12 @@
     "graphql-to-json": "^1.1.2"
   },
   "dependencies": {
+    "express": "^4.15.4",
+    "express-graphql": "^0.6.7",
     "graphql": "^0.10.5",
     "graphql-tools": "^1.2.1",
-    "mongodb": "^2.2.31"
+    "mongodb": "^2.2.31",
+    "morgan": "^1.8.2",
+    "node-dogstatsd": "0.0.6"
   }
 }
