@@ -64,9 +64,11 @@ type Season implements Dated {
 }
 
 type Comment {
+	id: ID!
 	user: User!
 	content: String!
 	posted: Date!
+	edited: Date
 }
 
 interface Player {
@@ -106,6 +108,7 @@ type User {
 	ratings: [AnimeRating!]!
 	rating_for(id: ID!): AnimeRating
 }
+
 type AnimeRating {
 	anime: Anime!
 	rating: Float!
@@ -119,6 +122,7 @@ type Query {
 	tag(id: ID!): Tag
 	media(id: ID!): Media
 }
+
 enum Sort {
 	NONE,
 	ASC,
