@@ -1,6 +1,15 @@
 scalar Url
 scalar Date
 
+input Upload {
+	mimetype: String
+	originalname: String!
+	encoding: String!
+	mimetype: String!
+	buffer: [Int!]
+	size: Int!
+}
+
 type Anime implements Dated {
 	id: ID!
 	names: [String!]!
@@ -123,6 +132,14 @@ type Query {
 	media(id: ID!): Media
 }
 
+type Result {
+	error: String
+}
+
+type Mutation {
+	setAvatar(file: Upload!): Result!
+}
+
 enum Sort {
 	NONE,
 	ASC,
@@ -131,4 +148,5 @@ enum Sort {
 
 schema {
 	query: Query
+	mutation: Mutation
 }

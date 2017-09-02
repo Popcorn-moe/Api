@@ -1,13 +1,15 @@
 import schema from './src/schema'
-import { instrument, report, createContext } from './src/monitor'
+import { instrument, report, createContext, instrumentMiddleware } from './src/monitor'
 import express from 'express'
 import graphqlHTTP from 'express-graphql'
 import logger from 'morgan'
 import cookieParser from 'cookie-parser'
-import { MongoClient, ObjectID } from 'mongodb'
+import { MongoClient } from 'mongodb'
 import passport from 'passport'
-import { Strategy as JwtStrategy } from 'passport-jwt'
+import JwtStrategy from './src/auth/JwtStrategy'
+import graphqlUpload from './src/middlewares/graphqlUpload'
 import cors from 'cors'
+import multer from 'multer'
 
 instrument(schema)
 
@@ -24,40 +26,19 @@ app.use(passport.initialize())
 passport.serializeUser((user, cb) => cb(null, user))
 
 MongoClient.connect(url).then(db =>{
-    const graphql = graphqlHTTP({
-        schema,
-        rootValue: { db },
-        graphiql: true
-    });
+    app.use('/graphql',
+        passport.authenticate('jwt'),
+        graphqlUpload(multer({
 
-    app.use('/graphql', passport.authenticate('jwt'), (req, res, next) => {
-        Object.assign(req, createContext())
-        graphql(req, res, next)
-        res.on('finish', () => report(req.instrument, res._startAt, req._startAt))
-    });
+        })),
+        instrumentMiddleware(graphqlHTTP({
+            schema,
+            rootValue: { db },
+            graphiql: true
+        }))
+    );
 
-    passport.use(new JwtStrategy({
-        jwtFromRequest(req) {
-            return req && req.cookies ? req.cookies['session'] : null
-        },
-        audience: 'session',
-        secretOrKey: 'secret'
-    }, (jwt, done) => {
-        done(null, {
-            then(onFulfilled, onRejected) {
-                if (!this.result)  {
-                    this.result = db.collection('users').find({ _id: new ObjectID(jwt._id) })
-                    .limit(1)
-                    .toArray()
-                    .then(([user]) => user)
-                }
-                return this.result.then(onFulfilled, onRejected)
-            },
-            catch(onRejected) {
-                return this.then(p => p, onRejected)
-            }
-        })
-    }))
+    passport.use(new JwtStrategy(db.collection('users')))
 
     console.log('Connected on mongodb')
 });

@@ -4,6 +4,6 @@ import { join } from 'path'
 import * as resolvers from './resolvers'
 
 export default makeExecutableSchema({
-    typeDefs: readFileSync(join(__dirname, '../graphql.schema'), 'UTF-8').toString(),
+    typeDefs: readFileSync(join(__dirname, '../schema.graphql'), 'UTF-8').toString(),
     resolvers
 })

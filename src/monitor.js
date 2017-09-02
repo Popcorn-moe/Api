@@ -82,3 +82,11 @@ export function createContext() {
         }
     }
 }
+
+export function instrumentMiddleware(middleware) {
+    return (req, res, next) => {
+        Object.assign(req, createContext())
+        middleware(req, res, next)
+        res.on('finish', () => report(req.instrument, res._startAt, req._startAt))
+    }
+}

@@ -2,8 +2,16 @@
 
 type ID = string
 type Context = any
+type Upload = any
 
-export function me(context: Context, { user }: { user: ?User }): User
+export function setAvatar(context: Context, { file } : { file: Upload }) : Result {
+    console.log('File', file)
+    return {
+        error: null
+    }
+}
+
+/*export function me(context: Context, { user }: { user: ?User }): User
 {
     //todo: check if user.id is the right id
     return context.db.collection('users')
@@ -58,5 +66,5 @@ export function rate(context: Context, { media, rating }: { media: ?ID, rating: 
             });
 }
 
-function now() { return new Date().getTime(); }
+function now() { return new Date().getTime(); }*/
 
