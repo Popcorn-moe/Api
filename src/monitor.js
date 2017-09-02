@@ -61,7 +61,7 @@ const hrOp = (a, b, op) => [op(a[0], b[0]), op(a[1], b[1])]
 export function report(instrument, resStart, reqStart) {
     instrument.endHrTime = hrOp(instrument.startHrTime, hrOp(resStart, reqStart, (a,b) => a - b), (a,b) => a + b)
     let totalCalls = 0;
-    instrument.calls.forEach(({ typeName, fieldName, startOffset, endOffset, result }) => {
+    instrument.calls.forEach(({ typeName, fieldName, startOffset, endOffset = process.hrtime(instrument.startHrTime), result }) => {
         const time = (hrConvert(endOffset) - hrConvert(startOffset)) / NS_PER_MS
         totalCalls += time
         console.log(`\t${typeName}.${fieldName} => ${time}ms`)

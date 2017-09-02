@@ -3,20 +3,20 @@
 type ID = string
 type Context = any
 
-export function me(context: Context): User
+export function me(context: Context, ignored: any, req: any): User
 {
-    let id = 1; //todo
-    return context.db.collection('users')
-        .find({ _id: id })
-        .limit(1)
-        .map(({
-                  _id: id, login, email, group, newsletter,
+    return req.user
+        .then(user => {
+            user.id = user._id
+            return user
+        })
+        .then(({
+                  id, login, email, group, newsletter,
                   account_registered, ratings
-              }: User) => ({
+              } : User) => ({
             id, login, email, group, newsletter,
             account_registered, ratings
         }))
-        .next();
 }
 
 

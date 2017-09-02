@@ -27,12 +27,16 @@
     "graphql-to-json": "^1.1.2"
   },
   "dependencies": {
+    "cookie-parser": "^1.4.3",
+    "cors": "^2.8.4",
     "express": "^4.15.4",
     "express-graphql": "^0.6.7",
     "graphql": "^0.10.5",
     "graphql-tools": "^1.2.1",
     "mongodb": "^2.2.31",
     "morgan": "^1.8.2",
-    "node-dogstatsd": "0.0.6"
+    "node-dogstatsd": "0.0.6",
+    "passport": "^0.4.0",
+    "passport-jwt": "^3.0.0"
   }
 }
