@@ -19,7 +19,7 @@ const app = express()
 app.use(logger('dev'))
 app.use(cookieParser())
 app.use(cors({
-  origin: ['http://localhost:8080', 'http://localhost:8000'],
+  origin: ['http://localhost:8080', 'http://localhost:8000', 'https://popcorn.moe'],
   credentials: true
 }))
 app.use(passport.initialize())
