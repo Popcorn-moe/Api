@@ -15,9 +15,6 @@ export default function graphqlUpload(upload) {
             req.body.variables = JSON.parse(req.body.variables)
             Object.entries(req.files)
                 .forEach(([name, [file]]) => {
-                    delete file.fieldname
-                    if(file.buffer)
-                        file.buffer = Array.from(file.buffer.values())
                     name.split('.').reduce((prev, curr, i, { length }) => prev[curr] = i == length - 1 ? file : (prev[curr] || {}) , req.body.variables)
                 })
         }

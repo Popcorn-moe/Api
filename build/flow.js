@@ -11,5 +11,5 @@ graphql(schema, introspectionQuery).then(schema => {
     })
     const module = generateModule(null, interfaces)
 
-    writeModuleToFile('./types/schema.js', module)
+    writeModuleToFile('./flowtypes/schema.js', module)
 }).catch(console.error)

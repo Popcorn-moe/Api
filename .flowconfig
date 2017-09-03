@@ -3,6 +3,6 @@
 [include]
 
 [libs]
-./types
+./flowtypes
 
 [options]

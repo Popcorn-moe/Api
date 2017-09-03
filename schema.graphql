@@ -1,14 +1,6 @@
 scalar Url
 scalar Date
-
-input Upload {
-	mimetype: String
-	originalname: String!
-	encoding: String!
-	mimetype: String!
-	buffer: [Int!]
-	size: Int!
-}
+scalar Upload
 
 type Anime implements Dated {
 	id: ID!
