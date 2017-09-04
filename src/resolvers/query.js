@@ -6,17 +6,12 @@ type Context = any
 export function me(context: Context, ignored: any, req: any): ?User
 {
     if(req.user) {
-        return req.user
-            .then(user => {
-                user.id = user._id
-                return user
-            })
-            .then(({
+        return req.user.then(({
                     id, login, email, group, newsletter,
-                    account_registered, ratings
+                    account_registered, ratings, avatar
                 } : User) => ({
                 id, login, email, group, newsletter,
-                account_registered, ratings
+                account_registered, ratings, avatar
             }))
     } else
         return null

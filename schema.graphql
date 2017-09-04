@@ -106,7 +106,8 @@ type User {
 	group: Int!
 	newsletter: Boolean!
 	account_registered: Boolean!
-	avatar: Url
+	# An url
+	avatar: String
 	ratings: [AnimeRating!]!
 	rating_for(id: ID!): AnimeRating
 }

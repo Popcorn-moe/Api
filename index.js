@@ -31,7 +31,7 @@ app.use(passport.initialize())
 passport.serializeUser((user, cb) => cb(null, user))
 passport.use(new AnonymousStrategy())
 
-MongoClient.connect(url).then(db =>{
+MongoClient.connect(url).then(db => {
     app.use('/graphql',
         passport.authenticate(['jwt', 'anonymous']),
         graphqlUpload(multer({

@@ -13,17 +13,19 @@ const IMAGE_MIME_TYPES = [
     'image/svg+xml' // SVG images (vector images)
 ]
 
-export function setAvatar(context: Context, { file } : { file: Upload }) : Result {
+export function setAvatar(context: Context, { file } : { file: Upload }, req: any) : Promise<Result> | Result {
     if (!IMAGE_MIME_TYPES.includes(file.mimetype)) {
         context.storage.removeFile(file)
         return {
             error: `MimeType ${file.mimetype} is not and image Mime Type`
         }
     }
-    console.log('File', file, context.storage.getUrl(file))
-    return {
+    return req.user.then(user => {
+        user.avatar = context.storage.getUrl(file)
+        return user.save()
+    }).then(() => ({
         error: null
-    }
+    }))
 }
 
 /*export function me(context: Context, { user }: { user: ?User }): User
