@@ -4,8 +4,23 @@ type ID = string
 type Context = any
 type Upload = any
 
+// https://developer.mozilla.org/fr/docs/Web/HTTP/Basics_of_HTTP/MIME_types#Images_types
+
+const IMAGE_MIME_TYPES = [
+    'image/gif',	// GIF images (lossless compression, superseded by PNG)
+    'image/jpeg',	// JPEG images
+    'image/png',	// PNG images
+    'image/svg+xml' // SVG images (vector images)
+]
+
 export function setAvatar(context: Context, { file } : { file: Upload }) : Result {
-    console.log('File', file)
+    if (!IMAGE_MIME_TYPES.includes(file.mimetype)) {
+        context.storage.removeFile(file)
+        return {
+            error: `MimeType ${file.mimetype} is not and image Mime Type`
+        }
+    }
+    console.log('File', file, context.storage.getUrl(file))
     return {
         error: null
     }

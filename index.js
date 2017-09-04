@@ -10,12 +10,16 @@ import JwtStrategy from './src/auth/JwtStrategy'
 import graphqlUpload from './src/middlewares/graphqlUpload'
 import cors from 'cors'
 import multer from 'multer'
+import { join } from 'path'
+import { FileStorage } from './src/storage'
 
 instrument(schema)
 
 const url = 'mongodb://localhost:27017/popcornmoe_backend';
 const app = express()
+const storage = new FileStorage(join(__dirname, 'uploads'))
 
+storage.register(app)
 app.use(logger('dev'))
 app.use(cookieParser())
 app.use(cors({
@@ -29,11 +33,11 @@ MongoClient.connect(url).then(db =>{
     app.use('/graphql',
         passport.authenticate('jwt'),
         graphqlUpload(multer({
-
+            storage: storage.createMulterStorage()
         })),
         instrumentMiddleware(graphqlHTTP({
             schema,
-            rootValue: { db },
+            rootValue: { db, storage },
             graphiql: true
         }))
     );
