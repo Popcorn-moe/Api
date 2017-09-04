@@ -106,6 +106,7 @@ type User {
 	group: Int!
 	newsletter: Boolean!
 	account_registered: Boolean!
+	avatar: Url
 	ratings: [AnimeRating!]!
 	rating_for(id: ID!): AnimeRating
 }
@@ -116,7 +117,7 @@ type AnimeRating {
 }
 
 type Query {
-	me: User!
+	me: User
 	animes(limit: Int, sort: Sort = NONE): [Anime!]
 	author(id: ID!): Author
 	anime(id: ID!): Anime

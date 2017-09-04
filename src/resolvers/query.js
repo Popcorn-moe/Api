@@ -3,20 +3,23 @@
 type ID = string
 type Context = any
 
-export function me(context: Context, ignored: any, req: any): User
+export function me(context: Context, ignored: any, req: any): ?User
 {
-    return req.user
-        .then(user => {
-            user.id = user._id
-            return user
-        })
-        .then(({
-                  id, login, email, group, newsletter,
-                  account_registered, ratings
-              } : User) => ({
-            id, login, email, group, newsletter,
-            account_registered, ratings
-        }))
+    if(req.user) {
+        return req.user
+            .then(user => {
+                user.id = user._id
+                return user
+            })
+            .then(({
+                    id, login, email, group, newsletter,
+                    account_registered, ratings
+                } : User) => ({
+                id, login, email, group, newsletter,
+                account_registered, ratings
+            }))
+    } else
+        return null
 }
 
 

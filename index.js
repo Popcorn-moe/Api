@@ -12,6 +12,7 @@ import cors from 'cors'
 import multer from 'multer'
 import { join } from 'path'
 import { FileStorage } from './src/storage'
+import AnonymousStrategy from 'passport-anonymous'
 
 instrument(schema)
 
@@ -28,10 +29,11 @@ app.use(cors({
 }))
 app.use(passport.initialize())
 passport.serializeUser((user, cb) => cb(null, user))
+passport.use(new AnonymousStrategy())
 
 MongoClient.connect(url).then(db =>{
     app.use('/graphql',
-        passport.authenticate('jwt'),
+        passport.authenticate(['jwt', 'anonymous']),
         graphqlUpload(multer({
             storage: storage.createMulterStorage()
         })),
