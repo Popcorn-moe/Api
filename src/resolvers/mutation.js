@@ -1,5 +1,7 @@
 /* @flow */
 
+import { ObjectID } from 'mongodb'
+
 type ID = string
 type Context = any
 type Upload = any
@@ -26,6 +28,29 @@ export function setAvatar(context: Context, { file } : { file: Upload }, req: an
     }).then(() => ({
         error: null
     }))
+}
+
+function transformAnime(anime: any, time, storage) {
+    if (anime.cover) anime.cover = storage.getUrl(anime.cover)
+    if (anime.background) anime.cover = storage.getUrl(anime.background)
+    anime.edit_date = time
+}
+
+export function addAnime(context: Context, { anime } : { anime: AnimeInput }): Promise<ID> {
+    const time = now()
+    transformAnime(anime, time, context.storage)
+    // $FlowIgnore
+    anime.posted_date = time
+    return context.db.collection('animes')
+            .insertOne(anime)
+            .then(({ insertedId }) => insertedId)
+}
+
+export function updateAnime(context: Context, { id, anime } : { id: ID, anime: AnimeInput }): Promise<ID> {
+    transformAnime(anime, now(), context.storage)
+    return context.db.collection('animes')
+            .updateOne({ _id: new ObjectID(id)} , { $set: anime })
+            .then(() => id)
 }
 
 /*export function me(context: Context, { user }: { user: ?User }): User
@@ -81,7 +106,7 @@ export function rate(context: Context, { media, rating }: { media: ?ID, rating: 
                 rating,
                 time: now()
             });
-}
+}*/
 
-function now() { return new Date().getTime(); }*/
+function now() { return new Date().getTime(); }
 

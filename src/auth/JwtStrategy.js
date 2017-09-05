@@ -39,7 +39,7 @@ export default class JwtStrategy extends Strategy {
                             user.save = () => {
                                 const userDiff = diff(user, user[ORIGINAL])
                                 if (userDiff) {
-                                    return db.update({ _id: new ObjectID(user._id)} , { $set: userDiff })
+                                    return db.updateOne({ _id: new ObjectID(user._id)} , { $set: userDiff })
                                 }
                             }
                             user[ORIGINAL] = Object.assign({} , user)

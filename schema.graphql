@@ -7,9 +7,13 @@ type Anime implements Dated {
 	names: [String!]!
 	authors: [Author!]!
 	tags: [Tag!]!
-	status: AnimeStatus!
+	status: AnimeStatus
 	medias: [Media!]!
 	season: [Season!]!
+	# An url
+	cover: String
+	# An url
+	background: String
 
 	release_date: Date
 	edit_date: Date!
@@ -130,8 +134,23 @@ type Result {
 	error: String
 }
 
+input AnimeInput {
+	names: [String!]
+	authors: [ID!]
+	tags: [ID!]
+	status: AnimeStatus
+	medias: [ID!]
+	season: [ID!]
+	cover: Upload
+	background: Upload
+
+	release_date: Date
+}
+
 type Mutation {
 	setAvatar(file: Upload!): Result!
+	addAnime(anime: AnimeInput!): ID!
+	updateAnime(id: ID!, anime: AnimeInput!): ID!
 }
 
 enum Sort {
