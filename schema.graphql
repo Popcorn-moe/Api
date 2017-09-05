@@ -11,9 +11,9 @@ type Anime implements Dated {
 	medias: [Media!]!
 	season: [Season!]!
 
-    release_date: Date
+	release_date: Date
 	edit_date: Date!
-    posted_date: Date!
+	posted_date: Date!
 }
 
 enum AnimeStatus {
@@ -38,14 +38,14 @@ type Tag {
 }
 
 type Media implements Dated {
-    id: ID!
+	id: ID!
 	comments: [Comment!]!
 	type: MediaType!
 	rate: Float!
 
-    release_date: Date
+	release_date: Date
 	edit_date: Date!
-    posted_date: Date!
+	posted_date: Date!
 }
 
 enum MediaType {
@@ -59,9 +59,9 @@ type Season implements Dated {
 	name: String!
 	episodes: [Media!]!
 
-    release_date: Date
+	release_date: Date
 	edit_date: Date!
-    posted_date: Date!
+	posted_date: Date!
 }
 
 type Comment {
@@ -96,7 +96,7 @@ enum PlayerType {
 interface Dated {
 	release_date: Date
 	edit_date: Date!
-    posted_date: Date!
+	posted_date: Date!
 }
 
 type User {
