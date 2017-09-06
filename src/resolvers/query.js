@@ -18,7 +18,21 @@ export function me(context: Context, ignored: any, req: any): ?User
 }
 
 
-export function animes(context: Context, { limit, sort }: { limit: number, sort: Sort }): ?Array<Anime>
+export function tags(context: Context): Promise<Array<Tag>>
+{
+    return context.db.collection('tags')
+        .find()
+        .map(data => {
+            data.id = data._id
+            return data
+        })
+        .map(({ id, name, desc, color }: Tag) => ({
+            id, name, desc, color
+        }))
+        .toArray()
+}
+
+/*export function animes(context: Context, { limit, sort }: { limit: number, sort: Sort }): ?Array<Anime>
 {
     return context.db.collection('animes')
         .find()
@@ -83,4 +97,4 @@ export function media(context: Context, { id }: { id: ID }): ?Media
             edit_date, posted_date
         }))
         .next();
-}
+}*/

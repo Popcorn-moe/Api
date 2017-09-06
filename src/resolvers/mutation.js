@@ -53,6 +53,25 @@ export function updateAnime(context: Context, { id, anime } : { id: ID, anime: A
             .then(() => id)
 }
 
+
+export function addTag(context: Context, { tag } : { tag: TagInput }): Promise<ID> {
+    return context.db.collection('tags')
+            .insertOne(tag)
+            .then(({ insertedId }) => insertedId)
+}
+
+export function updateTag(context: Context, { id, tag } : { id: ID, tag: TagUpdate }): Promise<ID> {
+    return context.db.collection('tags')
+            .updateOne({ _id: new ObjectID(id)} , { $set: tag })
+            .then(() => id)
+}
+
+export function deleteTag(context: Context, { id } : { id: ID }): Promise<ID> {
+    return context.db.collection('tags')
+            .deleteOne({ _id: new ObjectID(id) })
+            .then(() => id)
+}
+
 /*export function me(context: Context, { user }: { user: ?User }): User
 {
     //todo: check if user.id is the right id

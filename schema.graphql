@@ -39,6 +39,7 @@ type Tag {
 	id: ID!
 	name: String!
 	desc: String!
+	color: String!
 }
 
 type Media implements Dated {
@@ -123,6 +124,7 @@ type AnimeRating {
 
 type Query {
 	me: User
+	tags: [Tag!]!
 	animes(limit: Int, sort: Sort = NONE): [Anime!]
 	author(id: ID!): Author
 	anime(id: ID!): Anime
@@ -147,10 +149,25 @@ input AnimeInput {
 	release_date: Date
 }
 
+input TagInput {
+	name: String!
+	desc: String!
+	color: String!
+}
+
+input TagUpdate {
+	name: String
+	desc: String
+	color: String
+}
+
 type Mutation {
 	setAvatar(file: Upload!): Result!
 	addAnime(anime: AnimeInput!): ID!
 	updateAnime(id: ID!, anime: AnimeInput!): ID!
+	addTag(tag: TagInput!): ID!
+	updateTag(id: ID!, tag: TagUpdate!): ID!
+	deleteTag(id: ID!): ID!
 }
 
 enum Sort {
