@@ -1,5 +1,6 @@
 /* @flow */
 
+import { needAuth, needGroup, ADMIN } from './util'
 import { ObjectID } from 'mongodb'
 
 type ID = string
@@ -16,6 +17,7 @@ const IMAGE_MIME_TYPES = [
 ]
 
 export function setAvatar(context: Context, { file } : { file: Upload }, req: any) : Promise<Result> | Result {
+    needAuth(req)
     if (!IMAGE_MIME_TYPES.includes(file.mimetype)) {
         context.storage.removeFile(file)
         return {
@@ -36,40 +38,45 @@ function transformAnime(anime: any, time, storage) {
     anime.edit_date = time
 }
 
-export function addAnime(context: Context, { anime } : { anime: AnimeInput }): Promise<ID> {
+export function addAnime(context: Context, { anime } : { anime: AnimeInput }, req: any): Promise<ID> {
     const time = now()
     transformAnime(anime, time, context.storage)
     // $FlowIgnore
     anime.posted_date = time
-    return context.db.collection('animes')
-            .insertOne(anime)
-            .then(({ insertedId }) => insertedId)
+    return needGroup(req, ADMIN)
+            .then(() => context.db.collection('animes')
+                .insertOne(anime)
+                .then(({ insertedId }) => insertedId))
 }
 
-export function updateAnime(context: Context, { id, anime } : { id: ID, anime: AnimeInput }): Promise<ID> {
+export function updateAnime(context: Context, { id, anime } : { id: ID, anime: AnimeInput }, req: any): Promise<ID> {
     transformAnime(anime, now(), context.storage)
-    return context.db.collection('animes')
-            .updateOne({ _id: new ObjectID(id)} , { $set: anime })
-            .then(() => id)
+    return needGroup(req, ADMIN)
+            .then(() => context.db.collection('animes')
+                .updateOne({ _id: new ObjectID(id)} , { $set: anime })
+                .then(() => id))
 }
 
 
-export function addTag(context: Context, { tag } : { tag: TagInput }): Promise<ID> {
-    return context.db.collection('tags')
-            .insertOne(tag)
-            .then(({ insertedId }) => insertedId)
+export function addTag(context: Context, { tag } : { tag: TagInput }, req: any): Promise<ID> {
+    return needGroup(req, ADMIN)
+            .then(() => context.db.collection('tags')
+                .insertOne(tag)
+                .then(({ insertedId }) => insertedId))
 }
 
-export function updateTag(context: Context, { id, tag } : { id: ID, tag: TagUpdate }): Promise<ID> {
-    return context.db.collection('tags')
-            .updateOne({ _id: new ObjectID(id)} , { $set: tag })
-            .then(() => id)
+export function updateTag(context: Context, { id, tag } : { id: ID, tag: TagUpdate }, req: any): Promise<ID> {
+    return needGroup(req, ADMIN)
+            .then(() => context.db.collection('tags')
+                .updateOne({ _id: new ObjectID(id)} , { $set: tag })
+                .then(() => id))
 }
 
-export function deleteTag(context: Context, { id } : { id: ID }): Promise<ID> {
-    return context.db.collection('tags')
-            .deleteOne({ _id: new ObjectID(id) })
-            .then(() => id)
+export function deleteTag(context: Context, { id } : { id: ID }, req: any): Promise<ID> {
+    return needGroup(req, ADMIN)
+            .then(() => context.db.collection('tags')
+                .deleteOne({ _id: new ObjectID(id) })
+                .then(() => id))
 }
 
 /*export function me(context: Context, { user }: { user: ?User }): User

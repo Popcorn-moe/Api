@@ -10,9 +10,9 @@ export function me(context: Context, ignored: any, req: any): ?User
                     id, login, email, group, newsletter,
                     account_registered, ratings, avatar
                 } : User) => ({
-                id, login, email, group, newsletter,
-                account_registered, ratings, avatar
-            }))
+                    id, login, email, group, newsletter,
+                    account_registered, ratings, avatar
+                }))
     } else
         return null
 }

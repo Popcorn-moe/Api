@@ -106,13 +106,19 @@ type User {
 	id: ID!
 	login: String!
 	email: String!
-	group: Int!
+	group: UserGroup!
 	newsletter: Boolean!
 	account_registered: Boolean!
 	# An url
 	avatar: String
 	ratings: [AnimeRating!]!
 	rating_for(id: ID!): AnimeRating
+}
+
+enum UserGroup {
+	ADMIN,
+	MODERATOR,
+	VIEWER
 }
 
 type AnimeRating {
