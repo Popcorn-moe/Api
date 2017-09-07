@@ -47,7 +47,6 @@ type Media implements Dated {
 	comments: [Comment!]!
 	type: MediaType!
 	rate: Float!
-
 	release_date: Date
 	edit_date: Date!
 	posted_date: Date!
@@ -63,7 +62,6 @@ enum MediaType {
 type Season implements Dated {
 	name: String!
 	episodes: [Media!]!
-
 	release_date: Date
 	edit_date: Date!
 	posted_date: Date!
@@ -145,7 +143,7 @@ input AnimeInput {
 	season: [ID!]
 	cover: Upload
 	background: Upload
-
+	desc: String
 	release_date: Date
 }
 
