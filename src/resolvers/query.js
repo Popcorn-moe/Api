@@ -32,6 +32,20 @@ export function tags(context: Context): Promise<Array<Tag>>
         .toArray()
 }
 
+export function users(context: Context): Promise<Array<User>>
+{
+    return context.db.collection('users')
+        .find()
+        .map(data => {
+            data.id = data._id
+            return data
+        })
+        .map(({ id, email, login, group, newsletter }: User) => ({
+            id, email, login, group, newsletter
+        }))
+        .toArray()
+}
+
 /*export function animes(context: Context, { limit, sort }: { limit: number, sort: Sort }): ?Array<Anime>
 {
     return context.db.collection('animes')

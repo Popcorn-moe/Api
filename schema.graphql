@@ -129,6 +129,7 @@ type AnimeRating {
 type Query {
 	me: User
 	tags: [Tag!]!
+	users: [User!]!
 	animes(limit: Int, sort: Sort = NONE): [Anime!]
 	author(id: ID!): Author
 	anime(id: ID!): Anime
