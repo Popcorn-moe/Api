@@ -3,47 +3,65 @@
 type ID = string
 type Context = any
 
-export function me(context: Context, ignored: any, req: any): ?User
-{
-    if(req.user) {
-        return req.user.then(({
-                    id, login, email, group, newsletter,
-                    account_registered, ratings, avatar
-                } : User) => ({
-                    id, login, email, group, newsletter,
-                    account_registered, ratings, avatar
-                }))
-    } else
-        return null
+export function me(context: Context, ignored: any, req: any): ?User {
+	if (req.user) {
+		return req.user.then(
+			({
+				id,
+				login,
+				email,
+				group,
+				newsletter,
+				account_registered,
+				ratings,
+				avatar
+			}: User) => ({
+				id,
+				login,
+				email,
+				group,
+				newsletter,
+				account_registered,
+				ratings,
+				avatar
+			})
+		)
+	} else return null
 }
 
-
-export function tags(context: Context): Promise<Array<Tag>>
-{
-    return context.db.collection('tags')
-        .find()
-        .map(data => {
-            data.id = data._id
-            return data
-        })
-        .map(({ id, name, desc, color }: Tag) => ({
-            id, name, desc, color
-        }))
-        .toArray()
+export function tags(context: Context): Promise<Array<Tag>> {
+	return context.db
+		.collection('tags')
+		.find()
+		.map(data => {
+			data.id = data._id
+			return data
+		})
+		.map(({ id, name, desc, color }: Tag) => ({
+			id,
+			name,
+			desc,
+			color
+		}))
+		.toArray()
 }
 
-export function users(context: Context): Promise<Array<User>>
-{
-    return context.db.collection('users')
-        .find()
-        .map(data => {
-            data.id = data._id
-            return data
-        })
-        .map(({ id, email, login, group, newsletter }: User) => ({
-            id, email, login, group, newsletter
-        }))
-        .toArray()
+export function users(context: Context): Promise<Array<User>> {
+	return context.db
+		.collection('users')
+		.find()
+		.map(data => {
+			data.id = data._id
+			return data
+		})
+		.map(({ id, email, login, group, newsletter }: User) => ({
+			id,
+			email,
+			login,
+			group,
+			newsletter
+		}))
+		.toArray()
 }
 
 /*export function animes(context: Context, { limit, sort }: { limit: number, sort: Sort }): ?Array<Anime>
