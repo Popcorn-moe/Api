@@ -54,12 +54,13 @@ export function users(context: Context): Promise<Array<User>> {
 			data.id = data._id
 			return data
 		})
-		.map(({ id, email, login, group, newsletter }: User) => ({
+		.map(({ id, email, login, group, newsletter, avatar }: User) => ({
 			id,
 			email,
 			login,
 			group,
-			newsletter
+			newsletter,
+			avatar
 		}))
 		.toArray()
 }
