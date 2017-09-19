@@ -130,6 +130,7 @@ type Query {
 	me: User
 	tags: [Tag!]!
 	users: [User!]!
+	authors: [Author!]!
 	animes(limit: Int, sort: Sort = NONE): [Anime!]
 	author(id: ID!): Author
 	anime(id: ID!): Anime
@@ -166,6 +167,20 @@ input TagUpdate {
 	color: String
 }
 
+input AuthorInput {
+	name: String!
+	picture: Upload
+	bio: String!
+	organisation: Boolean!
+}
+
+input AuthorUpdate {
+	name: String
+	picture: Upload
+	bio: String
+	organisation: Boolean
+}
+
 type Mutation {
 	setAvatar(file: Upload!): Result!
 	addAnime(anime: AnimeInput!): ID!
@@ -173,6 +188,9 @@ type Mutation {
 	addTag(tag: TagInput!): ID!
 	updateTag(id: ID!, tag: TagUpdate!): ID!
 	deleteTag(id: ID!): ID!
+	addAuthor(author: AuthorInput!): ID!
+	updateAuthor(id: ID!, author: AuthorUpdate!): ID!
+	deleteAuthor(id: ID!): ID!
 }
 
 enum Sort {

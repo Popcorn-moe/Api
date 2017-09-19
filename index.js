@@ -43,6 +43,11 @@ passport.serializeUser((user, cb) => cb(null, user))
 passport.use(new AnonymousStrategy())
 
 MongoClient.connect(url).then(db => {
+	app.use((req, res, next) => {
+		req.db = db
+		req.storage = storage
+		next()
+	})
 	app.use(
 		'/graphql',
 		passport.authenticate(['jwt', 'anonymous']),
@@ -54,7 +59,6 @@ MongoClient.connect(url).then(db => {
 		instrumentMiddleware(
 			graphqlHTTP({
 				schema,
-				rootValue: { db, storage },
 				graphiql: true
 			})
 		)

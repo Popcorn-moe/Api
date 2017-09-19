@@ -17,18 +17,18 @@ const IMAGE_MIME_TYPES = [
 ]
 
 export function setAvatar(
-	context: Context,
+	root: any,
 	{ file }: { file: Upload },
-	req: any
+	context: Context
 ): Promise<Result> | Result {
-	needAuth(req)
+	needAuth(context)
 	if (!IMAGE_MIME_TYPES.includes(file.mimetype)) {
 		context.storage.removeFile(file)
 		return {
 			error: `MimeType ${file.mimetype} is not and image Mime Type`
 		}
 	}
-	return req.user
+	return context.user
 		.then(user => {
 			user.avatar = context.storage.getUrl(file)
 			return user.save()
@@ -45,15 +45,15 @@ function transformAnime(anime: any, time, storage) {
 }
 
 export function addAnime(
-	context: Context,
+	root: any,
 	{ anime }: { anime: AnimeInput },
-	req: any
+	context: Context
 ): Promise<ID> {
 	const time = now()
 	transformAnime(anime, time, context.storage)
 	// $FlowIgnore
 	anime.posted_date = time
-	return needGroup(req, ADMIN).then(() =>
+	return needGroup(context, ADMIN).then(() =>
 		context.db
 			.collection('animes')
 			.insertOne(anime)
@@ -62,12 +62,12 @@ export function addAnime(
 }
 
 export function updateAnime(
-	context: Context,
+	root: any,
 	{ id, anime }: { id: ID, anime: AnimeInput },
-	req: any
+	context: Context
 ): Promise<ID> {
 	transformAnime(anime, now(), context.storage)
-	return needGroup(req, ADMIN).then(() =>
+	return needGroup(context, ADMIN).then(() =>
 		context.db
 			.collection('animes')
 			.updateOne({ _id: new ObjectID(id) }, { $set: anime })
@@ -76,11 +76,11 @@ export function updateAnime(
 }
 
 export function addTag(
-	context: Context,
+	root: any,
 	{ tag }: { tag: TagInput },
-	req: any
+	context: Context
 ): Promise<ID> {
-	return needGroup(req, ADMIN).then(() =>
+	return needGroup(context, ADMIN).then(() =>
 		context.db
 			.collection('tags')
 			.insertOne(tag)
@@ -89,11 +89,11 @@ export function addTag(
 }
 
 export function updateTag(
-	context: Context,
+	root: any,
 	{ id, tag }: { id: ID, tag: TagUpdate },
-	req: any
+	context: Context
 ): Promise<ID> {
-	return needGroup(req, ADMIN).then(() =>
+	return needGroup(context, ADMIN).then(() =>
 		context.db
 			.collection('tags')
 			.updateOne({ _id: new ObjectID(id) }, { $set: tag })
@@ -102,11 +102,11 @@ export function updateTag(
 }
 
 export function deleteTag(
-	context: Context,
+	root: any,
 	{ id }: { id: ID },
-	req: any
+	context: Context
 ): Promise<ID> {
-	return needGroup(req, ADMIN).then(() =>
+	return needGroup(context, ADMIN).then(() =>
 		context.db
 			.collection('tags')
 			.deleteOne({ _id: new ObjectID(id) })
@@ -114,60 +114,46 @@ export function deleteTag(
 	)
 }
 
-/*export function me(context: Context, { user }: { user: ?User }): User
-{
-    //todo: check if user.id is the right id
-    return context.db.collection('users')
-        .findOneAndUpdate({ _id: user.id }, {
-            $set: {
-                login     : user.login,
-                email     : user.email,
-                group     : user.group,
-                newsletter: user.newsletter,
-                ratings   : user.ratings,
-                last_edit : now()
-            }
-        }, { returnOriginal: false })
-        .then(r => r.value);
+export function addAuthor(
+	root: any,
+	{ author }: { author: AuthorInput },
+	context: Context
+): Promise<ID> {
+	if (author.picture) author.picture = context.storage.getUrl(author.picture)
+	return needGroup(context, ADMIN).then(() =>
+		context.db
+			.collection('authors')
+			.insertOne(author)
+			.then(({ insertedId }) => insertedId)
+	)
 }
 
-export function comment(context: Context, { media, content }: { media: ?ID, content: ?string }): ID
-{
-    let user = null; //todo: get user
-    return context.db.collection('comments')
-        .insertOne(
-            {
-                user,
-                content,
-                posted: now()
-            })
-        .then(r => r.insertedId);
+export function updateAuthor(
+	root: any,
+	{ id, author }: { id: ID, author: AuthorUpdate },
+	context: Context
+): Promise<ID> {
+	if (author.picture) author.picture = context.storage.getUrl(author.picture)
+	return needGroup(context, ADMIN).then(() =>
+		context.db
+			.collection('authors')
+			.updateOne({ _id: new ObjectID(id) }, { $set: author })
+			.then(() => id)
+	)
 }
 
-export function edit_comment(context: Context, { id, content }: { id: ?ID, content: ?string })
-{
-    let user = null; //todo: get user
-    return context.db.collection('comments')
-        .findOneAndUpdate({ _id: id }, {
-            $set: {
-                user,
-                content,
-                edited: now()
-            }
-        });
+export function deleteAuthor(
+	root: any,
+	{ id }: { id: ID },
+	context: Context
+): Promise<ID> {
+	return needGroup(context, ADMIN).then(() =>
+		context.db
+			.collection('authors')
+			.deleteOne({ _id: new ObjectID(id) })
+			.then(() => id)
+	)
 }
-
-export function rate(context: Context, { media, rating }: { media: ?ID, rating: ?number })
-{
-    let user = null; //todo: get user
-    return context.db.collection('ratings')
-        .insertOne(
-            {
-                media,
-                rating,
-                time: now()
-            });
-}*/
 
 function now() {
 	return new Date().getTime()

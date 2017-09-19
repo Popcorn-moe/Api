@@ -3,9 +3,9 @@
 type ID = string
 type Context = any
 
-export function me(context: Context, ignored: any, req: any): ?User {
-	if (req.user) {
-		return req.user.then(
+export function me(root: any, args: any, context: Context): ?User {
+	if (context.user) {
+		return context.user.then(
 			({
 				id,
 				login,
@@ -13,7 +13,6 @@ export function me(context: Context, ignored: any, req: any): ?User {
 				group,
 				newsletter,
 				account_registered,
-				ratings,
 				avatar
 			}: User) => ({
 				id,
@@ -22,14 +21,17 @@ export function me(context: Context, ignored: any, req: any): ?User {
 				group,
 				newsletter,
 				account_registered,
-				ratings,
 				avatar
 			})
 		)
 	} else return null
 }
 
-export function tags(context: Context): Promise<Array<Tag>> {
+export function tags(
+	root: any,
+	args: any,
+	context: Context
+): Promise<Array<Tag>> {
 	return context.db
 		.collection('tags')
 		.find()
@@ -46,7 +48,11 @@ export function tags(context: Context): Promise<Array<Tag>> {
 		.toArray()
 }
 
-export function users(context: Context): Promise<Array<User>> {
+export function users(
+	root: any,
+	args: any,
+	context: Context
+): Promise<Array<User>> {
 	return context.db
 		.collection('users')
 		.find()
@@ -54,34 +60,99 @@ export function users(context: Context): Promise<Array<User>> {
 			data.id = data._id
 			return data
 		})
-		.map(({ id, email, login, group, newsletter, avatar }: User) => ({
+		.map(
+			({
+				id,
+				login,
+				email,
+				group,
+				newsletter,
+				account_registered,
+				avatar
+			}: User) => ({
+				id,
+				login,
+				email,
+				group,
+				newsletter,
+				account_registered,
+				avatar
+			})
+		)
+		.toArray()
+}
+
+export function authors(
+	root: any,
+	args: any,
+	context: Context
+): Promise<Array<Author>> {
+	return context.db
+		.collection('authors')
+		.find()
+		.map(data => {
+			data.id = data._id
+			return data
+		})
+		.map(({ id, name, picture, bio, organisation }: Author) => ({
 			id,
-			email,
-			login,
-			group,
-			newsletter,
-			avatar
+			name,
+			picture,
+			bio,
+			organisation
 		}))
 		.toArray()
 }
 
-/*export function animes(context: Context, { limit, sort }: { limit: number, sort: Sort }): ?Array<Anime>
-{
-    return context.db.collection('animes')
-        .find()
-        .limit(limit)
-        .sort(sort === 'NONE' ? {} : {
-            name: sort === 'ASC' ? 1 : -1
-        })
-        .map(({
-                  _id: id, names, authors, tags, status, medias,
-                  season, release_date, edit_date, posted_date
-              }: Anime) => ({
-                 id, names, authors, tags, status, medias,
-                 season, release_date, edit_date, posted_date
-             })
-        );
+export function animes(
+	root: any,
+	{ limit, sort }: { limit: number, sort: Sort },
+	context: Context
+): ?Array<Anime> {
+	return context.db
+		.collection('animes')
+		.find()
+		.limit(limit)
+		.sort(
+			sort === 'NONE'
+				? {}
+				: {
+						name: sort === 'ASC' ? 1 : -1
+					}
+		)
+		.map(data => {
+			data.id = data._id
+			return data
+		})
+		.map(
+			({
+				id,
+				names,
+				authors,
+				tags,
+				status,
+				medias,
+				season,
+				release_date,
+				edit_date,
+				posted_date
+			}: Anime) => ({
+				id,
+				names,
+				authors,
+				tags,
+				status,
+				medias,
+				season,
+				release_date,
+				edit_date,
+				posted_date
+			})
+		)
+		.toArray()
 }
+
+/*
 
 export function author(context: Context, { id }: { id: ID }): ?Author
 {
