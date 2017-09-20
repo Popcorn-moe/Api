@@ -40,7 +40,7 @@ export function setAvatar(
 
 function transformAnime(anime: any, time, storage) {
 	if (anime.cover) anime.cover = storage.getUrl(anime.cover)
-	if (anime.background) anime.cover = storage.getUrl(anime.background)
+	if (anime.background) anime.background = storage.getUrl(anime.background)
 	anime.edit_date = time
 }
 
