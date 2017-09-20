@@ -3,6 +3,34 @@
 type ID = string
 type Context = any
 
+const mapAnime = ({
+	id,
+	names,
+	authors,
+	tags,
+	status,
+	medias,
+	season,
+	cover,
+	background,
+	release_date,
+	edit_date,
+	posted_date
+}: Anime) => ({
+	id,
+	names,
+	authors,
+	tags,
+	status,
+	medias,
+	season,
+	cover,
+	background,
+	release_date,
+	edit_date,
+	posted_date
+})
+
 export function me(root: any, args: any, context: Context): ?User {
 	if (context.user) {
 		return context.user.then(
@@ -124,36 +152,26 @@ export function animes(
 			data.id = data._id
 			return data
 		})
-		.map(
-			({
-				id,
-				names,
-				authors,
-				tags,
-				status,
-				medias,
-				season,
-				cover,
-				background,
-				release_date,
-				edit_date,
-				posted_date
-			}: Anime) => ({
-				id,
-				names,
-				authors,
-				tags,
-				status,
-				medias,
-				season,
-				cover,
-				background,
-				release_date,
-				edit_date,
-				posted_date
-			})
-		)
+		.map(mapAnime)
 		.toArray()
+}
+
+export function anime(
+	root: any,
+	{ name }: { name: String },
+	context: Context
+): ?Array<Anime> {
+	return context.db
+		.collection('animes')
+		.find({ names: name })
+		.limit(1)
+		.map(data => {
+			data.id = data._id
+			return data
+		})
+		.map(mapAnime)
+		.toArray()
+		.then(([anime]) => anime)
 }
 
 /*

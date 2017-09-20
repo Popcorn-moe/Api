@@ -134,6 +134,7 @@ type Query {
 	animes(limit: Int, sort: Sort = NONE): [Anime!]
 	author(id: ID!): Author
 	anime(id: ID!): Anime
+	anime(name: String!): Anime
 	tag(id: ID!): Tag
 	media(id: ID!): Media
 }
