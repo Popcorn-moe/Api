@@ -133,6 +133,8 @@ export function animes(
 				status,
 				medias,
 				season,
+				cover,
+				background,
 				release_date,
 				edit_date,
 				posted_date
@@ -144,6 +146,8 @@ export function animes(
 				status,
 				medias,
 				season,
+				cover,
+				background,
 				release_date,
 				edit_date,
 				posted_date

@@ -14,8 +14,11 @@ export default class FileStorage {
 	}
 
 	getUrl({ filename }) {
-		return `${process.env.API_URL ||
-			'http://localhost:3030'}/uploads/${filename}`
+		if (filename)
+			return `${process.env.API_URL ||
+				'http://localhost:3030'}/uploads/${filename}`
+		else
+			return null;
 	}
 
 	removeFile({ path }) {
