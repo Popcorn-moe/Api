@@ -41,7 +41,8 @@ export function me(root: any, args: any, context: Context): ?User {
 				group,
 				newsletter,
 				account_registered,
-				avatar
+				avatar,
+				playlists
 			}: User) => ({
 				id,
 				login,
@@ -49,7 +50,8 @@ export function me(root: any, args: any, context: Context): ?User {
 				group,
 				newsletter,
 				account_registered,
-				avatar
+				avatar,
+				playlists
 			})
 		)
 	} else return null
@@ -96,7 +98,8 @@ export function users(
 				group,
 				newsletter,
 				account_registered,
-				avatar
+				avatar,
+				playlists
 			}: User) => ({
 				id,
 				login,
@@ -104,7 +107,8 @@ export function users(
 				group,
 				newsletter,
 				account_registered,
-				avatar
+				avatar,
+				playlists
 			})
 		)
 		.toArray()

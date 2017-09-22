@@ -75,27 +75,6 @@ type Comment {
 	edited: Date
 }
 
-interface Player {
-	type: PlayerType!
-}
-
-type GoogleDrivePlayer implements Player {
-    type: PlayerType!
-
-	url: Url
-}
-
-type OpenLoadPlayer implements Player {
-    type: PlayerType!
-
-	url: Url
-}
-
-enum PlayerType {
-	GOOGLE_DRIVE
-	OPENLOAD
-}
-
 interface Dated {
 	release_date: Date
 	edit_date: Date!
@@ -109,10 +88,25 @@ type User {
 	group: UserGroup!
 	newsletter: Boolean!
 	account_registered: Boolean!
+	playlists: [Playlist!]!
+
 	# An url
 	avatar: String
 	ratings: [AnimeRating!]!
 	rating_for(id: ID!): AnimeRating
+}
+
+type Playlist {
+    id: ID!
+    name: String!
+    type: PlaylistType!
+    medias: [Media!]!
+}
+
+enum PlaylistType {
+    NORMAL,
+    HISTORY,
+    FOLLOWS
 }
 
 enum UserGroup {
