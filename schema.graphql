@@ -140,6 +140,7 @@ type Query {
 	tag(id: ID!): Tag
 	media(id: ID!): Media
 	news: [News!]!
+	_news(id: ID!): News
 }
 
 type Result {

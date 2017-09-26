@@ -1,5 +1,7 @@
 /* @flow */
 
+import { ObjectID } from 'mongodb'
+
 type ID = string
 type Context = any
 
@@ -199,6 +201,32 @@ export function news(
 		}))
 		.toArray()
 }
+
+export function _news(
+	root: any,
+	{ id }: { id: ID },
+	context: Context
+): ?News {
+	return context.db
+		.collection('news')
+		.find({ _id: new ObjectID(id) })
+		.limit(1)
+		.map(data => {
+			data.id = data._id
+			return data
+		})
+		.map(({ id, name, author, content, posted_date }: News) => ({
+			id,
+			name,
+			author,
+			content,
+			posted_date
+		}))
+		.toArray()
+		.then(([news]) => news)
+}
+
+
 
 /*
 
