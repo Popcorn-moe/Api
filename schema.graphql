@@ -120,6 +120,14 @@ type AnimeRating {
 	rating: Float!
 }
 
+type News {
+	id: ID!
+	name: String!
+	author: User!
+	content: String!
+	posted_date: Date!
+}
+
 type Query {
 	me: User
 	tags: [Tag!]!
@@ -131,10 +139,23 @@ type Query {
 	anime(name: String!): Anime
 	tag(id: ID!): Tag
 	media(id: ID!): Media
+	news: [News!]!
 }
 
 type Result {
 	error: String
+}
+
+input NewsInput {
+	name: String!
+	content: String!
+	author: ID!
+}
+
+input NewsUpdate {
+	name: String
+	content: String
+	author: ID
 }
 
 input AnimeInput {
@@ -177,6 +198,9 @@ input AuthorUpdate {
 }
 
 type Mutation {
+	addNews(news: NewsInput!): ID!
+	deleteNews(id: ID!): ID!
+	updateNews(id: ID!, news: NewsInput!): ID!
 	setAvatar(file: Upload!): Result!
 	addAnime(anime: AnimeInput!): ID!
 	updateAnime(id: ID!, anime: AnimeInput!): ID!

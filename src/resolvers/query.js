@@ -178,6 +178,28 @@ export function anime(
 		.then(([anime]) => anime)
 }
 
+export function news(
+	root: any,
+	args: any,
+	context: Context
+): Promise<Array<News>> {
+	return context.db
+		.collection('news')
+		.find()
+		.map(data => {
+			data.id = data._id
+			return data
+		})
+		.map(({ id, name, author, content, posted_date }: News) => ({
+			id,
+			name,
+			author,
+			content,
+			posted_date
+		}))
+		.toArray()
+}
+
 /*
 
 export function author(context: Context, { id }: { id: ID }): ?Author
