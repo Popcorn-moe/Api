@@ -53,6 +53,8 @@ export function addAnime(
 	transformAnime(anime, time, context.storage)
 	// $FlowIgnore
 	anime.posted_date = time
+	// $FlowIgnore
+	anime._id = toId(anime.names[0])
 	return needGroup(context, ADMIN).then(() =>
 		context.db
 			.collection('animes')
@@ -70,7 +72,7 @@ export function updateAnime(
 	return needGroup(context, ADMIN).then(() =>
 		context.db
 			.collection('animes')
-			.updateOne({ _id: new ObjectID(id) }, { $set: anime })
+			.updateOne({ _id: id }, { $set: anime })
 			.then(() => id)
 	)
 }
@@ -197,4 +199,8 @@ export function updateNews(
 
 function now() {
 	return new Date()
+}
+
+function toId(name) {
+	return name.normalize('NFD').replace(/[\u0300-\u036f]/g, "").replace(/ /g, "-").toLowerCase()
 }

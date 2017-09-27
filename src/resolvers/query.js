@@ -164,12 +164,12 @@ export function animes(
 
 export function anime(
 	root: any,
-	{ name }: { name: String },
+	{ id }: { id: ID },
 	context: Context
 ): ?Array<Anime> {
 	return context.db
 		.collection('animes')
-		.find({ names: name })
+		.find({ _id: id })
 		.limit(1)
 		.map(data => {
 			data.id = data._id

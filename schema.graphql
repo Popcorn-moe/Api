@@ -138,7 +138,6 @@ type Query {
 	animes(limit: Int, sort: Sort = NONE): [Anime!]
 	author(id: ID!): Author
 	anime(id: ID!): Anime
-	anime(name: String!): Anime
 	tag(id: ID!): Tag
 	media(id: ID!): Media
 	news: [News!]!
@@ -171,7 +170,7 @@ input AnimeInput {
 	cover: Upload
 	background: Upload
 	desc: String
-	release_date: Date
+	release_date: DateTime
 }
 
 input TagInput {
