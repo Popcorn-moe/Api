@@ -196,5 +196,5 @@ export function updateNews(
 }
 
 function now() {
-	return new Date().getTime()
+	return new Date()
 }

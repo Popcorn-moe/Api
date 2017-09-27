@@ -1,5 +1,7 @@
 scalar Url
 scalar Date
+scalar Time
+scalar DateTime
 scalar Upload
 
 type Anime implements Dated {
@@ -15,9 +17,9 @@ type Anime implements Dated {
 	# An url
 	background: String
 
-	release_date: Date
-	edit_date: Date!
-	posted_date: Date!
+	release_date: DateTime
+	edit_date: DateTime!
+	posted_date: DateTime!
 }
 
 enum AnimeStatus {
@@ -47,9 +49,9 @@ type Media implements Dated {
 	comments: [Comment!]!
 	type: MediaType!
 	rate: Float!
-	release_date: Date
-	edit_date: Date!
-	posted_date: Date!
+	release_date: DateTime
+	edit_date: DateTime!
+	posted_date: DateTime!
 }
 
 enum MediaType {
@@ -62,23 +64,23 @@ enum MediaType {
 type Season implements Dated {
 	name: String!
 	episodes: [Media!]!
-	release_date: Date
-	edit_date: Date!
-	posted_date: Date!
+	release_date: DateTime
+	edit_date: DateTime!
+	posted_date: DateTime!
 }
 
 type Comment {
 	id: ID!
 	user: User!
 	content: String!
-	posted: Date!
-	edited: Date
+	posted: DateTime!
+	edited: DateTime
 }
 
 interface Dated {
-	release_date: Date
-	edit_date: Date!
-	posted_date: Date!
+	release_date: DateTime
+	edit_date: DateTime!
+	posted_date: DateTime!
 }
 
 type User {
@@ -125,7 +127,7 @@ type News {
 	name: String!
 	author: User!
 	content: String!
-	posted_date: Date!
+	posted_date: DateTime!
 }
 
 type Query {
