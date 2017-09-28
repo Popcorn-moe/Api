@@ -162,6 +162,7 @@ export function addNews(
 	{ news }: { news: NewsInput },
 	context: Context
 ): Promise<ID> {
+	if (news.cover) news.cover = context.storage.getUrl(news.cover)
 	news.posted_date = now()
 	return needGroup(context, ADMIN).then(() =>
 		context.db
@@ -189,6 +190,7 @@ export function updateNews(
 	{ id, news }: { id: ID, news: NewsUpdate },
 	context: Context
 ): Promise<ID> {
+	if (news.cover) news.cover = context.storage.getUrl(news.cover)
 	return needGroup(context, ADMIN).then(() =>
 		context.db
 			.collection('news')
