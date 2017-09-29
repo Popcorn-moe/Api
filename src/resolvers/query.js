@@ -216,11 +216,12 @@ export function _news(
 			data.id = data._id
 			return data
 		})
-		.map(({ id, name, author, content, posted_date }: News) => ({
+		.map(({ id, name, author, content, cover, posted_date }: News) => ({
 			id,
 			name,
 			author,
 			content,
+			cover,
 			posted_date
 		}))
 		.toArray()
