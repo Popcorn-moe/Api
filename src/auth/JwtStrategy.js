@@ -22,7 +22,9 @@ export default class JwtStrategy extends Strategy {
 		super(
 			{
 				jwtFromRequest(req) {
-					return req && req.cookies ? req.cookies['session'] : null
+					if (!req) return
+					if (req.headers['authorization']) return req.headers['authorization']
+					else if (req.cookies) return req.cookies['session']
 				},
 				audience: 'session',
 				secretOrKey: 'secret'
