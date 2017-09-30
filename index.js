@@ -34,7 +34,8 @@ app.use(
 		origin: [
 			'http://localhost:8080',
 			'http://localhost:8000',
-			'https://popcorn.moe'
+			'https://popcorn.moe',
+			'https://admin.popcorn.moe'
 		],
 		credentials: true
 	})
