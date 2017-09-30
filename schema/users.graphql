@@ -1,0 +1,48 @@
+type User {
+	id: ID!
+	login: String!
+	email: String!
+	group: UserGroup!
+	newsletter: Boolean!
+	account_registered: Boolean!
+	playlists: [Playlist!]!
+
+	# An url
+	avatar: String
+	ratings: [AnimeRating!]!
+	rating_for(id: ID!): AnimeRating
+}
+
+type Playlist {
+	id: ID!
+	name: String!
+	type: PlaylistType!
+	medias: [Media!]!
+}
+
+enum PlaylistType {
+	NORMAL,
+	HISTORY,
+	FOLLOWS
+}
+
+enum UserGroup {
+	ADMIN,
+	MODERATOR,
+	VIEWER
+}
+
+type AnimeRating {
+	anime: Anime!
+	rating: Float!
+}
+
+extend type Query {
+	me: User
+	users: [User!]!
+}
+
+
+extend type Mutation {
+	setAvatar(file: Upload!): Result!
+}

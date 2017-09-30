@@ -1,0 +1,33 @@
+type Media implements Dated {
+	id: ID!
+	comments: [Comment!]!
+	type: MediaType!
+	rate: Float!
+	release_date: DateTime
+	edit_date: DateTime!
+	posted_date: DateTime!
+}
+
+enum MediaType {
+	EPISODE
+	TRAILER
+	SONG
+	FILM
+}
+
+type Season implements Dated {
+	name: String!
+	episodes: [Media!]!
+	release_date: DateTime
+	edit_date: DateTime!
+	posted_date: DateTime!
+}
+
+type Comment {
+	id: ID!
+	user: User!
+	content: String!
+	posted: DateTime!
+	edited: DateTime
+}
+

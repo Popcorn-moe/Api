@@ -1,0 +1,33 @@
+type News {
+	id: ID!
+	name: String!
+	cover: String
+	author: User!
+	content: String!
+	posted_date: DateTime!
+}
+
+extend type Query {
+	news: [News!]!
+	_news(id: ID!): News
+}
+
+input NewsInput {
+	name: String!
+	content: String!
+	cover: Upload
+	author: ID!
+}
+
+input NewsUpdate {
+	name: String
+	content: String
+	cover: Upload
+	author: ID
+}
+
+extend type Mutation {
+	addNews(news: NewsInput!): ID!
+	deleteNews(id: ID!): ID!
+	updateNews(id: ID!, news: NewsUpdate!): ID!
+}

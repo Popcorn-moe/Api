@@ -1,0 +1,27 @@
+interface Dated {
+	release_date: DateTime
+	edit_date: DateTime!
+	posted_date: DateTime!
+}
+
+enum Sort {
+	NONE,
+	ASC,
+	DSC
+}
+
+type Result {
+	error: String
+}
+
+type Query {
+	version: String
+}
+type Mutation {
+	hello(name: String): String
+}
+
+schema {
+	query: Query
+	mutation: Mutation
+}

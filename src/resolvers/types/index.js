@@ -3,11 +3,6 @@ import {
 	GraphQLDate as Date,
 	GraphQLTime as Time,
 	GraphQLDateTime as DateTime
-} from 'graphql-iso-date';
+} from 'graphql-iso-date'
 
-export {
-	Upload,
-	Date,
-	Time,
-	DateTime
-}
+export { Upload, Date, Time, DateTime }

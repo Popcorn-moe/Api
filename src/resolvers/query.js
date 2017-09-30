@@ -203,11 +203,7 @@ export function news(
 		.toArray()
 }
 
-export function _news(
-	root: any,
-	{ id }: { id: ID },
-	context: Context
-): ?News {
+export function _news(root: any, { id }: { id: ID }, context: Context): ?News {
 	return context.db
 		.collection('news')
 		.find({ _id: new ObjectID(id) })

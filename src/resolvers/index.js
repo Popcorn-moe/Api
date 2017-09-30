@@ -2,12 +2,7 @@ import * as Query from './query'
 import * as Mutation from './mutation'
 import * as Anime from './Anime'
 import * as News from './News'
-import {
-	Upload,
-	Date,
-	Time,
-	DateTime
-} from './types'
+import { Upload, Date, Time, DateTime } from './types'
 
 export {
 	Query,
