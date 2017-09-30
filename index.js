@@ -18,6 +18,7 @@ import multer from 'multer'
 import { join } from 'path'
 import { FileStorage } from './src/storage'
 import AnonymousStrategy from 'passport-anonymous'
+import { express as playground } from 'graphql-playground/middleware'
 
 instrument(schema)
 
@@ -42,13 +43,16 @@ app.use(passport.initialize())
 passport.serializeUser((user, cb) => cb(null, user))
 passport.use(new AnonymousStrategy())
 
+app.get('/graphql', playground({ endpoint: '/graphql' }))
+
 MongoClient.connect(url).then(db => {
 	app.use((req, res, next) => {
 		req.db = db
 		req.storage = storage
 		next()
 	})
-	app.use(
+	app
+	app.post(
 		'/graphql',
 		passport.authenticate(['jwt', 'anonymous']),
 		graphqlUpload(
@@ -58,8 +62,7 @@ MongoClient.connect(url).then(db => {
 		),
 		instrumentMiddleware(
 			graphqlHTTP({
-				schema,
-				graphiql: true
+				schema
 			})
 		)
 	)
