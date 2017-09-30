@@ -1,7 +1,7 @@
 type News {
 	id: ID!
 	name: String!
-	cover: String
+	cover: Url
 	author: User!
 	content: String!
 	posted_date: DateTime!

@@ -6,9 +6,7 @@ type User {
 	newsletter: Boolean!
 	account_registered: Boolean!
 	playlists: [Playlist!]!
-
-	# An url
-	avatar: String
+	avatar: Url
 	ratings: [AnimeRating!]!
 	rating_for(id: ID!): AnimeRating
 }

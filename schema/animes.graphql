@@ -6,10 +6,8 @@ type Anime implements Dated {
 	status: AnimeStatus
 	medias: [Media!]!
 	season: [Season!]!
-	# An url
-	cover: String
-	# An url
-	background: String
+	cover: Url
+	background: Url
 
 	release_date: DateTime
 	edit_date: DateTime!
