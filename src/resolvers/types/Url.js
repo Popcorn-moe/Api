@@ -1,6 +1,6 @@
 import { GraphQLScalarType } from 'graphql'
-import { GraphQLError } from 'graphql/error';
-import { Kind } from 'graphql/language';
+import { GraphQLError } from 'graphql/error'
+import { Kind } from 'graphql/language'
 
 export default new GraphQLScalarType({
 	name: 'Url',
@@ -13,7 +13,9 @@ export default new GraphQLScalarType({
 	},
 	parseLiteral(ast) {
 		if (ast.kind === Kind.STRING)
-			throw new GraphQLError(`Query error: Can only parse strings to urls but got a: ${ast.kind}`);
+			throw new GraphQLError(
+				`Query error: Can only parse strings to urls but got a: ${ast.kind}`
+			)
 		return ast.value
 	}
 })

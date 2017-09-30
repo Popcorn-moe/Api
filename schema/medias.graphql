@@ -6,6 +6,8 @@ type Media implements Dated {
 	release_date: DateTime
 	edit_date: DateTime!
 	posted_date: DateTime!
+	comment(content: String!): ID!
+	linkTo(anime: ID!, season: Int = -1, episode: Int = -1): Boolean!
 }
 
 enum MediaType {
@@ -31,3 +33,12 @@ type Comment {
 	edited: DateTime
 }
 
+input MediaInput {
+	type: MediaType!
+	release_date: DateTime
+}
+
+extend type Mutation {
+	addMedia(media: MediaInput!): Media!
+	linkMedia(media: ID!, anime: ID!, season: Int = -1, episode: Int = -1): Boolean!
+}

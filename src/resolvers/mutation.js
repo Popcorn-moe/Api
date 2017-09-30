@@ -199,6 +199,50 @@ export function updateNews(
 	)
 }
 
+export function addMedia(
+	root: any,
+	{ media }: { media: MediaInput },
+	context: Context
+): Promise<ID> {
+	media.comments = []
+	media.rate = 0
+	media.edit_date = now()
+	media.posted_date = now()
+	return needGroup(context, ADMIN).then(() =>
+		context.db
+			.collection('medias')
+			.insertOne(media)
+			.then(({ ops: [result] }) => {
+				result.id = result._id
+				return result
+			})
+	)
+}
+
+export function linkMedia(
+	root: any,
+	{
+		media,
+		anime,
+		season,
+		episode
+	}: { media: ID, anime: ID, season: Number, episode: Number },
+	context: Context
+) {
+	let update
+	if (season == -1 || episode == -1) {
+		update = { $push: { medias: media } }
+	} else {
+		update = { $push: { [`seasons.${season}.episodes.${episode}`]: media } }
+	}
+	return needGroup(context, ADMIN).then(() =>
+		context.db
+			.collection('animes')
+			.updateOne({ _id: anime }, update)
+			.then(({ matchedCount }) => matchedCount == 1)
+	)
+}
+
 function now() {
 	return new Date()
 }
