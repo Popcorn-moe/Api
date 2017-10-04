@@ -9,6 +9,7 @@ type User {
 	avatar: Url
 	ratings: [AnimeRating!]!
 	rating_for(id: ID!): AnimeRating
+	relations: [Relation!]!
 }
 
 type Playlist {
@@ -38,6 +39,7 @@ type AnimeRating {
 extend type Query {
 	me: User
 	users: [User!]!
+	searchUser(name: String!): [User!]!
 }
 
 

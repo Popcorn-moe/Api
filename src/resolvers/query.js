@@ -31,31 +31,33 @@ const mapAnime = ({
 	release_date,
 	edit_date,
 	posted_date
+});
+
+const mapUser = ({
+	id,
+	login,
+	email,
+	group,
+	newsletter,
+	account_registered,
+	avatar,
+	playlists,
+	relations
+}: User) => ({
+	id,
+	login,
+	email,
+	group,
+	newsletter,
+	account_registered,
+	avatar,
+	playlists,
+	relations
 })
 
-export function me(root: any, args: any, context: Context): ?User {
+export function me(root: any, args: any, context: Context) {
 	if (context.user) {
-		return context.user.then(
-			({
-				id,
-				login,
-				email,
-				group,
-				newsletter,
-				account_registered,
-				avatar,
-				playlists
-			}: User) => ({
-				id,
-				login,
-				email,
-				group,
-				newsletter,
-				account_registered,
-				avatar,
-				playlists
-			})
-		)
+		return context.user.then(mapUser);
 	} else return null
 }
 
@@ -92,27 +94,23 @@ export function users(
 			data.id = data._id
 			return data
 		})
-		.map(
-			({
-				id,
-				login,
-				email,
-				group,
-				newsletter,
-				account_registered,
-				avatar,
-				playlists
-			}: User) => ({
-				id,
-				login,
-				email,
-				group,
-				newsletter,
-				account_registered,
-				avatar,
-				playlists
-			})
-		)
+		.map(mapUser)
+		.toArray()
+}
+
+export function searchUser(
+	root: any,
+	{ name }: { name: String },
+	context: Context
+): Promise<Array<User>> {
+	return context.db
+		.collection('users')
+		.find({login: new RegExp(".*" + name + ".*")})
+		.map(data => {
+			data.id = data._id
+			return data
+		})
+		.map(mapUser)
 		.toArray()
 }
 
