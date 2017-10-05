@@ -103,15 +103,15 @@ export function searchUser(
 	{ name }: { name: String },
 	context: Context
 ): Promise<Array<User>> {
-	return context.db
+	return name ? context.db
 		.collection('users')
-		.find({login: new RegExp(".*" + name + ".*")})
+		.find({login: new RegExp(".*" + name + ".*", 'i')})
 		.map(data => {
 			data.id = data._id
 			return data
 		})
 		.map(mapUser)
-		.toArray()
+		.toArray() : []
 }
 
 export function authors(
