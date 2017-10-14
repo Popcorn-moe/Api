@@ -13,31 +13,6 @@ function get(context: Context, user) {
 		.collection('users')
 		.find({ _id: new ObjectID(user) })
 		.limit(1)
-		.map(data => {
-			data.id = data._id
-			return data
-		})
-		.map(
-			({
-				id,
-				login,
-				email,
-				group,
-				newsletter,
-				account_registered,
-				avatar,
-				playlists
-			}: User) => ({
-				id,
-				login,
-				email,
-				group,
-				newsletter,
-				account_registered,
-				avatar,
-				playlists
-			})
-		)
-		.toArray()
-		.then(([user]) => user)
+		.map(({ _id, ...fields }) => ({ id: _id, ...fields }))
+		.next()
 }

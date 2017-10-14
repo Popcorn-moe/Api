@@ -12,19 +12,6 @@ type User {
 	relations: [Relation!]!
 }
 
-type Playlist {
-	id: ID!
-	name: String!
-	type: PlaylistType!
-	medias: [Media!]!
-}
-
-enum PlaylistType {
-	NORMAL,
-	HISTORY,
-	FOLLOWS
-}
-
 enum UserGroup {
 	ADMIN,
 	MODERATOR,

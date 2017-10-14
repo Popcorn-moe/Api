@@ -58,7 +58,11 @@ export function addAnime(
 	return needGroup(context, ADMIN).then(() =>
 		context.db
 			.collection('animes')
-			.insertOne(anime)
+			.insertOne({
+				...anime,
+				medias: [],
+				seasons: []
+			})
 			.then(({ insertedId }) => insertedId)
 	)
 }

@@ -1,0 +1,23 @@
+type Playlist {
+    id: ID!
+    author: User!
+    name: String!
+    type: PlaylistType!
+    medias: [PlaylistElem!]!
+}
+
+union PlaylistElem = PlaylistAnimeElem | PlaylistMediaElem
+
+type PlaylistAnimeElem {
+    anime: Anime!
+}
+
+type PlaylistMediaElem {
+    media: Media!
+}
+
+enum PlaylistType {
+    NORMAL,
+    HISTORY,
+    FOLLOWS
+}

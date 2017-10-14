@@ -5,6 +5,7 @@
         "node": "current"
       }
     }],
-    "flow"
+    "flow",
+    "stage-2"
   ]
 }

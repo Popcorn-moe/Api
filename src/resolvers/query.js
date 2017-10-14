@@ -5,60 +5,8 @@ import { ObjectID } from 'mongodb'
 type ID = string
 type Context = any
 
-const mapAnime = ({
-	id,
-	names,
-	authors,
-	tags,
-	status,
-	medias,
-	season,
-	cover,
-	background,
-	release_date,
-	edit_date,
-	posted_date
-}: Anime) => ({
-	id,
-	names,
-	authors,
-	tags,
-	status,
-	medias,
-	season,
-	cover,
-	background,
-	release_date,
-	edit_date,
-	posted_date
-});
-
-const mapUser = ({
-	id,
-	login,
-	email,
-	group,
-	newsletter,
-	account_registered,
-	avatar,
-	playlists,
-	relations
-}: User) => ({
-	id,
-	login,
-	email,
-	group,
-	newsletter,
-	account_registered,
-	avatar,
-	playlists,
-	relations
-})
-
 export function me(root: any, args: any, context: Context) {
-	if (context.user) {
-		return context.user.then(mapUser);
-	} else return null
+	return context.user
 }
 
 export function tags(
@@ -69,16 +17,7 @@ export function tags(
 	return context.db
 		.collection('tags')
 		.find()
-		.map(data => {
-			data.id = data._id
-			return data
-		})
-		.map(({ id, name, desc, color }: Tag) => ({
-			id,
-			name,
-			desc,
-			color
-		}))
+		.map(({ _id, ...fields }) => ({ id: _id, ...fields }))
 		.toArray()
 }
 
@@ -90,11 +29,7 @@ export function users(
 	return context.db
 		.collection('users')
 		.find()
-		.map(data => {
-			data.id = data._id
-			return data
-		})
-		.map(mapUser)
+		.map(({ _id, ...fields }) => ({ id: _id, ...fields }))
 		.toArray()
 }
 
@@ -103,15 +38,13 @@ export function searchUser(
 	{ name }: { name: String },
 	context: Context
 ): Promise<Array<User>> {
-	return name ? context.db
-		.collection('users')
-		.find({login: new RegExp(".*" + name + ".*", 'i')})
-		.map(data => {
-			data.id = data._id
-			return data
-		})
-		.map(mapUser)
-		.toArray() : []
+	return name
+		? context.db
+				.collection('users')
+				.find({ login: new RegExp('.*' + name + '.*', 'i') })
+				.map(({ _id, ...fields }) => ({ id: _id, ...fields }))
+				.toArray()
+		: []
 }
 
 export function authors(
@@ -122,17 +55,7 @@ export function authors(
 	return context.db
 		.collection('authors')
 		.find()
-		.map(data => {
-			data.id = data._id
-			return data
-		})
-		.map(({ id, name, picture, bio, organisation }: Author) => ({
-			id,
-			name,
-			picture,
-			bio,
-			organisation
-		}))
+		.map(({ _id, ...fields }) => ({ id: _id, ...fields }))
 		.toArray()
 }
 
@@ -152,11 +75,7 @@ export function animes(
 						name: sort === 'ASC' ? 1 : -1
 					}
 		)
-		.map(data => {
-			data.id = data._id
-			return data
-		})
-		.map(mapAnime)
+		.map(({ _id, ...fields }) => ({ id: _id, ...fields }))
 		.toArray()
 }
 
@@ -169,13 +88,8 @@ export function anime(
 		.collection('animes')
 		.find({ _id: id })
 		.limit(1)
-		.map(data => {
-			data.id = data._id
-			return data
-		})
-		.map(mapAnime)
-		.toArray()
-		.then(([anime]) => anime)
+		.map(({ _id, ...fields }) => ({ id: _id, ...fields }))
+		.next()
 }
 
 export function news(
@@ -186,18 +100,7 @@ export function news(
 	return context.db
 		.collection('news')
 		.find()
-		.map(data => {
-			data.id = data._id
-			return data
-		})
-		.map(({ id, name, author, content, cover, posted_date }: News) => ({
-			id,
-			name,
-			author,
-			content,
-			cover,
-			posted_date
-		}))
+		.map(({ _id, ...fields }) => ({ id: _id, ...fields }))
 		.toArray()
 }
 
@@ -206,20 +109,8 @@ export function _news(root: any, { id }: { id: ID }, context: Context): ?News {
 		.collection('news')
 		.find({ _id: new ObjectID(id) })
 		.limit(1)
-		.map(data => {
-			data.id = data._id
-			return data
-		})
-		.map(({ id, name, author, content, cover, posted_date }: News) => ({
-			id,
-			name,
-			author,
-			content,
-			cover,
-			posted_date
-		}))
-		.toArray()
-		.then(([news]) => news)
+		.map(({ _id, ...fields }) => ({ id: _id, ...fields }))
+		.next()
 }
 
 /*
