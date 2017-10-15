@@ -243,6 +243,21 @@ export function linkMedia(
 	)
 }
 
+export function updateUsers(
+	root: any,
+	{ users }: { users: ?Array<?UserInput> },
+	context: ?Context
+): ?Promise<?Array<?ID>>
+{
+	return needGroup(context, ADMIN).then(
+		() => Promise.all(
+			users.map(
+				user => context.db.collection('users').updateOne({ _id: new ObjectID(user.id) }, { $set: user })
+			)
+		)
+	).then(() => users.map(({ id }) => id))
+}
+
 function now() {
 	return new Date()
 }
