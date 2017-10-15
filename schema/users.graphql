@@ -29,7 +29,18 @@ extend type Query {
 	searchUser(name: String!): [User!]!
 }
 
+input UserInput {
+	id: ID!
+	login: String
+	email: String
+	group: UserGroup
+	newsletter: Boolean
+	account_registered: Boolean
+	avatar: Url
+}
 
 extend type Mutation {
 	setAvatar(file: Upload!): Result!
+	updateUsers(users: [UserInput!]!): [ID!]!
 }
+
