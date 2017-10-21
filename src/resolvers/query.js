@@ -6,7 +6,11 @@ type ID = string
 type Context = any
 
 export function me(root: any, args: any, context: Context) {
-	return context.user
+	return context.user.then(user => {
+		if(!user.friends) user.friends = [];
+		if(!user.blocked) user.blocked = [];
+		return user
+	})
 }
 
 export function tags(

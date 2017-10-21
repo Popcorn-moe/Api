@@ -8,7 +8,6 @@ type Context = any
 type Upload = any
 
 // https://developer.mozilla.org/fr/docs/Web/HTTP/Basics_of_HTTP/MIME_types#Images_types
-
 const IMAGE_MIME_TYPES = [
 	'image/gif', // GIF images (lossless compression, superseded by PNG)
 	'image/jpeg', // JPEG images
@@ -260,6 +259,28 @@ export function updateUsers(
 			)
 		)
 	).then(() => users.map(({ id }) => id))
+}
+
+export function addFriend(
+	root: any,
+	{ user }: { user: ID },
+	context: ?Context
+): Promise<Result> | Result {
+	needAuth(context)
+	return context.user
+		.then(u => {
+			if(u.id == user) //voluntary ==
+				return { error: "You can't be friend with yourself!" };
+			if (!u.friends)
+				u.friends = [];
+			if (u.friends.filter(u => u == user).length > 0) //voluntary ==
+				return { error: "You are already friends" };
+			context.db
+				.collection('users')
+				.updateOne({ _id: new ObjectID(user) }, { $addToSet: { friends: u.id } }, {upsert: true})
+			u.friends.push(new ObjectID(user))
+			return !u.save() ? {error: null} : {error: "nothing to save"};
+		})
 }
 
 function now() {

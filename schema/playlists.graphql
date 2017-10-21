@@ -2,7 +2,6 @@ type Playlist {
     id: ID!
     author: User!
     name: String!
-    type: PlaylistType!
     medias: [PlaylistElem!]!
 }
 
@@ -14,10 +13,4 @@ type PlaylistAnimeElem {
 
 type PlaylistMediaElem {
     media: Media!
-}
-
-enum PlaylistType {
-    NORMAL,
-    HISTORY,
-    FOLLOWS
 }

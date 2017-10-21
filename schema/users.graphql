@@ -9,7 +9,8 @@ type User {
 	avatar: Url
 	ratings: [AnimeRating!]!
 	rating_for(id: ID!): AnimeRating
-	relations: [Relation!]!
+	friends: [User!]!
+	blocked: [User!]!
 }
 
 enum UserGroup {
@@ -42,5 +43,9 @@ input UserInput {
 extend type Mutation {
 	setAvatar(file: Upload!): Result!
 	updateUsers(users: [UserInput!]!): [ID!]!
+	addFriend(user: ID!): Result!
+	delFriend(user: ID!): Boolean
+	blockUser(user: ID!): Boolean
+	unlockUser(user: ID!): Boolean
 }
 
