@@ -11,6 +11,7 @@ type User {
 	rating_for(id: ID!): AnimeRating
 	friends: [User!]!
 	blocked: [User!]!
+	notifications: [Notification!]!
 }
 
 enum UserGroup {

@@ -1,4 +1,8 @@
-export function anime({ anime }: { anime: String }, args: any, context: Context) {
+export function anime(
+	{ anime }: { anime: String },
+	args: any,
+	context: Context
+) {
 	console.log(anime)
 	return context.db
 		.collection('animes')

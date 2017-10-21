@@ -1,5 +1,6 @@
 /* @flow */
 import { ObjectID } from 'mongodb'
+import { getNotifications } from './query'
 
 export function playlists(root: any, args: any, context: Context) {
 	return context.db
@@ -23,4 +24,8 @@ export function blocked(root: any, args: any, context: Context) {
 		.find({ _id: { $in: root.blocked.map(id => new ObjectID(id)) } })
 		.map(({ _id, ...fields }) => ({ id: _id, ...fields }))
 		.toArray()
+}
+
+export function notifications(root: any, args: any, context: Context) {
+	return getNotifications(null, { user: root.id }, context)
 }

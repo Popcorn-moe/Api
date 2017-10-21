@@ -1,0 +1,33 @@
+interface Notification {
+    date: Date!
+    type: NotifType
+}
+
+enum NotifType {
+    MESSAGE
+    FOLLOW
+    FRIEND_REQUEST
+    ROOM_INVITE
+}
+
+type NotifMessageContent implements Notification {
+    date: Date!
+    type: NotifType
+    message: String!
+}
+
+type NotifFollowContent implements Notification {
+    date: Date!
+    type: NotifType
+    anime: Anime!
+}
+
+type NotifFriendRequestContent implements Notification {
+    date: Date!
+    type: NotifType
+    user: User!
+}
+
+extend type Query {
+    getNotifications(user: ID!): [Notification!]!
+}
