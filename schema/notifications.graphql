@@ -1,4 +1,5 @@
 interface Notification {
+    id: ID!
     date: Date!
     type: NotifType
 }
@@ -11,21 +12,24 @@ enum NotifType {
 }
 
 type NotifMessageContent implements Notification {
+    id: ID!
     date: Date!
     type: NotifType
     message: String!
 }
 
 type NotifFollowContent implements Notification {
+    id: ID!
     date: Date!
     type: NotifType
     anime: Anime!
 }
 
 type NotifFriendRequestContent implements Notification {
+    id: ID!
     date: Date!
     type: NotifType
-    user: User!
+    _from: User!
 }
 
 extend type Query {

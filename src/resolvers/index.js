@@ -8,12 +8,12 @@ import {
 	PlaylistElem,
 	PlaylistAnimeElem,
 	PlaylistMediaElem
-} from './playlists/'
+} from './playlists'
 import {
 	Notification,
 	NotifFollowContent,
 	NotifFriendRequestContent
-} from './notifications/'
+} from './notifications'
 import { Upload, Url, Date, Time, DateTime } from './types'
 
 export {
