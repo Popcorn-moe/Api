@@ -5,9 +5,10 @@
   "main": "index.js",
   "scripts": {
     "start": "babel-node index.js",
+    "test": "jest --collectCoverageFrom='src/**'",
     "flowgen": "babel-node build/flow.js",
     "check": "flow check",
-    "format": "prettier --write 'index.js' 'build/**/*.js' 'src/**/*.js'"
+    "format": "prettier --write 'index.js' 'build/**/*.js' 'src/**/*.js' 'test/**/*.js'"
   },
   "repository": {
     "type": "git",
@@ -21,12 +22,14 @@
   "homepage": "https://github.com/SkyBeastMC/Popcorn.moe-Backend#readme",
   "devDependencies": {
     "babel-cli": "^6.26.0",
+    "babel-jest": "^21.2.0",
     "babel-preset-env": "^1.6.0",
     "babel-preset-flow": "^6.23.0",
     "babel-preset-stage-2": "^6.24.1",
     "flow-bin": "^0.53.1",
     "gql2flow": "^0.4.5",
     "graphql-to-json": "^1.1.2",
+    "jest": "^21.2.1",
     "prettier": "^1.7.4"
   },
   "dependencies": {
