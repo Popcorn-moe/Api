@@ -32,6 +32,11 @@ type NotifFriendRequestContent implements Notification {
     _from: User!
 }
 
+extend type Mutation {
+    acceptFriendRequest(notif: ID!): Result!
+    refuseFriendRequest(notif: ID!): Result!
+}
+
 extend type Query {
     getNotifications(user: ID!): [Notification!]!
 }

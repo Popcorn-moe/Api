@@ -292,6 +292,34 @@ export function addFriend(
 	})
 }
 
+export function acceptFriendRequest(
+	root: any,
+	{ notif }: { notif: ID },
+	context: Context
+): Promise<Result> | Result {
+	return { error: context.db
+		.collection('notifications')
+		.findOneAndDelete({ _id: new ObjectID(notif), type: 'FRIEND_REQUEST' })
+		.then(({value}) => {
+			if(!value)
+				return "This notification is not a FRIEND_REQUEST or does not exist";
+			return addFriend(null, { user: value._from }, context).error;
+		})
+	};
+}
+
+export function refuseFriendRequest(
+	root: any,
+	{ notif }: { notif: ID },
+	context: Context
+): Promise<Result> | Result {
+	return { error: context.db
+		.collection('notifications')
+		.findOneAndDelete({ _id: new ObjectID(notif), type: 'FRIEND_REQUEST' })
+		.then(({value}) => !value ? "This notification is not a FRIEND_REQUEST or does not exist" : null)
+	};
+}
+
 export function addSeason(
 	root: any,
 	{
