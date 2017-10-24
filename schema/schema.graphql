@@ -25,3 +25,8 @@ schema {
 	query: Query
 	mutation: Mutation
 }
+
+type Root {
+	query: Query
+	mutation: Mutation
+}

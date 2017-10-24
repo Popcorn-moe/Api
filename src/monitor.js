@@ -14,7 +14,7 @@ function defaultResolveFn(source, args, context, { fieldName }) {
 	}
 }
 
-const isPromise = e => typeof e.then === 'function'
+const isPromise = e => e && typeof e.then === 'function'
 
 function decorate(fn, typeName, fieldName) {
 	return (p, a, ctx, resolverInfo) => {

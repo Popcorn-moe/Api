@@ -34,6 +34,7 @@ app.use(
 		origin: [
 			'http://localhost:8080',
 			'http://localhost:8000',
+			'http://localhost:3000',
 			'https://popcorn.moe',
 			'https://admin.popcorn.moe'
 		],
@@ -63,7 +64,11 @@ MongoClient.connect(url).then(db => {
 		),
 		instrumentMiddleware(
 			graphqlHTTP({
-				schema
+				schema,
+				formatError(e) {
+					console.error(e)
+					return e;
+				}
 			})
 		)
 	)

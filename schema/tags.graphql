@@ -1,0 +1,29 @@
+type Tag {
+	id: ID!
+	name: String!
+	desc: String!
+	color: String!
+}
+
+extend type Query {
+	tags: [Tag!]!
+	tag(id: ID!): Tag
+}
+
+input TagInput {
+	name: String!
+	desc: String!
+	color: String!
+}
+
+input TagUpdate {
+	name: String
+	desc: String
+	color: String
+}
+
+extend type Mutation {
+	addTag(tag: TagInput!): ID!
+	updateTag(id: ID!, tag: TagUpdate!): ID!
+	deleteTag(id: ID!): ID!
+}

@@ -47,10 +47,10 @@ export function searchUser(
 	return name
 		? context.db
 				.collection('users')
-				.find({ login: new RegExp('.*' + name + '.*', 'i') })
+				.find({ login: new RegExp('.*' + name.toString() + '.*', 'i') })
 				.map(({ _id, ...fields }) => ({ id: _id, ...fields }))
 				.toArray()
-		: []
+		: Promise.resolve([])
 }
 
 export function authors(
@@ -96,6 +96,10 @@ export function anime(
 		.limit(1)
 		.map(({ _id, ...fields }) => ({ id: _id, ...fields }))
 		.next()
+		.then(e => {
+			console.log(e)
+			return e;
+		})
 }
 
 export function news(

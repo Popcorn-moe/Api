@@ -1,4 +1,5 @@
 import { ObjectID } from 'mongodb'
+import { addSeason as mAddSeason } from './mutation'
 
 export function authors(root: any, args: any, context: Context) {
 	return context.db
@@ -22,4 +23,16 @@ export function medias(root: any, args: any, context: Context) {
 		.find({ _id: { $in: root.medias.map(id => new ObjectID(id)) } })
 		.map(({ _id, ...fields }) => ({ id: _id, ...fields }))
 		.toArray()
+}
+
+export function seasons(root: any, args: any, context: Context) {
+	return root.seasons.map(season => (season && { anime: root.id, ...season }))
+}
+
+export function season(root: any, { season }: { season: Number }, context: Context) {
+	return root.seasons[season] && { anime: root.id, ...root.seasons[season] }
+}
+
+export function addSeason(root: any, { season }: { season: SeasonInput }, context: Context) {
+	return mAddSeason(root, { season, anime: root.id }, context)
 }

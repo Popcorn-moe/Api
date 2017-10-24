@@ -7,7 +7,7 @@ type Media implements Dated {
 	edit_date: DateTime!
 	posted_date: DateTime!
 	comment(content: String!): ID!
-	linkTo(anime: ID!, season: Int = -1, episode: Int = -1): Boolean!
+	linkTo(anime: ID!, season: Int = null, episode: Int = null): Boolean!
 }
 
 enum MediaType {
@@ -15,14 +15,6 @@ enum MediaType {
 	TRAILER
 	SONG
 	FILM
-}
-
-type Season implements Dated {
-	name: String!
-	episodes: [Media!]!
-	release_date: DateTime
-	edit_date: DateTime!
-	posted_date: DateTime!
 }
 
 type Comment {
@@ -40,5 +32,5 @@ input MediaInput {
 
 extend type Mutation {
 	addMedia(media: MediaInput!): Media!
-	linkMedia(media: ID!, anime: ID!, season: Int = -1, episode: Int = -1): Boolean!
+	linkMedia(media: ID!, anime: ID!, season: Int = null, episode: Int = null): Boolean!
 }

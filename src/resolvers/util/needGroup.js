@@ -1,5 +1,5 @@
 import groups from './groups'
-import needAuth from './needAuth'
+import { needAuth } from '.'
 
 export default function needGroup(req, group) {
 	needAuth(req)

@@ -5,7 +5,9 @@ type Anime implements Dated {
 	tags: [Tag!]!
 	status: AnimeStatus
 	medias: [Media!]!
-	seasons: [Season!]!
+	seasons: [Season]!
+	season(season: Int!): Season
+	addSeason(season: SeasonInput!): Season!
 	cover: Url
 	background: Url
 
@@ -14,35 +16,25 @@ type Anime implements Dated {
 	posted_date: DateTime!
 }
 
+type Season implements Dated {
+	anime: ID!
+	name: String!
+	episodes: [Media!]!
+	release_date: DateTime
+	edit_date: DateTime!
+	posted_date: DateTime!
+	# addEpisode(media: ID = null, episode: Int!): ID!
+}
+
 enum AnimeStatus {
 	PENDING
 	FINISHED
 	NOT_STARTED
 }
 
-type Author {
-	id: ID!
-	name: String!
-	picture: Url
-	bio: String!
-	organisation: Boolean!
-	animes(limit: Int, sort: Sort): [Anime!]!
-}
-
-type Tag {
-	id: ID!
-	name: String!
-	desc: String!
-	color: String!
-}
-
 extend type Query {
-	authors: [Author!]!
-	tags: [Tag!]!
 	animes(limit: Int, sort: Sort = NONE): [Anime!]
-	author(id: ID!): Author
 	anime(id: ID!): Anime
-	tag(id: ID!): Tag
 }
 
 input AnimeInput {
@@ -56,39 +48,14 @@ input AnimeInput {
 	release_date: DateTime
 }
 
-input TagInput {
+input SeasonInput {
+	season: Int!
 	name: String!
-	desc: String!
-	color: String!
-}
-
-input TagUpdate {
-	name: String
-	desc: String
-	color: String
-}
-
-input AuthorInput {
-	name: String!
-	picture: Upload
-	bio: String!
-	organisation: Boolean!
-}
-
-input AuthorUpdate {
-	name: String
-	picture: Upload
-	bio: String
-	organisation: Boolean
+	release_date: DateTime
 }
 
 extend type Mutation {
 	addAnime(anime: AnimeInput!): ID!
 	updateAnime(id: ID!, anime: AnimeInput!): ID!
-	addTag(tag: TagInput!): ID!
-	updateTag(id: ID!, tag: TagUpdate!): ID!
-	deleteTag(id: ID!): ID!
-	addAuthor(author: AuthorInput!): ID!
-	updateAuthor(id: ID!, author: AuthorUpdate!): ID!
-	deleteAuthor(id: ID!): ID!
+	addSeason(anime: ID!, season: SeasonInput!): Season!
 }

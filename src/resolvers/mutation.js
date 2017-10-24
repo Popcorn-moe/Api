@@ -166,6 +166,7 @@ export function addNews(
 	context: Context
 ): Promise<ID> {
 	if (news.cover) news.cover = context.storage.getUrl(news.cover)
+	// $FlowIgnore
 	news.posted_date = now()
 	return needGroup(context, ADMIN).then(() =>
 		context.db
@@ -207,18 +208,19 @@ export function addMedia(
 	{ media }: { media: MediaInput },
 	context: Context
 ): Promise<ID> {
+	// $FlowIgnore
 	media.comments = []
+	// $FlowIgnore
 	media.rate = 0
+	// $FlowIgnore
 	media.edit_date = now()
+	// $FlowIgnore
 	media.posted_date = now()
 	return needGroup(context, ADMIN).then(() =>
 		context.db
 			.collection('medias')
 			.insertOne(media)
-			.then(({ ops: [result] }) => {
-				result.id = result._id
-				return result
-			})
+			.then(({ ops: [{ _id, ...result }] }) => ({ id: _id, ...result }))
 	)
 }
 
@@ -229,14 +231,14 @@ export function linkMedia(
 		anime,
 		season,
 		episode
-	}: { media: ID, anime: ID, season: Number, episode: Number },
+	}: { media: ID, anime: ID, season: ?Number, episode: ?Number },
 	context: Context
 ) {
 	let update
-	if (season == -1 || episode == -1) {
-		update = { $push: { medias: media } }
+	if (season && episode) {
+		update = { $push: { [`seasons.${season.toString()}.episodes.${episode.toString()}`]: media } }
 	} else {
-		update = { $push: { [`seasons.${season}.episodes.${episode}`]: media } }
+		update = { $push: { medias: media } }
 	}
 	return needGroup(context, ADMIN).then(() =>
 		context.db
@@ -248,8 +250,8 @@ export function linkMedia(
 
 export function updateUsers(
 	root: any,
-	{ users }: { users: ?Array<?UserInput> },
-	context: ?Context
+	{ users }: { users: Array<UserInput> },
+	context: Context
 ): ?Promise<?Array<?ID>> {
 	return needGroup(context, ADMIN)
 		.then(() =>
@@ -267,7 +269,7 @@ export function updateUsers(
 export function addFriend(
 	root: any,
 	{ user }: { user: ID },
-	context: ?Context
+	context: Context
 ): Promise<Result> | Result {
 	needAuth(context)
 	return context.user.then(u => {
@@ -288,6 +290,29 @@ export function addFriend(
 		u.friends.push(new ObjectID(user))
 		return !u.save() ? { error: null } : { error: 'nothing to save' }
 	})
+}
+
+export function addSeason(
+	root: any,
+	{
+		anime,
+		season,
+	}: { anime: ID, season: SeasonInput},
+	context: Context
+) {
+	let seasonNb = season.season
+	delete season.season
+	const time = now()
+	// $FlowIgnore
+	season.edit_date = time
+	// $FlowIgnore
+	season.posted_date = time
+	return needGroup(context, ADMIN).then(() =>
+		context.db
+			.collection('animes')
+			.updateOne({ _id: anime }, { $set: { [`seasons.${seasonNb.toString()}`]: season } })
+			.then(() => ({ anime, ...season }))
+	)
 }
 
 function now() {

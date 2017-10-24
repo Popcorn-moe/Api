@@ -1,0 +1,33 @@
+type Author {
+	id: ID!
+	name: String!
+	picture: Url
+	bio: String!
+	organisation: Boolean!
+	animes(limit: Int, sort: Sort): [Anime!]!
+}
+
+extend type Query {
+	authors: [Author!]!
+	author(id: ID!): Author
+}
+
+input AuthorInput {
+	name: String!
+	picture: Upload
+	bio: String!
+	organisation: Boolean!
+}
+
+input AuthorUpdate {
+	name: String
+	picture: Upload
+	bio: String
+	organisation: Boolean
+}
+
+extend type Mutation {
+	addAuthor(author: AuthorInput!): ID!
+	updateAuthor(id: ID!, author: AuthorUpdate!): ID!
+	deleteAuthor(id: ID!): ID!
+}

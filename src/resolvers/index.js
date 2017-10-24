@@ -4,6 +4,7 @@ import * as User from './User'
 import * as Anime from './Anime'
 import * as News from './News'
 import * as Media from './Media'
+import * as Season from './Season'
 import {
 	PlaylistElem,
 	PlaylistAnimeElem,
