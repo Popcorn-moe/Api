@@ -128,7 +128,6 @@ export function getNotifications(
 	{ user }: { user: ID },
 	context: Context
 ) {
-	console.log(user)
 	return context.db
 		.collection('notifications')
 		.find({ user: new ObjectID(user) })

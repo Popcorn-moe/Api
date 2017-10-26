@@ -274,11 +274,9 @@ export function addFriend(
 	needAuth(context)
 	return context.user.then(u => {
 		if (u.id == user)
-			//voluntary ==
 			return { error: "You can't be friend with yourself!" }
 		if (!u.friends) u.friends = []
 		if (u.friends.filter(u => u == user).length > 0)
-			//voluntary ==
 			return { error: 'You are already friends' }
 		context.db
 			.collection('users')
@@ -297,27 +295,36 @@ export function acceptFriendRequest(
 	{ notif }: { notif: ID },
 	context: Context
 ): Promise<Result> | Result {
-	return { error: context.db
-		.collection('notifications')
-		.findOneAndDelete({ _id: new ObjectID(notif), type: 'FRIEND_REQUEST' })
-		.then(({value}) => {
-			if(!value)
-				return "This notification is not a FRIEND_REQUEST or does not exist";
-			return addFriend(null, { user: value._from }, context).error;
-		})
-	};
+	needAuth(context)
+	return context.user.then(user => {
+		return {
+			error: context.db
+				.collection('notifications')
+				.findOneAndDelete({_id: new ObjectID(notif), user: user._id, type: 'FRIEND_REQUEST'})
+				.then(({value}) => {
+					if (!value)
+						return "This notification is not a FRIEND_REQUEST or does not exist";
+					return addFriend(null, {user: value._from}, context).error;
+				})
+		}
+	});
 }
+
 
 export function refuseFriendRequest(
 	root: any,
 	{ notif }: { notif: ID },
 	context: Context
 ): Promise<Result> | Result {
-	return { error: context.db
-		.collection('notifications')
-		.findOneAndDelete({ _id: new ObjectID(notif), type: 'FRIEND_REQUEST' })
-		.then(({value}) => !value ? "This notification is not a FRIEND_REQUEST or does not exist" : null)
-	};
+	needAuth(context)
+	return context.user.then(user => {
+		return {
+			error: context.db
+				.collection('notifications')
+				.findOneAndDelete({_id: new ObjectID(notif), user: user._id, type: 'FRIEND_REQUEST'})
+				.then(({value}) => !value ? "This notification is not a FRIEND_REQUEST or does not exist" : null)
+		}
+	});
 }
 
 export function addSeason(
