@@ -28,7 +28,7 @@ type AnimeRating {
 extend type Query {
 	me: User
 	users: [User!]!
-	searchUser(name: String!): [User!]!
+	searchUser(name: String!, limit: Int = 10): [User!]!
 }
 
 input UserInput {

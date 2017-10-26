@@ -41,13 +41,29 @@ export function users(
 
 export function searchUser(
 	root: any,
-	{ name }: { name: String },
+	{ name, limit }: { name: String, limit: Number },
 	context: Context
 ): Promise<Array<User>> {
 	return name
 		? context.db
 				.collection('users')
-				.find({ login: new RegExp('.*' + name.toString() + '.*', 'i') })
+				.find({ login: new RegExp(escapeRegExp(name), 'i') })
+				.limit(limit)
+				.map(({ _id, ...fields }) => ({ id: _id, ...fields }))
+				.toArray()
+		: Promise.resolve([])
+}
+
+export function searchAnime(
+	root: any,
+	{ name, limit }: { name: String, limit: Number },
+	context: Context
+): Promise<Array<User>> {
+	return name
+		? context.db
+				.collection('animes')
+				.find({ names: new RegExp(escapeRegExp(name), 'i') })
+				.limit(limit)
 				.map(({ _id, ...fields }) => ({ id: _id, ...fields }))
 				.toArray()
 		: Promise.resolve([])
@@ -133,4 +149,8 @@ export function getNotifications(
 		.find({ user: new ObjectID(user) })
 		.map(({ _id, ...fields }) => ({ id: _id, ...fields }))
 		.toArray()
+}
+
+function escapeRegExp(text) {
+  return text.replace(/[-[\]{}()*+?.,\\^$|#\s]/g, '\\$&');
 }

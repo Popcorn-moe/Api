@@ -35,6 +35,7 @@ enum AnimeStatus {
 extend type Query {
 	animes(limit: Int, sort: Sort = NONE): [Anime!]
 	anime(id: ID!): Anime
+	searchAnime(name: String!, limit: Int = 10): [Anime!]!
 }
 
 input AnimeInput {
