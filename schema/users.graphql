@@ -25,12 +25,6 @@ type AnimeRating {
 	rating: Float!
 }
 
-extend type Query {
-	me: User
-	users: [User!]!
-	searchUser(name: String!, limit: Int = 10): [User!]!
-}
-
 input UserInput {
 	id: ID!
 	login: String
@@ -49,4 +43,13 @@ extend type Mutation {
 	blockUser(user: ID!): Boolean
 	unlockUser(user: ID!): Boolean
 }
+
+extend type Query {
+	me: User
+	users: [User!]!
+	searchUser(name: String!, limit: Int = 10): [User!]!
+	friendRequests: [User!]!
+	pendingFriendRequests: [User!]!
+}
+
 
