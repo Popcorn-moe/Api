@@ -236,7 +236,11 @@ export function linkMedia(
 ) {
 	let update
 	if (season && episode) {
-		update = { $push: { [`seasons.${season.toString()}.episodes.${episode.toString()}`]: media } }
+		update = {
+			$push: {
+				[`seasons.${season.toString()}.episodes.${episode.toString()}`]: media
+			}
+		}
 	} else {
 		update = { $push: { medias: media } }
 	}
@@ -273,8 +277,7 @@ export function addFriend(
 ): Promise<Result> | Result {
 	needAuth(context)
 	return context.user.then(u => {
-		if (u.id == user)
-			return { error: "You can't be friend with yourself!" }
+		if (u.id == user) return { error: "You can't be friend with yourself!" }
 		if (!u.friends) u.friends = []
 		if (u.friends.filter(u => u == user).length > 0)
 			return { error: 'You are already friends' }
@@ -300,16 +303,19 @@ export function acceptFriendRequest(
 		return {
 			error: context.db
 				.collection('notifications')
-				.findOneAndDelete({_id: new ObjectID(notif), user: user._id, type: 'FRIEND_REQUEST'})
-				.then(({value}) => {
+				.findOneAndDelete({
+					_id: new ObjectID(notif),
+					user: user._id,
+					type: 'FRIEND_REQUEST'
+				})
+				.then(({ value }) => {
 					if (!value)
-						return "This notification is not a FRIEND_REQUEST or does not exist";
-					return addFriend(null, {user: value._from}, context).error;
+						return 'This notification is not a FRIEND_REQUEST or does not exist'
+					return addFriend(null, { user: value._from }, context).error
 				})
 		}
-	});
+	})
 }
-
 
 export function refuseFriendRequest(
 	root: any,
@@ -321,18 +327,24 @@ export function refuseFriendRequest(
 		return {
 			error: context.db
 				.collection('notifications')
-				.findOneAndDelete({_id: new ObjectID(notif), user: user._id, type: 'FRIEND_REQUEST'})
-				.then(({value}) => !value ? "This notification is not a FRIEND_REQUEST or does not exist" : null)
+				.findOneAndDelete({
+					_id: new ObjectID(notif),
+					user: user._id,
+					type: 'FRIEND_REQUEST'
+				})
+				.then(
+					({ value }) =>
+						!value
+							? 'This notification is not a FRIEND_REQUEST or does not exist'
+							: null
+				)
 		}
-	});
+	})
 }
 
 export function addSeason(
 	root: any,
-	{
-		anime,
-		season,
-	}: { anime: ID, season: SeasonInput},
+	{ anime, season }: { anime: ID, season: SeasonInput },
 	context: Context
 ) {
 	let seasonNb = season.season
@@ -345,7 +357,10 @@ export function addSeason(
 	return needGroup(context, ADMIN).then(() =>
 		context.db
 			.collection('animes')
-			.updateOne({ _id: anime }, { $set: { [`seasons.${seasonNb.toString()}`]: season } })
+			.updateOne(
+				{ _id: anime },
+				{ $set: { [`seasons.${seasonNb.toString()}`]: season } }
+			)
 			.then(() => ({ anime, ...season }))
 	)
 }

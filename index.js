@@ -67,7 +67,7 @@ MongoClient.connect(url).then(db => {
 				schema,
 				formatError(e) {
 					console.error(e)
-					return e;
+					return e
 				}
 			})
 		)

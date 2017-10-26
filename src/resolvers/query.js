@@ -6,10 +6,10 @@ type Context = any
 export function me(root: any, args: any, context: Context) {
 	return context.user
 		? context.user.then(user => {
-			if (!user.friends) user.friends = []
-			if (!user.blocked) user.blocked = []
-			return user
-		})
+				if (!user.friends) user.friends = []
+				if (!user.blocked) user.blocked = []
+				return user
+			})
 		: null
 }
 
@@ -44,11 +44,11 @@ export function searchUser(
 ): Promise<Array<User>> {
 	return name
 		? context.db
-			.collection('users')
-			.find({ login: new RegExp(escapeRegExp(name), 'i') })
-			.limit(limit)
-			.map(({ _id, ...fields }) => ({ id: _id, ...fields }))
-			.toArray()
+				.collection('users')
+				.find({ login: new RegExp(escapeRegExp(name), 'i') })
+				.limit(limit)
+				.map(({ _id, ...fields }) => ({ id: _id, ...fields }))
+				.toArray()
 		: Promise.resolve([])
 }
 
@@ -59,11 +59,11 @@ export function searchAnime(
 ): Promise<Array<User>> {
 	return name
 		? context.db
-			.collection('animes')
-			.find({ names: new RegExp(escapeRegExp(name), 'i') })
-			.limit(limit)
-			.map(({ _id, ...fields }) => ({ id: _id, ...fields }))
-			.toArray()
+				.collection('animes')
+				.find({ names: new RegExp(escapeRegExp(name), 'i') })
+				.limit(limit)
+				.map(({ _id, ...fields }) => ({ id: _id, ...fields }))
+				.toArray()
 		: Promise.resolve([])
 }
 
@@ -92,8 +92,8 @@ export function animes(
 			sort === 'NONE'
 				? {}
 				: {
-					name: sort === 'ASC' ? 1 : -1
-				}
+						name: sort === 'ASC' ? 1 : -1
+					}
 		)
 		.map(({ _id, ...fields }) => ({ id: _id, ...fields }))
 		.toArray()
@@ -112,7 +112,7 @@ export function anime(
 		.next()
 		.then(e => {
 			console.log(e)
-			return e;
+			return e
 		})
 }
 
@@ -154,17 +154,20 @@ export function friendRequests(
 	args: any,
 	context: Context
 ): ?Array<User> {
-	needAuth(context);
-	return context.user.then(user => context.db
-		.collection('notifications')
-		.find({ user: user._id, type: "FRIEND_REQUEST" })
-		.toArray().then(notifs => {
-			return context.db
-				.collection('users')
-				.find({ _id: { $in: notifs.map(notif => notif._from) } })
-				.map(({ _id, ...fields }) => ({ id: _id, ...fields }))
-				.toArray()
-		}));
+	needAuth(context)
+	return context.user.then(user =>
+		context.db
+			.collection('notifications')
+			.find({ user: user._id, type: 'FRIEND_REQUEST' })
+			.toArray()
+			.then(notifs => {
+				return context.db
+					.collection('users')
+					.find({ _id: { $in: notifs.map(notif => notif._from) } })
+					.map(({ _id, ...fields }) => ({ id: _id, ...fields }))
+					.toArray()
+			})
+	)
 }
 
 export function pendingFriendRequests(
@@ -172,19 +175,22 @@ export function pendingFriendRequests(
 	args: any,
 	context: Context
 ): ?Promise<Array<User>> {
-	needAuth(context);
-	return context.user.then(user => context.db
-		.collection('notifications')
-		.find({ _from: user._id, type: "FRIEND_REQUEST" })
-		.toArray().then(notifs => {
-			return context.db
-				.collection('users')
-				.find({ _id: { $in: notifs.map(notif => notif.user) } })
-				.map(({ _id, ...fields }) => ({ id: _id, ...fields }))
-				.toArray()
-		}));
+	needAuth(context)
+	return context.user.then(user =>
+		context.db
+			.collection('notifications')
+			.find({ _from: user._id, type: 'FRIEND_REQUEST' })
+			.toArray()
+			.then(notifs => {
+				return context.db
+					.collection('users')
+					.find({ _id: { $in: notifs.map(notif => notif.user) } })
+					.map(({ _id, ...fields }) => ({ id: _id, ...fields }))
+					.toArray()
+			})
+	)
 }
 
 function escapeRegExp(text) {
-	return text.replace(/[-[\]{}()*+?.,\\^$|#\s]/g, '\\$&');
+	return text.replace(/[-[\]{}()*+?.,\\^$|#\s]/g, '\\$&')
 }

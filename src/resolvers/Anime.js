@@ -26,13 +26,21 @@ export function medias(root: any, args: any, context: Context) {
 }
 
 export function seasons(root: any, args: any, context: Context) {
-	return root.seasons.map(season => (season && { anime: root.id, ...season }))
+	return root.seasons.map(season => season && { anime: root.id, ...season })
 }
 
-export function season(root: any, { season }: { season: Number }, context: Context) {
+export function season(
+	root: any,
+	{ season }: { season: Number },
+	context: Context
+) {
 	return root.seasons[season] && { anime: root.id, ...root.seasons[season] }
 }
 
-export function addSeason(root: any, { season }: { season: SeasonInput }, context: Context) {
+export function addSeason(
+	root: any,
+	{ season }: { season: SeasonInput },
+	context: Context
+) {
 	return mAddSeason(root, { season, anime: root.id }, context)
 }
