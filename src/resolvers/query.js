@@ -192,6 +192,39 @@ export function pendingFriendRequests(
 	)
 }
 
+
+export function searchAnimes(
+	root: any,
+	{ limit, skip, name, order_by, status, type, authors, year, tags }: { limit: Number, skip: Number, name: String, order_by: String, status: AnimeStatus, type: MediaType, authors: Array<ID>, year: Number, tags: Array<ID>},
+	context: Context
+): ?Array<Anime> {
+	return context.db.collection("animes")
+		.find({
+			names: new RegExp(escapeRegExp(name), 'i'),
+			...(status ? { status }: {}),
+			...(authors ? { authors: { $in: authors.map(a => new ObjectID(a))}}: {}),
+			...(tags ? { tags: { $in: tags.map(t => new ObjectID(t))}}: {})
+		})
+		.skip(skip)
+		.limit(limit)
+		.map(({ _id, ...fields }) => ({ id: _id, ...fields }))
+		.toArray();
+}
+
+export function searchAuthor(
+	root: any,
+	{ name }: { name: String },
+	context: Context
+): Promise<Array<Author>> {
+	return name
+		? context.db
+			.collection('authors')
+			.find({ name: new RegExp(escapeRegExp(name), 'i') })
+			.map(({ _id, ...fields }) => ({ id: _id, ...fields }))
+			.toArray()
+		: Promise.resolve([])
+}
+
 function escapeRegExp(text) {
 	return text.replace(/[-[\]{}()*+?.,\\^$|#\s]/g, '\\$&')
 }

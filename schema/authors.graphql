@@ -10,6 +10,7 @@ type Author {
 extend type Query {
 	authors: [Author!]!
 	author(id: ID!): Author
+	searchAuthor(name: String): [Author!]!
 }
 
 input AuthorInput {

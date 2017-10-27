@@ -36,6 +36,7 @@ extend type Query {
 	animes(limit: Int, sort: Sort = NONE): [Anime!]
 	anime(id: ID!): Anime
 	searchAnime(name: String!, limit: Int = 10): [Anime!]!
+	searchAnimes(limit: Int = 50, skip: Int = 0, name: String, order_by: String, status: AnimeStatus, type: MediaType, authors: [ID], year: Int, tags: [ID!]): [Anime!]!
 }
 
 input AnimeInput {
@@ -59,4 +60,5 @@ extend type Mutation {
 	addAnime(anime: AnimeInput!): ID!
 	updateAnime(id: ID!, anime: AnimeInput!): ID!
 	addSeason(anime: ID!, season: SeasonInput!): Season!
+
 }

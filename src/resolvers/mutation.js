@@ -54,6 +54,8 @@ export function addAnime(
 	anime.posted_date = time
 	// $FlowIgnore
 	anime._id = toId(anime.names[0])
+	anime.tags = anime.tags.map(t => new ObjectID(t))
+	anime.authors = anime.authors.map(a => new ObjectID(a))
 	return needGroup(context, ADMIN).then(() =>
 		context.db
 			.collection('animes')
