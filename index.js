@@ -4,7 +4,8 @@ import {
 	report,
 	createContext,
 	instrumentMiddleware
-} from './src/monitor'
+} from './src/graphql/monitor'
+import memoize from './src/graphql/memoize'
 import express from 'express'
 import graphqlHTTP from 'express-graphql'
 import logger from 'morgan'
@@ -20,6 +21,7 @@ import { FileStorage } from './src/storage'
 import AnonymousStrategy from 'passport-anonymous'
 import { express as playground } from 'graphql-playground/middleware'
 
+memoize(schema)
 instrument(schema)
 
 const url = 'mongodb://localhost:27017/popcornmoe_backend'

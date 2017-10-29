@@ -57,7 +57,8 @@ export default class JwtStrategy extends Strategy {
 					},
 					catch(onRejected) {
 						return this.then(p => p, onRejected)
-					}
+					},
+					unsafe_id: jwt._id
 				})
 			}
 		)

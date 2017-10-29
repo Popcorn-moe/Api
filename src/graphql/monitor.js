@@ -55,12 +55,7 @@ const NS_PER_MS = 1e6
 const hrConvert = time => time[0] * NS_PER_SEC + time[1]
 const hrOp = (a, b, op) => [op(a[0], b[0]), op(a[1], b[1])]
 
-export function report(instrument, resStart, reqStart) {
-	instrument.endHrTime = hrOp(
-		instrument.startHrTime,
-		hrOp(resStart, reqStart, (a, b) => a - b),
-		(a, b) => a + b
-	)
+export function report(instrument) {
 	let totalCalls = 0
 	instrument.calls.forEach(
 		({
@@ -74,25 +69,17 @@ export function report(instrument, resStart, reqStart) {
 			totalCalls += time
 			console.log(`\t${typeName}.${fieldName} => ${time}ms`)
 			stats.timing(
-				`backend.graphql.${typeName}.${fieldName}`,
+				`backend.graphql.timing`,
 				time,
-				result ? [`result:${result}`] : []
+				[result ? `resolver:${typeName}#${fieldName}.${result}` : `resolver:${typeName}#${fieldName}`]
 			)
 		}
 	)
-	const total =
-		(hrConvert(instrument.endHrTime) - hrConvert(instrument.startHrTime)) /
-		NS_PER_MS
-	stats.timing(`backend.graphql.http`, total - totalCalls)
-	console.log(`\tHTTP => ${total - totalCalls}ms`)
-	stats.timing(`backend.graphql.total`, total)
-	console.log(`\tTotal => ${total}ms`)
 }
 
 export function createContext() {
 	return {
 		instrument: {
-			startHrTime: process.hrtime(),
 			calls: []
 		}
 	}
