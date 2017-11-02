@@ -225,6 +225,22 @@ export function searchAuthor(
 		: Promise.resolve([])
 }
 
+//moe.graphql
+export function moe(
+	root: any,
+	{ moe }: { moe: ?String },
+	context: Context
+): ?Promise<Kyun> {
+	return context.db
+		.collection('moe')
+		.find({ moe })
+		.toArray()
+		.then(moe => {
+			if (!moe.length) throw Error("We lack the moe you requested.")
+			return moe[Math.floor(Math.random() * moe.length)]
+		})
+}
+
 function escapeRegExp(text) {
 	return text.replace(/[-[\]{}()*+?.,\\^$|#\s]/g, '\\$&')
 }
