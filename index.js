@@ -19,7 +19,7 @@ import multer from 'multer'
 import { join } from 'path'
 import { FileStorage } from './src/storage'
 import AnonymousStrategy from 'passport-anonymous'
-import { express as playground } from 'graphql-playground/middleware'
+import { expressPlayground as playground } from 'graphql-playground-middleware'
 
 memoize(schema)
 instrument(schema)
