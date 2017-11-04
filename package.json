@@ -40,6 +40,7 @@
     "graphql": "^0.10.5",
     "graphql-iso-date": "^3.3.0",
     "graphql-playground-middleware": "^1.1.0",
+    "graphql-subscriptions": "^0.5.4",
     "graphql-tools": "^1.2.1",
     "memoizee": "^0.4.11",
     "mime": "^1.4.0",
@@ -49,6 +50,7 @@
     "node-dogstatsd": "0.0.6",
     "passport": "^0.4.0",
     "passport-anonymous": "^1.0.1",
-    "passport-jwt": "^3.0.1"
+    "passport-jwt": "^3.0.1",
+    "subscriptions-transport-sse": "^0.6.4"
   }
 }

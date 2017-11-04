@@ -7,6 +7,8 @@ import {
 } from './src/graphql/monitor'
 import memoize from './src/graphql/memoize'
 import express from 'express'
+import { PubSub } from 'graphql-subscriptions'
+import { SubscriptionServer, SubscriptionManager } from 'subscriptions-transport-sse'
 import graphqlHTTP from 'express-graphql'
 import logger from 'morgan'
 import cookieParser from 'cookie-parser'
@@ -49,13 +51,23 @@ passport.use(new AnonymousStrategy())
 
 app.get('/graphql', playground({ endpoint: '/graphql' }))
 
+SubscriptionServer({
+	onSubscribe: (msg, params) => console.log(msg, params),
+	subscriptionManager: new SubscriptionManager({
+		schema,
+		pubsub: new PubSub()
+	})
+}, {
+	express: app,
+	path: '/subscriptions',
+})
+
 MongoClient.connect(url).then(db => {
 	app.use((req, res, next) => {
 		req.db = db
 		req.storage = storage
 		next()
 	})
-	app
 	app.post(
 		'/graphql',
 		passport.authenticate(['jwt', 'anonymous']),
