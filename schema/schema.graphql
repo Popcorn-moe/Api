@@ -21,9 +21,14 @@ type Mutation {
 	hello(name: String): String
 }
 
+type Subscription {
+	test(param: String): String
+}
+
 schema {
 	query: Query
 	mutation: Mutation
+	subscription: Subscription
 }
 
 type Root {

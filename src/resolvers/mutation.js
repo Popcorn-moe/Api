@@ -367,6 +367,12 @@ export function addSeason(
 	)
 }
 
+
+export function hello(root: any, { name }: { name: String }, context: Context) {
+	context.pubsub.publish("test", { name, licorne: 'magique'});
+	return `hello ${name}!`;
+}
+
 function now() {
 	return new Date()
 }

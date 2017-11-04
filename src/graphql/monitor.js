@@ -45,7 +45,8 @@ function decorate(fn, typeName, fieldName) {
 
 export function instrument(schema) {
 	forEachField(schema, (field, typeName, fieldName) => {
-		if (!field.resolve) field.resolve = defaultResolveFn
+		if (field.subscribe) return
+		if (!field.resolve) field.resolve = defaultResolveFnQ
 		field.resolve = decorate(field.resolve, typeName, fieldName)
 	})
 }

@@ -1,5 +1,6 @@
 import * as Query from './query'
 import * as Mutation from './mutation'
+import * as Subscription from './subscription'
 import * as User from './User'
 import * as Anime from './Anime'
 import * as News from './News'
@@ -16,6 +17,7 @@ import { Upload, Url, Date, Time, DateTime } from './types'
 export {
 	Query,
 	Mutation,
+	Subscription,
 	User,
 	Anime,
 	News,

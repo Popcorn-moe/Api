@@ -1,4 +1,5 @@
 import schema from './src/schema'
+import { PubSub } from 'graphql-subscriptions';
 import {
 	instrument,
 	report,
@@ -7,8 +8,10 @@ import {
 } from './src/graphql/monitor'
 import memoize from './src/graphql/memoize'
 import express from 'express'
-import { PubSub } from 'graphql-subscriptions'
+import { createServer } from 'http'
 import { SubscriptionServer, SubscriptionManager } from 'subscriptions-transport-sse'
+import { SubscriptionServer as WSSubscriptionServer }  from 'subscriptions-transport-ws'
+import { execute, subscribe } from 'graphql';
 import graphqlHTTP from 'express-graphql'
 import logger from 'morgan'
 import cookieParser from 'cookie-parser'
@@ -27,8 +30,13 @@ memoize(schema)
 instrument(schema)
 
 const url = 'mongodb://localhost:27017/popcornmoe_backend'
-const app = express()
+const app = express();
+const server = createServer((request, response) => {
+	response.writeHead(404);
+	response.end();
+});
 const storage = new FileStorage(join(__dirname, 'uploads'))
+export const pubsub = new PubSub();
 
 storage.register(app)
 app.use(logger('dev'))
@@ -49,13 +57,25 @@ app.use(passport.initialize())
 passport.serializeUser((user, cb) => cb(null, user))
 passport.use(new AnonymousStrategy())
 
-app.get('/graphql', playground({ endpoint: '/graphql' }))
+app.get('/graphql', playground({ endpoint: '/graphql', subscriptionEndpoint: 'ws://127.0.0.1:5000' }))
+
+WSSubscriptionServer.create(
+	{
+		schema,
+		execute,
+		subscribe,
+	},
+	{
+		path: "/",
+		server
+	},
+);
 
 SubscriptionServer({
 	onSubscribe: (msg, params) => console.log(msg, params),
 	subscriptionManager: new SubscriptionManager({
 		schema,
-		pubsub: new PubSub()
+		pubsub
 	})
 }, {
 	express: app,
@@ -66,6 +86,7 @@ MongoClient.connect(url).then(db => {
 	app.use((req, res, next) => {
 		req.db = db
 		req.storage = storage
+		req.pubsub = pubsub
 		next()
 	})
 	app.post(
@@ -93,3 +114,4 @@ MongoClient.connect(url).then(db => {
 })
 
 app.listen(3030, () => console.log('Listening on port 3030'))
+server.listen(5000, () => console.log('WS: Listening on port 5000'))
