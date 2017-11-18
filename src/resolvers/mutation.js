@@ -367,6 +367,66 @@ export function addSeason(
 	)
 }
 
+export function notifyMessage(
+	root: any,
+	{ user, message }: { user: ID, message: String },
+	context: Context
+) {
+
+	const notif = {
+		user: new ObjectID(user),
+		date: now(),
+		type: "MESSAGE",
+		message
+	};
+	return context.db
+		.collection('notifications')
+		.insertOne(notif)
+		.then(({ insertedId }) => {
+			context.pubsub.publish("notification", notif);
+			return insertedId
+		})
+}
+
+export function notifyAnimeFollow(
+	root: any,
+	{ user, anime }: { user: ID, anime: ID },
+	context: Context
+) {
+	const notif = {
+		user: new ObjectID(user),
+		date: now(),
+		type: "ANIME_FOLLOW",
+		anime
+	};
+	return context.db
+		.collection('notifications')
+		.insertOne(notif)
+		.then(({ insertedId }) => {
+			context.pubsub.publish("notification", notif);
+			return insertedId
+		})
+}
+
+export function notifyFriendRequest(
+	root: any,
+	{ user, _from }: { user: ID, _from: ID },
+	context: Context
+) {
+	const notif = {
+		user: new ObjectID(user),
+		date: now(),
+		type: "FRIEND_REQUEST",
+		_from: new ObjectID(_from)
+	};
+	return context.db
+		.collection('notifications')
+		.insertOne(notif)
+		.then(({ insertedId }) => {
+			context.pubsub.publish("notification", notif);
+			return insertedId
+		})
+}
 
 export function hello(root: any, { name }: { name: String }, context: Context) {
 	context.pubsub.publish("test", { name, licorne: 'magique'});

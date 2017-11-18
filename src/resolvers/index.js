@@ -9,7 +9,7 @@ import * as Season from './Season'
 import { PlaylistElem, PlaylistAnimeElem, PlaylistMediaElem } from './playlists'
 import {
 	Notification,
-	NotifFollowContent,
+	NotifAnimeFollowContent,
 	NotifFriendRequestContent
 } from './notifications'
 import { Upload, Url, Date, Time, DateTime } from './types'
@@ -26,7 +26,7 @@ export {
 	PlaylistAnimeElem,
 	PlaylistMediaElem,
 	Notification,
-	NotifFollowContent,
+	NotifAnimeFollowContent,
 	NotifFriendRequestContent,
 	//types
 	Upload,

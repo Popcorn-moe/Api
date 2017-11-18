@@ -18,3 +18,17 @@ export const test = {
 		return payload.name
 	}
 }
+
+export const notification = {
+	subscribe: withFilter(
+		(root, args, context) => {
+			return pubsub.asyncIterator('notification')
+		},
+		(payload, variables, context) => {
+			return context.user.id === payload.user;
+		}
+	),
+	resolve(payload, args, context, info) {
+		return payload
+	}
+}

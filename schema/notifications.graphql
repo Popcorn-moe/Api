@@ -1,12 +1,13 @@
 interface Notification {
     id: ID!
     date: Date!
+    user: User!
     type: NotifType
 }
 
 enum NotifType {
     MESSAGE
-    FOLLOW
+    ANIME_FOLLOW
     FRIEND_REQUEST
     ROOM_INVITE
 }
@@ -14,13 +15,15 @@ enum NotifType {
 type NotifMessageContent implements Notification {
     id: ID!
     date: Date!
+    user: User!
     type: NotifType
     message: String!
 }
 
-type NotifFollowContent implements Notification {
+type NotifAnimeFollowContent implements Notification {
     id: ID!
     date: Date!
+    user: User!
     type: NotifType
     anime: Anime!
 }
@@ -28,6 +31,7 @@ type NotifFollowContent implements Notification {
 type NotifFriendRequestContent implements Notification {
     id: ID!
     date: Date!
+    user: User!
     type: NotifType
     _from: User!
 }
@@ -35,8 +39,15 @@ type NotifFriendRequestContent implements Notification {
 extend type Mutation {
     acceptFriendRequest(notif: ID!): Result!
     refuseFriendRequest(notif: ID!): Result!
+    notifyMessage(user: ID!, message: String!): ID!
+    notifyAnimeFollow(user: ID!, anime: ID!): ID!
+    notifyFriendRequest(user: ID!, _from: ID!): ID!
 }
 
 extend type Query {
     getNotifications(user: ID!): [Notification!]!
+}
+
+extend type Subscription {
+    notification: Notification
 }
