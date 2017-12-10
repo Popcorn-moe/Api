@@ -1,3 +1,5 @@
+import { ObjectID } from 'mongodb'
+
 export function __resolveType(obj) {
 	switch (obj.type) {
 		case 'MESSAGE':

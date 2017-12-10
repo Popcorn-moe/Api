@@ -40,7 +40,7 @@ extend type Mutation {
 	updateUsers(users: [UserInput!]!): [ID!]!
 	sendFriendsRequests(to: [ID!]!): [ID!]!
 	addFriend(user: ID!): Result!
-	delFriend(user: ID!): Boolean
+	delFriend(friend: ID!): Boolean
 	blockUser(user: ID!): Boolean
 	unlockUser(user: ID!): Boolean
 }
@@ -49,8 +49,6 @@ extend type Query {
 	me: User
 	users: [User!]!
 	searchUser(name: String!, limit: Int = 10): [User!]!
-	friendRequests: [User!]!
-	pendingFriendRequests: [User!]!
+	friendRequests: [NotifFriendRequestContent!]!
+	pendingFriendRequests: [NotifFriendRequestContent!]!
 }
-
-

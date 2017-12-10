@@ -7,10 +7,17 @@ function diff(o1, o2) {
 	const result = {}
 	for (const key in o1) {
 		const value = o1[key]
-		if (typeof value === 'object' && typeof o2[key] === 'object') {
+		if (Array.isArray(value) && Array.isArray(o2[key])) {
+			if (!value.every((e,i) => e === o2[key][i]))
+				result[key] = value
+			continue;
+		}
+		else if (typeof value === 'object' && typeof o2[key] === 'object') {
 			const tmp = diff(value, o2[key])
 			if (tmp) result[key] = tmp
-		} else if (value !== o2[key]) {
+			continue;
+		}
+		if (value !== o2[key]) {
 			result[key] = value
 		}
 	}
@@ -41,13 +48,10 @@ export default class JwtStrategy extends Strategy {
 								.then(user => {
 									user.id = user._id
 									user.save = () => {
-										const userDiff = diff(user, user[ORIGINAL])
-										if (userDiff) {
-											return db.updateOne(
-												{ _id: new ObjectID(user._id) },
-												{ $set: userDiff }
-											)
-										}
+										return db.updateOne(
+											{ _id: new ObjectID(user._id) },
+											{ $set: user }
+										)
 									}
 									user[ORIGINAL] = Object.assign({}, user)
 									return user

@@ -38,10 +38,7 @@ type NotifFriendRequestContent implements Notification {
 
 extend type Mutation {
     acceptFriendRequest(notif: ID!): Result!
-    refuseFriendRequest(notif: ID!): Result!
-    notifyMessage(user: ID!, message: String!): ID!
-    notifyAnimeFollow(user: ID!, anime: ID!): ID!
-    notifyFriendRequest(user: ID!, _from: ID!): ID!
+    delNotification(notif: ID!): Result!
 }
 
 extend type Query {

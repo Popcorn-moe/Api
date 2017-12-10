@@ -295,53 +295,74 @@ export function addFriend(
 	})
 }
 
+export function delFriend(
+	root: any,
+	{ friend }: { friend: ID },
+	context: Context
+): Promise<Boolean> | Boolean {
+	needAuth(context)
+	return context.user.then(u => {
+		const index = u.friends.findIndex(f => f == friend);
+		if(index === -1)
+			return false;
+		context.db
+			.collection('users')
+			.updateOne(
+				{ _id: new ObjectID(friend) },
+				{ $pull: { friends: u._id } }
+			)
+		u.friends.splice(index, 1);
+		return u.save();
+	});
+}
+
+export function sendFriendsRequests(
+	root: any,
+	{ to }: { to: Array<ID> },
+	context: Context
+): Array<ID> {
+	needAuth(context)
+	console.log(to);
+	return context.user.then(user =>
+		context.db
+			.collection('users')
+			.find({ _id: { $in: to.map(u => new ObjectID(u))} })
+			.map(({ _id, ...fields }) => ({ id: _id, ...fields }))
+			.toArray()
+			.then(founds => founds.length > 0 ? notifyFriendRequests(founds.map(u => ({ _from: user, user: u })), context) : [])
+	)
+}
+
 export function acceptFriendRequest(
 	root: any,
 	{ notif }: { notif: ID },
 	context: Context
 ): Promise<Result> | Result {
 	needAuth(context)
-	return context.user.then(user => {
-		return {
-			error: context.db
-				.collection('notifications')
-				.findOneAndDelete({
-					_id: new ObjectID(notif),
-					user: user._id,
-					type: 'FRIEND_REQUEST'
-				})
-				.then(({ value }) => {
-					if (!value)
-						return 'This notification is not a FRIEND_REQUEST or does not exist'
-					return addFriend(null, { user: value._from }, context).error
-				})
-		}
-	})
+	return {
+		error: context.db
+			.collection('notifications')
+			.findOneAndDelete({ _id: new ObjectID(notif) })
+			.then(({ value }) =>
+				value
+					? addFriend(null, { user: value._from }, context).error
+					: 'This notification does not exist'
+			)
+	}
 }
 
-export function refuseFriendRequest(
+export function delNotification(
 	root: any,
 	{ notif }: { notif: ID },
 	context: Context
 ): Promise<Result> | Result {
 	needAuth(context)
-	return context.user.then(user => {
-		return {
-			error: context.db
-				.collection('notifications')
-				.findOneAndDelete({
-					_id: new ObjectID(notif),
-					user: user._id,
-					type: 'FRIEND_REQUEST'
-				})
-				.then(
-					({ value }) =>
-						!value
-							? 'This notification is not a FRIEND_REQUEST or does not exist'
-							: null
-				)
-		}
-	})
+	return context.db
+		.collection('notifications')
+		.findOneAndDelete({ _id: new ObjectID(notif) })
+		.then(
+			({ value }) => !value ? { error: 'This notification does not exist'} : { error: null }
+		)
 }
 
 export function addSeason(
@@ -367,8 +388,25 @@ export function addSeason(
 	)
 }
 
-export function notifyMessage(
-	root: any,
+export function hello(root: any, { name }: { name: String }, context: Context) {
+	context.pubsub.publish("test", { name, licorne: 'magique'});
+	return `hello ${name}!`;
+}
+
+function now() {
+	return new Date()
+}
+
+function toId(name) {
+	return name
+		.normalize('NFD')
+		.replace(/[\u0300-\u036f]/g, '')
+		.replace(/ /g, '-')
+		.toLowerCase()
+}
+
+
+function notifyMessage(
 	{ user, message }: { user: ID, message: String },
 	context: Context
 ) {
@@ -388,8 +426,7 @@ export function notifyMessage(
 		})
 }
 
-export function notifyAnimeFollow(
-	root: any,
+function notifyAnimeFollow(
 	{ user, anime }: { user: ID, anime: ID },
 	context: Context
 ) {
@@ -408,39 +445,18 @@ export function notifyAnimeFollow(
 		})
 }
 
-export function notifyFriendRequest(
-	root: any,
-	{ user, _from }: { user: ID, _from: ID },
+function notifyFriendRequests(
+	requests,
 	context: Context
 ) {
-	const notif = {
-		user: new ObjectID(user),
-		date: now(),
-		type: "FRIEND_REQUEST",
-		_from: new ObjectID(_from)
-	};
+	const date = now();
+	const type = "FRIEND_REQUEST"
+	const notifs = requests.map(r => ({user: new ObjectID(r.user.id), date, type, _from: new ObjectID(r._from._id)}));
 	return context.db
 		.collection('notifications')
-		.insertOne(notif)
-		.then(({ insertedId }) => {
-			context.pubsub.publish("notification", notif);
-			return insertedId
+		.insertMany(notifs)
+		.then(({ insertedIds }) => {
+			context.pubsub.publish("notification", requests.map(r => ({user: r.user, date, type, _from: r._from})));
+			return insertedIds
 		})
-}
-
-export function hello(root: any, { name }: { name: String }, context: Context) {
-	context.pubsub.publish("test", { name, licorne: 'magique'});
-	return `hello ${name}!`;
-}
-
-function now() {
-	return new Date()
-}
-
-function toId(name) {
-	return name
-		.normalize('NFD')
-		.replace(/[\u0300-\u036f]/g, '')
-		.replace(/ /g, '-')
-		.toLowerCase()
 }

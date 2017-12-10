@@ -154,20 +154,14 @@ export function friendRequests(
 	root: any,
 	args: any,
 	context: Context
-): ?Array<User> {
+): ?Promise<Array<NotifFriendRequestContent>> {
 	needAuth(context)
 	return context.user.then(user =>
 		context.db
 			.collection('notifications')
 			.find({ user: user._id, type: 'FRIEND_REQUEST' })
+			.map(({ _id, ...fields }) => ({ id: _id, ...fields }))
 			.toArray()
-			.then(notifs => {
-				return context.db
-					.collection('users')
-					.find({ _id: { $in: notifs.map(notif => notif._from) } })
-					.map(({ _id, ...fields }) => ({ id: _id, ...fields }))
-					.toArray()
-			})
 	)
 }
 
@@ -175,20 +169,14 @@ export function pendingFriendRequests(
 	root: any,
 	args: any,
 	context: Context
-): ?Promise<Array<User>> {
+): ?Promise<Array<NotifFriendRequestContent>> {
 	needAuth(context)
 	return context.user.then(user =>
 		context.db
 			.collection('notifications')
 			.find({ _from: user._id, type: 'FRIEND_REQUEST' })
+			.map(({ _id, ...fields }) => ({ id: _id, ...fields }))
 			.toArray()
-			.then(notifs => {
-				return context.db
-					.collection('users')
-					.find({ _id: { $in: notifs.map(notif => notif.user) } })
-					.map(({ _id, ...fields }) => ({ id: _id, ...fields }))
-					.toArray()
-			})
 	)
 }
 
