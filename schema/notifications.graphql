@@ -37,7 +37,6 @@ type NotifFriendRequestContent implements Notification {
 }
 
 extend type Mutation {
-    acceptFriendRequest(notif: ID!): Result!
     delNotification(notif: ID!): Result!
 }
 

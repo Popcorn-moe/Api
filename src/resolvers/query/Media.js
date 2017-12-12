@@ -1,5 +1,4 @@
-import { needGroup, ADMIN } from './util'
-import { linkMedia } from './mutation'
+import { linkMedia } from '../mutations/medias'
 
 export function linkTo(
 	root: any,

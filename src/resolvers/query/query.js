@@ -1,4 +1,4 @@
-import { needAuth } from './util'
+import { needAuth } from '../util/index'
 import { ObjectID } from 'mongodb'
 
 type ID = string

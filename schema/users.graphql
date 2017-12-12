@@ -38,8 +38,8 @@ input UserInput {
 extend type Mutation {
 	setAvatar(file: Upload!): Result!
 	updateUsers(users: [UserInput!]!): [ID!]!
+	acceptFriendRequest(notif: ID!): Result!
 	sendFriendsRequests(to: [ID!]!): [ID!]!
-	addFriend(user: ID!): Result!
 	delFriend(friend: ID!): Boolean
 	blockUser(user: ID!): Boolean
 	unlockUser(user: ID!): Boolean

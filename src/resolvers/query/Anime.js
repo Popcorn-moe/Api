@@ -1,5 +1,5 @@
 import { ObjectID } from 'mongodb'
-import { addSeason as mAddSeason } from './mutation'
+import { addSeason as mAddSeason } from '../mutations/animes'
 
 export function authors(root: any, args: any, context: Context) {
 	return context.db
