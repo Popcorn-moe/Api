@@ -21,6 +21,7 @@ import JwtStrategy from './src/auth/JwtStrategy'
 import graphqlUpload from './src/middlewares/graphqlUpload'
 import cors from 'cors'
 import multer from 'multer'
+import bodyParser from 'body-parser'
 import { join } from 'path'
 import { FileStorage } from './src/storage'
 import AnonymousStrategy from 'passport-anonymous'
@@ -41,6 +42,7 @@ export const pubsub = new PubSub();
 storage.register(app)
 app.use(logger('dev'))
 app.use(cookieParser())
+app.use(bodyParser.json())
 app.use(
 	cors({
 		origin: [

@@ -30,20 +30,21 @@
     "gql2flow": "^0.4.5",
     "graphql-to-json": "^1.1.2",
     "jest": "^21.2.1",
-    "prettier": "^1.7.4"
+    "prettier": "^1.9.2"
   },
   "dependencies": {
+    "body-parser": "^1.18.2",
     "cookie-parser": "^1.4.3",
     "cors": "^2.8.4",
     "express": "^4.16.2",
     "express-graphql": "^0.6.7",
-    "graphql": "^0.10.5",
+    "graphql": "^0.11.7",
     "graphql-iso-date": "^3.3.0",
     "graphql-playground-middleware": "^1.1.0",
-    "graphql-subscriptions": "^0.5.4",
+    "graphql-subscriptions": "^0.5.5",
     "graphql-tools": "^1.2.1",
     "memoizee": "^0.4.11",
-    "mime": "^1.4.0",
+    "mime": "^1.6.0",
     "mongodb": "^2.2.33",
     "morgan": "^1.9.0",
     "multer": "^1.3.0",
@@ -51,7 +52,7 @@
     "passport": "^0.4.0",
     "passport-anonymous": "^1.0.1",
     "passport-jwt": "^3.0.1",
-    "subscriptions-transport-sse": "^0.6.4",
-    "subscriptions-transport-ws": "^0.9.1"
+    "subscriptions-transport-sse": "^0.7.8",
+    "subscriptions-transport-ws": "^0.9.4"
   }
 }
