@@ -1,0 +1,59 @@
+enum EventType {
+    MESSAGE
+    ANIME_FOLLOW
+    NEW_FRIEND
+    PLAYLIST_ADD
+    MEDIA_WATCH
+}
+
+type Event {
+    id: ID!
+    user: User!
+    date: Date!
+    type: EventType!
+}
+
+type MessageEvent implements Event {
+    id: ID!
+    user: User!
+    date: Date!
+    type: EventType!
+    message: String!
+}
+
+type AnimeFollowEvent implements Event {
+    id: ID!
+    user: User!
+    date: Date!
+    anime: Anime!
+}
+
+type NewFriendEvent implements Event {
+    id: ID!
+    user: User!
+    date: Date!
+    friend: User!
+}
+
+type PlaylistAddEvent implements Event {
+    id: ID!
+    user: User!
+    date: Date!
+    playlist: Playlist!
+    element: PlaylistElem!
+}
+
+type MediaWatchEvent implements Event {
+    id: ID!
+    user: User!
+    date: Date!
+    media: Media!
+}
+
+extend type Query {
+
+}
+
+extend type Mutation {
+
+}
