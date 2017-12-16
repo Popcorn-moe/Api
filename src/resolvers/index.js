@@ -7,11 +7,20 @@ import * as News from './query/News'
 import * as Media from './query/Media'
 import * as Season from './query/Season'
 import { PlaylistElem, PlaylistAnimeElem, PlaylistMediaElem } from './query/playlists'
+
 import {
 	Notification,
 	NotifAnimeFollowContent,
 	NotifFriendRequestContent
 } from './query/notifications'
+
+
+import {
+	Event,
+	NewFriendEvent,
+	AnimeFollowEvent
+} from './query/events'
+
 import { Upload, Url, Date, Time, DateTime } from './types'
 
 export {
@@ -28,6 +37,9 @@ export {
 	Notification,
 	NotifAnimeFollowContent,
 	NotifFriendRequestContent,
+	Event,
+	NewFriendEvent,
+	AnimeFollowEvent,
 	//types
 	Upload,
 	Url,
