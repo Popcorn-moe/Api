@@ -8,11 +8,9 @@ import {
 } from './src/graphql/monitor'
 import memoize from './src/graphql/memoize'
 import express from 'express'
-import { createServer } from 'http'
 import { SubscriptionServer, SubscriptionManager } from 'subscriptions-transport-sse'
-import { SubscriptionServer as WSSubscriptionServer }  from 'subscriptions-transport-ws'
 import { execute, subscribe } from 'graphql';
-import graphqlHTTP from 'express-graphql'
+import { graphqlExpress } from 'apollo-server-express'
 import logger from 'morgan'
 import cookieParser from 'cookie-parser'
 import { MongoClient } from 'mongodb'
@@ -25,17 +23,12 @@ import bodyParser from 'body-parser'
 import { join } from 'path'
 import { FileStorage } from './src/storage'
 import AnonymousStrategy from 'passport-anonymous'
-import { expressPlayground as playground } from 'graphql-playground-middleware'
 
 memoize(schema)
 instrument(schema)
 
 const url = 'mongodb://localhost:27017/popcornmoe_backend'
 const app = express();
-const server = createServer((request, response) => {
-	response.writeHead(404);
-	response.end();
-});
 const storage = new FileStorage(join(__dirname, 'uploads'))
 export const pubsub = new PubSub();
 
@@ -58,20 +51,6 @@ app.use(
 app.use(passport.initialize())
 passport.serializeUser((user, cb) => cb(null, user))
 passport.use(new AnonymousStrategy())
-
-app.get('/graphql', playground({ endpoint: '/graphql', subscriptionEndpoint: 'ws://127.0.0.1:5000' }))
-
-WSSubscriptionServer.create(
-	{
-		schema,
-		execute,
-		subscribe,
-	},
-	{
-		path: "/",
-		server
-	},
-);
 
 SubscriptionServer({
 	onSubscribe: (msg, params) => console.log(msg, params),
@@ -99,21 +78,23 @@ MongoClient.connect(url).then(db => {
 				storage: storage.createMulterStorage()
 			})
 		),
-		instrumentMiddleware(
-			graphqlHTTP({
+		instrumentMiddleware((req, res, next) => 
+			graphqlExpress({
 				schema,
+				context: req,
+				tracing: true,
 				formatError(e) {
 					console.error(e)
 					return e
 				}
-			})
+			})(req, res, next)
 		)
 	)
-
 	passport.use(new JwtStrategy(db.collection('users')))
 
 	console.log('Connected on mongodb')
 })
 
 app.listen(3030, () => console.log('Listening on port 3030'))
-server.listen(5000, () => console.log('WS: Listening on port 5000'))
+
+process.on('unhandledRejection', error => console.error('unhandledRejection', error));

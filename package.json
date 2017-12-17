@@ -12,14 +12,14 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/SkyBeastMC/Popcorn.moe-Backend.git"
+    "url": "git+https://github.com/Popcorn-moe/Popcorn.moe-Backend.git"
   },
   "author": "",
   "license": "UNLICENSED",
   "bugs": {
-    "url": "https://github.com/SkyBeastMC/Popcorn.moe-Backend/issues"
+    "url": "https://github.com/Popcorn-moe/Popcorn.moe-Backend/issues"
   },
-  "homepage": "https://github.com/SkyBeastMC/Popcorn.moe-Backend#readme",
+  "homepage": "https://github.com/Popcorn-moe/Popcorn.moe-Backend#readme",
   "devDependencies": {
     "babel-cli": "^6.26.0",
     "babel-jest": "^21.2.0",
@@ -33,14 +33,13 @@
     "prettier": "^1.9.2"
   },
   "dependencies": {
+    "apollo-server-express": "^1.3.0",
     "body-parser": "^1.18.2",
     "cookie-parser": "^1.4.3",
     "cors": "^2.8.4",
     "express": "^4.16.2",
-    "express-graphql": "^0.6.7",
     "graphql": "^0.11.7",
     "graphql-iso-date": "^3.3.0",
-    "graphql-playground-middleware": "^1.1.0",
     "graphql-subscriptions": "^0.5.5",
     "graphql-tools": "^1.2.1",
     "memoizee": "^0.4.11",
@@ -52,7 +51,6 @@
     "passport": "^0.4.0",
     "passport-anonymous": "^1.0.1",
     "passport-jwt": "^3.0.1",
-    "subscriptions-transport-sse": "^0.7.9",
-    "subscriptions-transport-ws": "^0.9.4"
+    "subscriptions-transport-sse": "^0.7.9"
   }
 }
