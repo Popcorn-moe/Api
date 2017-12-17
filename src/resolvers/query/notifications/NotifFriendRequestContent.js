@@ -9,7 +9,7 @@ export function _from({ _from }: { _from: ID }, args: any, context: Context) {
 		.next()
 }
 
-export function user({ user }: { user: ID}, args: any, context: Context) {
+export function user({ user }: { user: ID }, args: any, context: Context) {
 	return context.db
 		.collection('users')
 		.find({ _id: new ObjectID(user) })

@@ -69,11 +69,11 @@ export function report(instrument) {
 			const time = (hrConvert(endOffset) - hrConvert(startOffset)) / NS_PER_MS
 			totalCalls += time
 			console.log(`\t${typeName}.${fieldName} => ${time}ms`)
-			stats.timing(
-				`backend.graphql.timing`,
-				time,
-				[result ? `resolver:${typeName}#${fieldName}.${result}` : `resolver:${typeName}#${fieldName}`]
-			)
+			stats.timing(`backend.graphql.timing`, time, [
+				result
+					? `resolver:${typeName}#${fieldName}.${result}`
+					: `resolver:${typeName}#${fieldName}`
+			])
 		}
 	)
 }

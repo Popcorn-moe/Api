@@ -11,7 +11,7 @@ export function delNotification(
 		.collection('notifications')
 		.findOneAndDelete({ _id: new ObjectID(notif) })
 		.then(
-			({ value }) => !value ? { error: 'This notification does not exist'} : { error: null }
+			({ value }) =>
+				!value ? { error: 'This notification does not exist' } : { error: null }
 		)
 }
-

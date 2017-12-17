@@ -1,5 +1,5 @@
 import schema from './src/schema'
-import { PubSub } from 'graphql-subscriptions';
+import { PubSub } from 'graphql-subscriptions'
 import {
 	instrument,
 	report,
@@ -8,8 +8,11 @@ import {
 } from './src/graphql/monitor'
 import memoize from './src/graphql/memoize'
 import express from 'express'
-import { SubscriptionServer, SubscriptionManager } from 'subscriptions-transport-sse'
-import { execute, subscribe } from 'graphql';
+import {
+	SubscriptionServer,
+	SubscriptionManager
+} from 'subscriptions-transport-sse'
+import { execute, subscribe } from 'graphql'
 import { graphqlExpress } from 'apollo-server-express'
 import logger from 'morgan'
 import cookieParser from 'cookie-parser'
@@ -28,9 +31,9 @@ memoize(schema)
 instrument(schema)
 
 const url = 'mongodb://localhost:27017/popcornmoe_backend'
-const app = express();
+const app = express()
 const storage = new FileStorage(join(__dirname, 'uploads'))
-export const pubsub = new PubSub();
+export const pubsub = new PubSub()
 
 storage.register(app)
 app.use(logger('dev'))
@@ -52,16 +55,19 @@ app.use(passport.initialize())
 passport.serializeUser((user, cb) => cb(null, user))
 passport.use(new AnonymousStrategy())
 
-SubscriptionServer({
-	onSubscribe: (msg, params) => console.log(msg, params),
-	subscriptionManager: new SubscriptionManager({
-		schema,
-		pubsub
-	})
-}, {
-	express: app,
-	path: '/subscriptions',
-})
+SubscriptionServer(
+	{
+		onSubscribe: (msg, params) => console.log(msg, params),
+		subscriptionManager: new SubscriptionManager({
+			schema,
+			pubsub
+		})
+	},
+	{
+		express: app,
+		path: '/subscriptions'
+	}
+)
 
 MongoClient.connect(url).then(db => {
 	app.use((req, res, next) => {
@@ -78,7 +84,7 @@ MongoClient.connect(url).then(db => {
 				storage: storage.createMulterStorage()
 			})
 		),
-		instrumentMiddleware((req, res, next) => 
+		instrumentMiddleware((req, res, next) =>
 			graphqlExpress({
 				schema,
 				context: req,
@@ -97,4 +103,6 @@ MongoClient.connect(url).then(db => {
 
 app.listen(3030, () => console.log('Listening on port 3030'))
 
-process.on('unhandledRejection', error => console.error('unhandledRejection', error));
+process.on('unhandledRejection', error =>
+	console.error('unhandledRejection', error)
+)

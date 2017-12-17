@@ -180,23 +180,45 @@ export function pendingFriendRequests(
 	)
 }
 
-
 export function searchAnimes(
 	root: any,
-	{ limit, skip, name, order_by, status, type, authors, year, tags }: { limit: Number, skip: Number, name: String, order_by: String, status: AnimeStatus, type: MediaType, authors: Array<ID>, year: Number, tags: Array<ID>},
+	{
+		limit,
+		skip,
+		name,
+		order_by,
+		status,
+		type,
+		authors,
+		year,
+		tags
+	}: {
+		limit: Number,
+		skip: Number,
+		name: String,
+		order_by: String,
+		status: AnimeStatus,
+		type: MediaType,
+		authors: Array<ID>,
+		year: Number,
+		tags: Array<ID>
+	},
 	context: Context
 ): ?Array<Anime> {
-	return context.db.collection("animes")
+	return context.db
+		.collection('animes')
 		.find({
 			names: new RegExp(escapeRegExp(name), 'i'),
-			...(status ? { status }: {}),
-			...(authors ? { authors: { $in: authors.map(a => new ObjectID(a))}}: {}),
-			...(tags ? { tags: { $in: tags.map(t => new ObjectID(t))}}: {})
+			...(status ? { status } : {}),
+			...(authors
+				? { authors: { $in: authors.map(a => new ObjectID(a)) } }
+				: {}),
+			...(tags ? { tags: { $in: tags.map(t => new ObjectID(t)) } } : {})
 		})
 		.skip(skip)
 		.limit(limit)
 		.map(({ _id, ...fields }) => ({ id: _id, ...fields }))
-		.toArray();
+		.toArray()
 }
 
 export function searchAuthor(
@@ -206,10 +228,10 @@ export function searchAuthor(
 ): Promise<Array<Author>> {
 	return name
 		? context.db
-			.collection('authors')
-			.find({ name: new RegExp(escapeRegExp(name), 'i') })
-			.map(({ _id, ...fields }) => ({ id: _id, ...fields }))
-			.toArray()
+				.collection('authors')
+				.find({ name: new RegExp(escapeRegExp(name), 'i') })
+				.map(({ _id, ...fields }) => ({ id: _id, ...fields }))
+				.toArray()
 		: Promise.resolve([])
 }
 
@@ -225,7 +247,6 @@ export function events(
 		.toArray()
 }
 
-
 //moe.graphql
 export function moe(
 	root: any,
@@ -237,7 +258,7 @@ export function moe(
 		.find({ moe })
 		.toArray()
 		.then(moe => {
-			if (!moe.length) throw Error("We lack the moe you requested.")
+			if (!moe.length) throw Error('We lack the moe you requested.')
 			return moe[Math.floor(Math.random() * moe.length)]
 		})
 }

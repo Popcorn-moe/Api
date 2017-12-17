@@ -54,14 +54,22 @@ export function sendFriendsRequests(
 	context: Context
 ): Array<ID> {
 	needAuth(context)
-	console.log(to);
+	console.log(to)
 	return context.user.then(user =>
 		context.db
 			.collection('users')
-			.find({ _id: { $in: to.map(u => new ObjectID(u))} })
+			.find({ _id: { $in: to.map(u => new ObjectID(u)) } })
 			.map(({ _id, ...fields }) => ({ id: _id, ...fields }))
 			.toArray()
-			.then(founds => founds.length > 0 ? notifyFriendRequests(founds.map(u => ({ _from: user, user: u })), context) : [])
+			.then(
+				founds =>
+					founds.length > 0
+						? notifyFriendRequests(
+								founds.map(u => ({ _from: user, user: u })),
+								context
+							)
+						: []
+			)
 	)
 }
 
@@ -75,10 +83,11 @@ export function acceptFriendRequest(
 		error: context.db
 			.collection('notifications')
 			.findOneAndDelete({ _id: new ObjectID(notif) })
-			.then(({ value }) =>
-				value
-					? addFriend(null, { user: value._from }, context).error
-					: 'This notification does not exist'
+			.then(
+				({ value }) =>
+					value
+						? addFriend(null, { user: value._from }, context).error
+						: 'This notification does not exist'
 			)
 	}
 }
@@ -90,20 +99,15 @@ export function delFriend(
 ): Promise<Boolean> | Boolean {
 	needAuth(context)
 	return context.user.then(u => {
-		const index = u.friends.findIndex(f => f == friend);
-		if(index === -1)
-			return false;
+		const index = u.friends.findIndex(f => f == friend)
+		if (index === -1) return false
 		context.db
 			.collection('users')
-			.updateOne(
-				{ _id: new ObjectID(friend) },
-				{ $pull: { friends: u._id } }
-			)
-		u.friends.splice(index, 1);
-		return u.save();
-	});
+			.updateOne({ _id: new ObjectID(friend) }, { $pull: { friends: u._id } })
+		u.friends.splice(index, 1)
+		return u.save()
+	})
 }
-
 
 function addFriend(
 	root: any,
