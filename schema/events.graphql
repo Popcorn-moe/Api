@@ -6,7 +6,7 @@ enum EventType {
     MEDIA_WATCH
 }
 
-type Event {
+interface Event {
     id: ID!
     user: User!
     date: Date!
@@ -25,6 +25,7 @@ type AnimeFollowEvent implements Event {
     id: ID!
     user: User!
     date: Date!
+    type: EventType!
     anime: Anime!
 }
 
@@ -32,6 +33,7 @@ type NewFriendEvent implements Event {
     id: ID!
     user: User!
     date: Date!
+    type: EventType!
     friend: User!
 }
 
@@ -39,6 +41,7 @@ type PlaylistAddEvent implements Event {
     id: ID!
     user: User!
     date: Date!
+    type: EventType!
     playlist: Playlist!
     element: PlaylistElem!
 }
@@ -47,6 +50,7 @@ type MediaWatchEvent implements Event {
     id: ID!
     user: User!
     date: Date!
+    type: EventType!
     media: Media!
 }
 

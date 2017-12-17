@@ -217,7 +217,7 @@ export function events(
 	root: any,
 	{ user }: { user: ID },
 	context: Context
-) {
+): Promise<Array<Event>> {
 	return context.db
 		.collection('events')
 		.find({ user: new ObjectID(user) })
