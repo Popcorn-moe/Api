@@ -213,6 +213,19 @@ export function searchAuthor(
 		: Promise.resolve([])
 }
 
+export function events(
+	root: any,
+	{ user }: { user: ID },
+	context: Context
+) {
+	return context.db
+		.collection('events')
+		.find({ user: new ObjectID(user) })
+		.map(({ _id, ...fields }) => ({ id: _id, ...fields }))
+		.toArray()
+}
+
+
 //moe.graphql
 export function moe(
 	root: any,
