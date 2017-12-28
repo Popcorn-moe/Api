@@ -48,6 +48,8 @@ extend type Mutation {
 extend type Query {
 	me: User
 	users: [User!]!
+	user(name: String!): User!
+	userById(id: ID!): User!
 	searchUser(name: String!, limit: Int = 10): [User!]!
 	friendRequests: [NotifFriendRequestContent!]!
 	pendingFriendRequests: [NotifFriendRequestContent!]!

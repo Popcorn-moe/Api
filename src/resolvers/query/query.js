@@ -38,6 +38,33 @@ export function users(
 		.toArray()
 }
 
+
+export function user(
+	root: any,
+	{ name }: { name: String },
+	context: Context
+): User {
+	return context.db
+		.collection('users')
+		.find({ login: new RegExp(escapeRegExp(name), 'i') })
+		.limit(1)
+		.map(({ _id, ...fields }) => ({ id: _id, ...fields }))
+		.next()
+}
+
+export function userById(
+	root: any,
+	{ id }: { id: ID },
+	context: Context
+): User {
+	return context.db
+		.collection('users')
+		.find({ id: new ObjectID(id) })
+		.limit(1)
+		.map(({ _id, ...fields }) => ({ id: _id, ...fields }))
+		.next()
+}
+
 export function searchUser(
 	root: any,
 	{ name, limit }: { name: String, limit: Number },
@@ -239,7 +266,7 @@ export function events(
 	root: any,
 	{ user }: { user: ID },
 	context: Context
-): Promise<Array<Event>> {
+): ?Promise<Array<Event>> {
 	return context.db
 		.collection('events')
 		.find({ user: new ObjectID(user) })

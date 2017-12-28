@@ -1,4 +1,4 @@
-export function user({ anime }: { anime: ID }, args: any, context: Context) {
+export function anime({ anime }: { anime: ID }, args: any, context: Context) {
 	return context.db
 		.collection('animes')
 		.find({ _id: anime })
