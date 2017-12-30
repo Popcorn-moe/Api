@@ -1,3 +1,5 @@
+export { user } from './Notification'
+
 export function anime({ anime }: { anime: ID }, args: any, context: Context) {
 	return context.db
 		.collection('animes')

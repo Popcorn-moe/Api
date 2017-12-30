@@ -1,3 +1,5 @@
+export { user } from './Event'
+
 export function anime({ anime }: { anime: ID }, args: any, context: Context) {
 	return context.db
 		.collection('animes')

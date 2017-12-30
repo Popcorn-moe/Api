@@ -1,4 +1,5 @@
 import { needAuth, needGroup, ADMIN, notifyFriendRequests } from '../util/index'
+import { newFriendEvent } from './events'
 import { ObjectID } from 'mongodb'
 
 const IMAGE_MIME_TYPES = [
@@ -128,6 +129,8 @@ function addFriend(
 				{ upsert: true }
 			)
 		u.friends.push(new ObjectID(user))
+		newFriendEvent({ user: u.id, friend: new ObjectID(user) }, context);
+		newFriendEvent({ user: new ObjectID(user), friend: u.id }, context);
 		return !u.save() ? { error: null } : { error: 'nothing to save' }
 	})
 }

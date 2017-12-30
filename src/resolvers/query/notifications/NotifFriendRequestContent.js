@@ -1,4 +1,5 @@
 import { ObjectID } from 'mongodb'
+export { user } from './Notification'
 
 export function _from({ _from }: { _from: ID }, args: any, context: Context) {
 	return context.db
