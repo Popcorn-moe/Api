@@ -35,8 +35,8 @@ export function messageEvent(
 		return context.db
 			.collection('events')
 			.insertOne(event)
-			.then(({insertedId}) => {
+			.then(({ insertedId }) => {
 				return insertedId //TODO: add subscription
 			})
-	});
+	})
 }

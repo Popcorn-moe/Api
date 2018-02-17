@@ -1,7 +1,11 @@
 import { ObjectID } from 'mongodb'
 export { user } from './Event'
 
-export function friend({ friend }: { friend: ID}, args: any, context: Context) {
+export function friend(
+	{ friend }: { friend: ID },
+	args: any,
+	context: Context
+) {
 	return context.db
 		.collection('users')
 		.find({ _id: new ObjectID(friend) })

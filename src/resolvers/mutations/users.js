@@ -129,8 +129,8 @@ function addFriend(
 				{ upsert: true }
 			)
 		u.friends.push(new ObjectID(user))
-		newFriendEvent({ user: u.id, friend: new ObjectID(user) }, context);
-		newFriendEvent({ user: new ObjectID(user), friend: u.id }, context);
+		newFriendEvent({ user: u.id, friend: new ObjectID(user) }, context)
+		newFriendEvent({ user: new ObjectID(user), friend: u.id }, context)
 		return !u.save() ? { error: null } : { error: 'nothing to save' }
 	})
 }

@@ -46,7 +46,8 @@ app.use(
 			'http://localhost:8000',
 			'http://localhost:3000',
 			'https://popcorn.moe',
-			'https://admin.popcorn.moe'
+			'https://admin.popcorn.moe',
+			'https://dev.popcorn.moe'
 		],
 		credentials: true
 	})

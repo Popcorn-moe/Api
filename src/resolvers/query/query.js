@@ -38,7 +38,6 @@ export function users(
 		.toArray()
 }
 
-
 export function user(
 	root: any,
 	{ name }: { name: String },
