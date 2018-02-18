@@ -1,10 +1,7 @@
 import { now } from './'
 import { ObjectID } from 'mongodb'
 
-export function notifyMessage(
-	{ user, message }: { user: ID, message: String },
-	context: Context
-) {
+export function notifyMessage({ user, message }, context) {
 	const notif = {
 		user: new ObjectID(user),
 		date: now(),
@@ -20,10 +17,7 @@ export function notifyMessage(
 		})
 }
 
-export function notifyAnimeFollow(
-	{ user, anime }: { user: ID, anime: ID },
-	context: Context
-) {
+export function notifyAnimeFollow({ user, anime }, context) {
 	const notif = {
 		user: new ObjectID(user),
 		date: now(),
@@ -39,7 +33,7 @@ export function notifyAnimeFollow(
 		})
 }
 
-export function notifyFriendRequests(requests, context: Context) {
+export function notifyFriendRequests(requests, context) {
 	const date = now()
 	const type = 'FRIEND_REQUEST'
 	const notifs = requests.map(r => ({

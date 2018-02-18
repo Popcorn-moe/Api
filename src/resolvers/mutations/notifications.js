@@ -1,11 +1,7 @@
 import { needAuth } from '../util/index'
 import { ObjectID } from 'mongodb'
 
-export function delNotification(
-	root: any,
-	{ notif }: { notif: ID },
-	context: Context
-): Promise<Result> | Result {
+export function delNotification(root, { notif }, context) {
 	needAuth(context)
 	return context.db
 		.collection('notifications')

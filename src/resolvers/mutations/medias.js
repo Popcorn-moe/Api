@@ -1,17 +1,9 @@
 import { now, needGroup, ADMIN } from '../util/index'
 
-export function addMedia(
-	root: any,
-	{ media }: { media: MediaInput },
-	context: Context
-): Promise<ID> {
-	// $FlowIgnore
+export function addMedia(root, { media }, context) {
 	media.comments = []
-	// $FlowIgnore
 	media.rate = 0
-	// $FlowIgnore
 	media.edit_date = now()
-	// $FlowIgnore
 	media.posted_date = now()
 	return needGroup(context, ADMIN).then(() =>
 		context.db
@@ -21,16 +13,7 @@ export function addMedia(
 	)
 }
 
-export function linkMedia(
-	root: any,
-	{
-		media,
-		anime,
-		season,
-		episode
-	}: { media: ID, anime: ID, season: ?Number, episode: ?Number },
-	context: Context
-) {
+export function linkMedia(root, { media, anime, season, episode }, context) {
 	let update
 	if (season && episode) {
 		update = {

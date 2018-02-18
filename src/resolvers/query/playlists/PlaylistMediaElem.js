@@ -1,6 +1,6 @@
 import { ObjectID } from 'mongodb'
 
-export function media({ media }: { media: ID }, args: any, context: Context) {
+export function media({ media }, args, context) {
 	return context.db
 		.collection('medias')
 		.find({ _id: new ObjectID(media) })

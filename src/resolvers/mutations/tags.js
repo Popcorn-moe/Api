@@ -1,11 +1,7 @@
 import { needGroup, ADMIN } from '../util/index'
 import { ObjectID } from 'mongodb'
 
-export function addTag(
-	root: any,
-	{ tag }: { tag: TagInput },
-	context: Context
-): Promise<ID> {
+export function addTag(root, { tag }, context) {
 	return needGroup(context, ADMIN).then(() =>
 		context.db
 			.collection('tags')
@@ -14,11 +10,7 @@ export function addTag(
 	)
 }
 
-export function updateTag(
-	root: any,
-	{ id, tag }: { id: ID, tag: TagUpdate },
-	context: Context
-): Promise<ID> {
+export function updateTag(root, { id, tag }, context) {
 	return needGroup(context, ADMIN).then(() =>
 		context.db
 			.collection('tags')
@@ -27,11 +19,7 @@ export function updateTag(
 	)
 }
 
-export function deleteTag(
-	root: any,
-	{ id }: { id: ID },
-	context: Context
-): Promise<ID> {
+export function deleteTag(root, { id }, context) {
 	return needGroup(context, ADMIN).then(() =>
 		context.db
 			.collection('tags')

@@ -1,6 +1,6 @@
 export { user } from './Event'
 
-export function anime({ anime }: { anime: ID }, args: any, context: Context) {
+export function anime({ anime }, args, context) {
 	return context.db
 		.collection('animes')
 		.find({ _id: anime })

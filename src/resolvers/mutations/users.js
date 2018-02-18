@@ -9,13 +9,8 @@ const IMAGE_MIME_TYPES = [
 	'image/svg+xml' // SVG images (vector images)
 ]
 
-export function setAvatar(
-	root: any,
-	{ file }: { file: Upload },
-	context: Context
-): Promise<Result> | Result {
+export function setAvatar(root, { file }, context) {
 	needAuth(context)
-	console.log(file)
 	file.then(file => {
 		if (!IMAGE_MIME_TYPES.includes(file.mimetype)) {
 			return {
@@ -39,11 +34,7 @@ export function setAvatar(
 	})
 }
 
-export function updateUsers(
-	root: any,
-	{ users }: { users: Array<UserInput> },
-	context: Context
-): ?Promise<?Array<?ID>> {
+export function updateUsers(root, { users }, context) {
 	return needGroup(context, ADMIN)
 		.then(() =>
 			Promise.all(
@@ -57,13 +48,8 @@ export function updateUsers(
 		.then(() => users.map(({ id }) => id))
 }
 
-export function sendFriendsRequests(
-	root: any,
-	{ to }: { to: Array<ID> },
-	context: Context
-): Array<ID> {
+export function sendFriendsRequests(root, { to }, context) {
 	needAuth(context)
-	console.log(to)
 	return context.user.then(user =>
 		context.db
 			.collection('users')
@@ -82,11 +68,7 @@ export function sendFriendsRequests(
 	)
 }
 
-export function acceptFriendRequest(
-	root: any,
-	{ notif }: { notif: ID },
-	context: Context
-): Promise<Result> | Result {
+export function acceptFriendRequest(root, { notif }, context) {
 	needAuth(context)
 	return {
 		error: context.db
@@ -101,11 +83,7 @@ export function acceptFriendRequest(
 	}
 }
 
-export function delFriend(
-	root: any,
-	{ friend }: { friend: ID },
-	context: Context
-): Promise<Boolean> | Boolean {
+export function delFriend(root, { friend }, context) {
 	needAuth(context)
 	return context.user.then(u => {
 		const index = u.friends.findIndex(f => f == friend)
@@ -118,11 +96,7 @@ export function delFriend(
 	})
 }
 
-function addFriend(
-	root: any,
-	{ user }: { user: ID },
-	context: Context
-): Promise<Result> | Result {
+function addFriend(root, { user }, context) {
 	needAuth(context)
 	return context.user.then(u => {
 		if (u.id == user) return { error: "You can't be friend with yourself!" }

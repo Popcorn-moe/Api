@@ -1,11 +1,7 @@
 import { toId, now, needGroup, ADMIN } from '../util/index'
 import { ObjectID } from 'mongodb'
 
-export function updateAnime(
-	root: any,
-	{ id, anime }: { id: ID, anime: AnimeInput },
-	context: Context
-): Promise<ID> {
+export function updateAnime(root, { id, anime }, context) {
 	transformAnime(anime, now(), context.storage).then(anime =>
 		needGroup(context, ADMIN).then(() =>
 			context.db
@@ -16,16 +12,10 @@ export function updateAnime(
 	)
 }
 
-export function addAnime(
-	root: any,
-	{ anime }: { anime: AnimeInput },
-	context: Context
-): Promise<ID> {
+export function addAnime(root, { anime }, context) {
 	const time = now()
 	transformAnime(anime, time, context.storage).then(anime => {
-		// $FlowIgnore
 		anime.posted_date = time
-		// $FlowIgnore
 		anime._id = toId(anime.names[0])
 		anime.tags = anime.tags.map(t => new ObjectID(t))
 		anime.authors = anime.authors.map(a => new ObjectID(a))
@@ -42,7 +32,7 @@ export function addAnime(
 	})
 }
 
-function transformAnime(anime: any, time, storage) {
+function transformAnime(anime, time, storage) {
 	return Promise.all([anime.cover, anime.background])
 		.then(([cover, background]) =>
 			Promise.all([
@@ -58,17 +48,11 @@ function transformAnime(anime: any, time, storage) {
 		})
 }
 
-export function addSeason(
-	root: any,
-	{ anime, season }: { anime: ID, season: SeasonInput },
-	context: Context
-) {
+export function addSeason(root, { anime, season }, context) {
 	let seasonNb = season.season
 	delete season.season
 	const time = now()
-	// $FlowIgnore
 	season.edit_date = time
-	// $FlowIgnore
 	season.posted_date = time
 	return needGroup(context, ADMIN).then(() =>
 		context.db

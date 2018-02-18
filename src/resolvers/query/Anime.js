@@ -1,7 +1,7 @@
 import { ObjectID } from 'mongodb'
 import { addSeason as mAddSeason } from '../mutations/animes'
 
-export function authors(root: any, args: any, context: Context) {
+export function authors(root, args, context) {
 	return context.db
 		.collection('authors')
 		.find({ _id: { $in: root.authors.map(id => new ObjectID(id)) } })
@@ -9,7 +9,7 @@ export function authors(root: any, args: any, context: Context) {
 		.toArray()
 }
 
-export function tags(root: any, args: any, context: Context) {
+export function tags(root, args, context) {
 	return context.db
 		.collection('tags')
 		.find({ _id: { $in: root.tags.map(id => new ObjectID(id)) } })
@@ -17,7 +17,7 @@ export function tags(root: any, args: any, context: Context) {
 		.toArray()
 }
 
-export function medias(root: any, args: any, context: Context) {
+export function medias(root, args, context) {
 	return context.db
 		.collection('medias')
 		.find({ _id: { $in: root.medias.map(id => new ObjectID(id)) } })
@@ -25,22 +25,14 @@ export function medias(root: any, args: any, context: Context) {
 		.toArray()
 }
 
-export function seasons(root: any, args: any, context: Context) {
+export function seasons(root, args, context) {
 	return root.seasons.map(season => season && { anime: root.id, ...season })
 }
 
-export function season(
-	root: any,
-	{ season }: { season: Number },
-	context: Context
-) {
+export function season(root, { season }, context) {
 	return root.seasons[season] && { anime: root.id, ...root.seasons[season] }
 }
 
-export function addSeason(
-	root: any,
-	{ season }: { season: SeasonInput },
-	context: Context
-) {
+export function addSeason(root, { season }, context) {
 	return mAddSeason(root, { season, anime: root.id }, context)
 }

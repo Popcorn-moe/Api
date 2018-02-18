@@ -42,7 +42,7 @@ export {
 	updateUsers
 }
 
-export function hello(root: any, { name }: { name: String }, context: Context) {
+export function hello(root, { name }, context) {
 	context.pubsub.publish('test', { name, licorne: 'magique' })
 	return `hello ${name}!`
 }

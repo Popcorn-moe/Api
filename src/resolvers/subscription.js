@@ -1,8 +1,6 @@
 import { withFilter } from 'graphql-subscriptions'
 import { pubsub } from '../../index'
 
-type Context = any
-
 export const test = {
 	subscribe: withFilter(
 		(root, args, context) => {

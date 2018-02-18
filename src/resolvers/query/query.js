@@ -1,10 +1,7 @@
 import { needAuth } from '../util/index'
 import { ObjectID } from 'mongodb'
 
-type ID = string
-type Context = any
-
-export function me(root: any, args: any, context: Context) {
+export function me(root, args, context) {
 	return context.user
 		? context.user.then(user => {
 				if (!user.friends) user.friends = []
@@ -14,11 +11,7 @@ export function me(root: any, args: any, context: Context) {
 		: null
 }
 
-export function tags(
-	root: any,
-	args: any,
-	context: Context
-): Promise<Array<Tag>> {
+export function tags(root, args, context) {
 	return context.db
 		.collection('tags')
 		.find()
@@ -26,11 +19,7 @@ export function tags(
 		.toArray()
 }
 
-export function users(
-	root: any,
-	args: any,
-	context: Context
-): Promise<Array<User>> {
+export function users(root, args, context) {
 	return context.db
 		.collection('users')
 		.find()
@@ -38,11 +27,7 @@ export function users(
 		.toArray()
 }
 
-export function user(
-	root: any,
-	{ name }: { name: String },
-	context: Context
-): User {
+export function user(root, { name }, context) {
 	return context.db
 		.collection('users')
 		.find({ login: new RegExp(escapeRegExp(name), 'i') })
@@ -51,11 +36,7 @@ export function user(
 		.next()
 }
 
-export function userById(
-	root: any,
-	{ id }: { id: ID },
-	context: Context
-): User {
+export function userById(root, { id }, context) {
 	return context.db
 		.collection('users')
 		.find({ id: new ObjectID(id) })
@@ -64,11 +45,7 @@ export function userById(
 		.next()
 }
 
-export function searchUser(
-	root: any,
-	{ name, limit }: { name: String, limit: Number },
-	context: Context
-): Promise<Array<User>> {
+export function searchUser(root, { name, limit }, context) {
 	return name
 		? context.db
 				.collection('users')
@@ -76,14 +53,10 @@ export function searchUser(
 				.limit(limit)
 				.map(({ _id, ...fields }) => ({ id: _id, ...fields }))
 				.toArray()
-		: Promise.resolve([])
+		: []
 }
 
-export function searchAnime(
-	root: any,
-	{ name, limit }: { name: String, limit: Number },
-	context: Context
-): Promise<Array<User>> {
+export function searchAnime(root, { name, limit }) {
 	return name
 		? context.db
 				.collection('animes')
@@ -91,14 +64,10 @@ export function searchAnime(
 				.limit(limit)
 				.map(({ _id, ...fields }) => ({ id: _id, ...fields }))
 				.toArray()
-		: Promise.resolve([])
+		: []
 }
 
-export function authors(
-	root: any,
-	args: any,
-	context: Context
-): Promise<Array<Author>> {
+export function authors(root, args, context) {
 	return context.db
 		.collection('authors')
 		.find()
@@ -106,11 +75,7 @@ export function authors(
 		.toArray()
 }
 
-export function animes(
-	root: any,
-	{ limit, sort }: { limit: number, sort: Sort },
-	context: Context
-): ?Array<Anime> {
+export function animes(root, { limit, sort }, context) {
 	return context.db
 		.collection('animes')
 		.find()
@@ -126,11 +91,7 @@ export function animes(
 		.toArray()
 }
 
-export function anime(
-	root: any,
-	{ id }: { id: ID },
-	context: Context
-): ?Array<Anime> {
+export function anime(root, { id }, context) {
 	return context.db
 		.collection('animes')
 		.find({ _id: id })
@@ -143,11 +104,7 @@ export function anime(
 		})
 }
 
-export function news(
-	root: any,
-	args: any,
-	context: Context
-): Promise<Array<News>> {
+export function news(root, args, context) {
 	return context.db
 		.collection('news')
 		.find()
@@ -155,7 +112,7 @@ export function news(
 		.toArray()
 }
 
-export function _news(root: any, { id }: { id: ID }, context: Context): ?News {
+export function _news(root, { id }, context) {
 	return context.db
 		.collection('news')
 		.find({ _id: new ObjectID(id) })
@@ -164,11 +121,7 @@ export function _news(root: any, { id }: { id: ID }, context: Context): ?News {
 		.next()
 }
 
-export function getNotifications(
-	root: any,
-	{ user }: { user: ID },
-	context: Context
-) {
+export function getNotifications(root, { user }, context) {
 	return context.db
 		.collection('notifications')
 		.find({ user: new ObjectID(user) })
@@ -176,11 +129,7 @@ export function getNotifications(
 		.toArray()
 }
 
-export function friendRequests(
-	root: any,
-	args: any,
-	context: Context
-): ?Promise<Array<NotifFriendRequestContent>> {
+export function friendRequests(root, args, context) {
 	needAuth(context)
 	return context.user.then(user =>
 		context.db
@@ -191,11 +140,7 @@ export function friendRequests(
 	)
 }
 
-export function pendingFriendRequests(
-	root: any,
-	args: any,
-	context: Context
-): ?Promise<Array<NotifFriendRequestContent>> {
+export function pendingFriendRequests(root, args, context) {
 	needAuth(context)
 	return context.user.then(user =>
 		context.db
@@ -207,30 +152,10 @@ export function pendingFriendRequests(
 }
 
 export function searchAnimes(
-	root: any,
-	{
-		limit,
-		skip,
-		name,
-		order_by,
-		status,
-		type,
-		authors,
-		year,
-		tags
-	}: {
-		limit: Number,
-		skip: Number,
-		name: String,
-		order_by: String,
-		status: AnimeStatus,
-		type: MediaType,
-		authors: Array<ID>,
-		year: Number,
-		tags: Array<ID>
-	},
-	context: Context
-): ?Array<Anime> {
+	root,
+	{ limit, skip, name, order_by, status, type, authors, year, tags },
+	context
+) {
 	return context.db
 		.collection('animes')
 		.find({
@@ -247,25 +172,17 @@ export function searchAnimes(
 		.toArray()
 }
 
-export function searchAuthor(
-	root: any,
-	{ name }: { name: String },
-	context: Context
-): Promise<Array<Author>> {
+export function searchAuthor(root, { name }, context) {
 	return name
 		? context.db
 				.collection('authors')
 				.find({ name: new RegExp(escapeRegExp(name), 'i') })
 				.map(({ _id, ...fields }) => ({ id: _id, ...fields }))
 				.toArray()
-		: Promise.resolve([])
+		: []
 }
 
-export function events(
-	root: any,
-	{ user }: { user: ID },
-	context: Context
-): ?Promise<Array<Event>> {
+export function events(root, { user }, context) {
 	return context.db
 		.collection('events')
 		.find({ user: new ObjectID(user) })
@@ -274,11 +191,7 @@ export function events(
 }
 
 //moe.graphql
-export function moe(
-	root: any,
-	{ moe }: { moe: ?String },
-	context: Context
-): ?Promise<Kyun> {
+export function moe(root, { moe }, context) {
 	return context.db
 		.collection('moe')
 		.find({ moe })

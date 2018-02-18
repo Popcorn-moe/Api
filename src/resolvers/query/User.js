@@ -1,8 +1,7 @@
-/* @flow */
 import { ObjectID } from 'mongodb'
 import { getNotifications } from './query'
 
-export function playlists(root: any, args: any, context: Context) {
+export function playlists(root, args, context) {
 	return context.db
 		.collection('playlists')
 		.find({ _id: { $in: root.playlists.map(id => new ObjectID(id)) } })
@@ -10,7 +9,7 @@ export function playlists(root: any, args: any, context: Context) {
 		.toArray()
 }
 
-export function friends(root: any, args: any, context: Context) {
+export function friends(root, args, context) {
 	return context.db
 		.collection('users')
 		.find({ _id: { $in: root.friends.map(id => new ObjectID(id)) } })
@@ -18,7 +17,7 @@ export function friends(root: any, args: any, context: Context) {
 		.toArray()
 }
 
-export function blocked(root: any, args: any, context: Context) {
+export function blocked(root, args, context) {
 	return context.db
 		.collection('users')
 		.find({ _id: { $in: root.blocked.map(id => new ObjectID(id)) } })
@@ -26,6 +25,6 @@ export function blocked(root: any, args: any, context: Context) {
 		.toArray()
 }
 
-export function notifications(root: any, args: any, context: Context) {
+export function notifications(root, args, context) {
 	return getNotifications(null, { user: root.id }, context)
 }

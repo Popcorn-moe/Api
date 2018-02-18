@@ -2,10 +2,7 @@ import { now, needAuth } from '../util'
 import { ObjectID } from 'mongodb'
 
 //Do not import in mutations
-export function newFriendEvent(
-	{ user, friend }: { user: ID, friend: ID },
-	context: Context
-) {
+export function newFriendEvent({ user, friend }, context) {
 	const event = {
 		user: new ObjectID(user),
 		date: now(),
@@ -20,10 +17,7 @@ export function newFriendEvent(
 		})
 }
 
-export function messageEvent(
-	{ message }: { message: String },
-	context: Context
-) {
+export function messageEvent({ message }, context) {
 	needAuth(context)
 	return context.user.then(({ _id }) => {
 		const event = {

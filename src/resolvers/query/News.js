@@ -1,6 +1,6 @@
 import { ObjectID } from 'mongodb'
 
-export function author(root: any, args: any, context: Context) {
+export function author(root, args, context) {
 	return context.db
 		.collection('users')
 		.find({ _id: new ObjectID(root.author) })

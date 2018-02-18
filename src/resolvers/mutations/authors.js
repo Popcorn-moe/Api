@@ -1,11 +1,7 @@
 import { needGroup, ADMIN } from '../util/index'
 import { ObjectID } from 'mongodb'
 
-export function addAuthor(
-	root: any,
-	{ author }: { author: AuthorInput },
-	context: Context
-): Promise<ID> {
+export function addAuthor(root, { author }, context) {
 	if (author.picture) author.picture = context.storage.getUrl(author.picture)
 	return needGroup(context, ADMIN).then(() =>
 		context.db
@@ -15,11 +11,7 @@ export function addAuthor(
 	)
 }
 
-export function updateAuthor(
-	root: any,
-	{ id, author }: { id: ID, author: AuthorUpdate },
-	context: Context
-): Promise<ID> {
+export function updateAuthor(root, { id, author }, context) {
 	if (author.picture) author.picture = context.storage.getUrl(author.picture)
 	return needGroup(context, ADMIN).then(() =>
 		context.db
@@ -29,11 +21,7 @@ export function updateAuthor(
 	)
 }
 
-export function deleteAuthor(
-	root: any,
-	{ id }: { id: ID },
-	context: Context
-): Promise<ID> {
+export function deleteAuthor(root, { id }, context) {
 	return needGroup(context, ADMIN).then(() =>
 		context.db
 			.collection('authors')

@@ -1,9 +1,4 @@
-export function anime(
-	{ anime }: { anime: String },
-	args: any,
-	context: Context
-) {
-	console.log(anime)
+export function anime({ anime }, args, context) {
 	return context.db
 		.collection('animes')
 		.find({ _id: anime })
