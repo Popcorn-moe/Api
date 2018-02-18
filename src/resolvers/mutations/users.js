@@ -15,20 +15,28 @@ export function setAvatar(
 	context: Context
 ): Promise<Result> | Result {
 	needAuth(context)
-	if (!IMAGE_MIME_TYPES.includes(file.mimetype)) {
-		context.storage.removeFile(file)
-		return {
-			error: `MimeType ${file.mimetype} is not and image Mime Type`
+	console.log(file)
+	file.then(file => {
+		if (!IMAGE_MIME_TYPES.includes(file.mimetype)) {
+			return {
+				error: `MimeType ${file.mimetype} is not and image Mime Type`
+			}
 		}
-	}
-	return context.user
-		.then(user => {
-			user.avatar = context.storage.getUrl(file)
-			return user.save()
-		})
-		.then(() => ({
-			error: null
-		}))
+		return context.user
+			.then(
+				user => (
+					console.log('Lol'),
+					context.storage.save(file).then(url => {
+						console.log(url)
+						user.avatar = url
+						return user.save()
+					})
+				)
+			)
+			.then(() => ({
+				error: null
+			}))
+	})
 }
 
 export function updateUsers(

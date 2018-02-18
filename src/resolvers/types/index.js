@@ -1,4 +1,4 @@
-import Upload from './Upload'
+import { GraphQLUpload as Upload } from 'apollo-upload-server'
 import Url from './Url'
 import {
 	GraphQLDate as Date,

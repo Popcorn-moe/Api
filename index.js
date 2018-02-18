@@ -19,9 +19,8 @@ import cookieParser from 'cookie-parser'
 import { MongoClient } from 'mongodb'
 import passport from 'passport'
 import JwtStrategy from './src/auth/JwtStrategy'
-import graphqlUpload from './src/middlewares/graphqlUpload'
 import cors from 'cors'
-import multer from 'multer'
+import { apolloUploadExpress } from 'apollo-upload-server'
 import bodyParser from 'body-parser'
 import { join } from 'path'
 import { FileStorage } from './src/storage'
@@ -52,6 +51,7 @@ app.use(
 		credentials: true
 	})
 )
+
 app.use(passport.initialize())
 passport.serializeUser((user, cb) => cb(null, user))
 passport.use(new AnonymousStrategy())
@@ -80,11 +80,7 @@ MongoClient.connect(url).then(db => {
 	app.post(
 		'/graphql',
 		passport.authenticate(['jwt', 'anonymous']),
-		graphqlUpload(
-			multer({
-				storage: storage.createMulterStorage()
-			})
-		),
+		apolloUploadExpress(),
 		instrumentMiddleware((req, res, next) =>
 			graphqlExpress({
 				schema,

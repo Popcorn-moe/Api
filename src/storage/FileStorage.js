@@ -1,8 +1,9 @@
-import MulterFileStorage from 'multer/storage/disk'
 import express from 'express'
 import { pseudoRandomBytes } from 'crypto'
 import mime from 'mime'
-import { unlink } from 'fs'
+import { join } from 'path'
+import { createWriteStream } from 'fs'
+import { promisify } from 'util'
 
 export default class FileStorage {
 	constructor(dest) {
@@ -13,32 +14,20 @@ export default class FileStorage {
 		app.use('/uploads', express.static(this.dest))
 	}
 
-	getUrl({ filename }) {
-		if (filename)
-			return `${process.env.API_URL ||
-				'http://localhost:3030'}/uploads/${filename}`
-		else return null
-	}
-
-	removeFile({ path }) {
-		unlink(path, err => {
-			if (err) console.log('Cannot remove file', path, err)
-		})
-	}
-
-	createMulterStorage() {
-		return new MulterFileStorage({
-			destination: this.dest,
-			filename(req, file, cb) {
-				pseudoRandomBytes(16, (err, raw) => {
-					cb(
-						err,
-						err
-							? undefined
-							: `${raw.toString('hex')}.${mime.extension(file.mimetype)}`
+	save({ mimetype, stream }) {
+		return new Promise((resolve, reject) => {
+			pseudoRandomBytes(16, (err, raw) => {
+				if (err) return reject(err)
+				const filename = `${raw.toString('hex')}.${mime.extension(mimetype)}`
+				const fstream = createWriteStream(join(this.dest, filename))
+				stream.pipe(fstream)
+				stream.on('end', _ =>
+					resolve(
+						`${process.env.API_URL ||
+							'http://localhost:3030'}/uploads/${filename}`
 					)
-				})
-			}
+				)
+			})
 		})
 	}
 }

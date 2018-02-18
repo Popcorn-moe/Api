@@ -6,12 +6,13 @@ export function updateAnime(
 	{ id, anime }: { id: ID, anime: AnimeInput },
 	context: Context
 ): Promise<ID> {
-	transformAnime(anime, now(), context.storage)
-	return needGroup(context, ADMIN).then(() =>
-		context.db
-			.collection('animes')
-			.updateOne({ _id: id }, { $set: anime })
-			.then(() => id)
+	transformAnime(anime, now(), context.storage).then(anime =>
+		needGroup(context, ADMIN).then(() =>
+			context.db
+				.collection('animes')
+				.updateOne({ _id: id }, { $set: anime })
+				.then(() => id)
+		)
 	)
 }
 
@@ -21,29 +22,40 @@ export function addAnime(
 	context: Context
 ): Promise<ID> {
 	const time = now()
-	transformAnime(anime, time, context.storage)
-	// $FlowIgnore
-	anime.posted_date = time
-	// $FlowIgnore
-	anime._id = toId(anime.names[0])
-	anime.tags = anime.tags.map(t => new ObjectID(t))
-	anime.authors = anime.authors.map(a => new ObjectID(a))
-	return needGroup(context, ADMIN).then(() =>
-		context.db
-			.collection('animes')
-			.insertOne({
-				...anime,
-				medias: [],
-				seasons: []
-			})
-			.then(({ insertedId }) => insertedId)
-	)
+	transformAnime(anime, time, context.storage).then(anime => {
+		// $FlowIgnore
+		anime.posted_date = time
+		// $FlowIgnore
+		anime._id = toId(anime.names[0])
+		anime.tags = anime.tags.map(t => new ObjectID(t))
+		anime.authors = anime.authors.map(a => new ObjectID(a))
+		return needGroup(context, ADMIN).then(() =>
+			context.db
+				.collection('animes')
+				.insertOne({
+					...anime,
+					medias: [],
+					seasons: []
+				})
+				.then(({ insertedId }) => insertedId)
+		)
+	})
 }
 
 function transformAnime(anime: any, time, storage) {
-	if (anime.cover) anime.cover = storage.getUrl(anime.cover)
-	if (anime.background) anime.background = storage.getUrl(anime.background)
-	anime.edit_date = time
+	return Promise.all([anime.cover, anime.background])
+		.then(([cover, background]) =>
+			Promise.all([
+				cover && storage.save(cover),
+				background && storage.save(background)
+			])
+		)
+		.then(([cover, background]) => {
+			if (cover) anime.cover = cover
+			if (background) anime.background = background
+			anime.edit_date = time
+			return anime
+		})
 }
 
 export function addSeason(
