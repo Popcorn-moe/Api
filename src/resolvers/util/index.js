@@ -1,13 +1,13 @@
-import toId from './toId'
-import now from './now'
-import needAuth from './needAuth'
-import needGroup from './needGroup'
+import toId from "./toId";
+import now from "./now";
+import needAuth from "./needAuth";
+import needGroup from "./needGroup";
 import {
 	notifyAnimeFollow,
 	notifyFriendRequests,
 	notifyMessage
-} from './notification'
-import { ADMIN, MODERATOR, VIEWER } from './groups'
+} from "./notification";
+import { ADMIN, MODERATOR, VIEWER } from "./groups";
 
 export {
 	now,
@@ -20,4 +20,4 @@ export {
 	ADMIN,
 	MODERATOR,
 	VIEWER
-}
+};

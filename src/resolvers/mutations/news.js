@@ -1,40 +1,40 @@
-import { now, needGroup, ADMIN } from '../util/index'
-import { ObjectID } from 'mongodb'
+import { now, needGroup, ADMIN } from "../util/index";
+import { ObjectID } from "mongodb";
 
 export function addNews(root, { news }, context) {
 	return Promise.resolve(news.cover)
 		.then(cover => cover && context.storage.save(cover))
 		.then(cover => {
-			if (cover) news.cover = cover
-			news.posted_date = now()
+			if (cover) news.cover = cover;
+			news.posted_date = now();
 			return needGroup(context, ADMIN).then(() =>
 				context.db
-					.collection('news')
+					.collection("news")
 					.insertOne(news)
 					.then(({ insertedId }) => insertedId)
-			)
-		})
+			);
+		});
 }
 
 export function deleteNews(root, { id }, context) {
 	return needGroup(context, ADMIN).then(() =>
 		context.db
-			.collection('news')
+			.collection("news")
 			.deleteOne({ _id: new ObjectID(id) })
 			.then(() => id)
-	)
+	);
 }
 
 export function updateNews(root, { id, news }, context) {
 	return Promise.resolve(news.cover)
 		.then(cover => cover && context.storage.save(cover))
 		.then(cover => {
-			if (cover) news.cover = cover
+			if (cover) news.cover = cover;
 			return needGroup(context, ADMIN).then(() =>
 				context.db
-					.collection('news')
+					.collection("news")
 					.updateOne({ _id: new ObjectID(id) }, { $set: news })
 					.then(() => id)
-			)
-		})
+			);
+		});
 }

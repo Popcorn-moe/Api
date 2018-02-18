@@ -1,60 +1,63 @@
-import schema from './src/schema'
-import { PubSub } from 'graphql-subscriptions'
+import express from "express";
+import { graphqlExpress } from "apollo-server-express";
+import { apolloUploadExpress } from "apollo-upload-server";
+import bodyParser from "body-parser";
+import logger from "morgan";
+import cookieParser from "cookie-parser";
+import cors from "cors";
+import passport from "passport";
+
+import schema from "./src/schema";
 import {
 	instrument,
 	report,
 	createContext,
 	instrumentMiddleware
-} from './src/graphql/monitor'
-import memoize from './src/graphql/memoize'
-import express from 'express'
+} from "./src/graphql/monitor";
+import memoize from "./src/graphql/memoize";
+
+import { execute, subscribe } from "graphql";
+import { PubSub } from "graphql-subscriptions";
 import {
 	SubscriptionServer,
 	SubscriptionManager
-} from 'subscriptions-transport-sse'
-import { execute, subscribe } from 'graphql'
-import { graphqlExpress } from 'apollo-server-express'
-import logger from 'morgan'
-import cookieParser from 'cookie-parser'
-import { MongoClient } from 'mongodb'
-import passport from 'passport'
-import JwtStrategy from './src/auth/JwtStrategy'
-import cors from 'cors'
-import { apolloUploadExpress } from 'apollo-upload-server'
-import bodyParser from 'body-parser'
-import { join } from 'path'
-import { FileStorage } from './src/storage'
-import AnonymousStrategy from 'passport-anonymous'
+} from "subscriptions-transport-sse";
 
-memoize(schema)
-instrument(schema)
+import { join } from "path";
+import { MongoClient } from "mongodb";
+import JwtStrategy from "./src/auth/JwtStrategy";
+import AnonymousStrategy from "passport-anonymous";
+import { FileStorage } from "./src/storage";
 
-const url = 'mongodb://localhost:27017/popcornmoe_backend'
-const app = express()
-const storage = new FileStorage(join(__dirname, 'uploads'))
-export const pubsub = new PubSub()
+memoize(schema);
+instrument(schema);
 
-storage.register(app)
-app.use(logger('dev'))
-app.use(cookieParser())
-app.use(bodyParser.json())
+const url = "mongodb://localhost:27017/popcornmoe_backend";
+const app = express();
+const storage = new FileStorage(join(__dirname, "uploads"));
+export const pubsub = new PubSub();
+
+storage.register(app);
+app.use(logger("dev"));
+app.use(cookieParser());
+app.use(bodyParser.json());
 app.use(
 	cors({
 		origin: [
-			'http://localhost:8080',
-			'http://localhost:8000',
-			'http://localhost:3000',
-			'https://popcorn.moe',
-			'https://admin.popcorn.moe',
-			'https://dev.popcorn.moe'
+			"http://localhost:8080",
+			"http://localhost:8000",
+			"http://localhost:3000",
+			"https://popcorn.moe",
+			"https://admin.popcorn.moe",
+			"https://dev.popcorn.moe"
 		],
 		credentials: true
 	})
-)
+);
 
-app.use(passport.initialize())
-passport.serializeUser((user, cb) => cb(null, user))
-passport.use(new AnonymousStrategy())
+app.use(passport.initialize());
+passport.serializeUser((user, cb) => cb(null, user));
+passport.use(new AnonymousStrategy());
 
 SubscriptionServer(
 	{
@@ -66,20 +69,20 @@ SubscriptionServer(
 	},
 	{
 		express: app,
-		path: '/subscriptions'
+		path: "/subscriptions"
 	}
-)
+);
 
 MongoClient.connect(url).then(db => {
 	app.use((req, res, next) => {
-		req.db = db
-		req.storage = storage
-		req.pubsub = pubsub
-		next()
-	})
+		req.db = db;
+		req.storage = storage;
+		req.pubsub = pubsub;
+		next();
+	});
 	app.post(
-		'/graphql',
-		passport.authenticate(['jwt', 'anonymous']),
+		"/graphql",
+		passport.authenticate(["jwt", "anonymous"]),
 		apolloUploadExpress(),
 		instrumentMiddleware((req, res, next) =>
 			graphqlExpress({
@@ -87,19 +90,19 @@ MongoClient.connect(url).then(db => {
 				context: req,
 				tracing: true,
 				formatError(e) {
-					console.error(e)
-					return e
+					console.error(e);
+					return e;
 				}
 			})(req, res, next)
 		)
-	)
-	passport.use(new JwtStrategy(db.collection('users')))
+	);
+	passport.use(new JwtStrategy(db.collection("users")));
 
-	console.log('Connected on mongodb')
-})
+	console.log("Connected on mongodb");
+});
 
-app.listen(3030, () => console.log('Listening on port 3030'))
+app.listen(3030, () => console.log("Listening on port 3030"));
 
-process.on('unhandledRejection', error =>
-	console.error('unhandledRejection', error)
-)
+process.on("unhandledRejection", error =>
+	console.error("unhandledRejection", error)
+);
