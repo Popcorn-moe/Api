@@ -16,22 +16,19 @@ const IMAGE_MIME_TYPES = [
 
 export function setAvatar(root, { file }, context) {
 	needAuth(context);
-	file.then(file => {
+	return file.then(file => {
 		if (!IMAGE_MIME_TYPES.includes(file.mimetype)) {
 			return {
 				error: `MimeType ${file.mimetype} is not and image Mime Type`
 			};
 		}
 		return context.user
-			.then(
-				user => (
-					console.log("Lol"),
-					context.storage.save(file).then(url => {
-						console.log(url);
-						user.avatar = url;
-						return user.save();
-					})
-				)
+			.then(user =>
+				context.storage.save(file).then(url => {
+					console.log(url);
+					user.avatar = url;
+					return user.save();
+				})
 			)
 			.then(() => ({
 				error: null
