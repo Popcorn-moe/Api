@@ -10,11 +10,13 @@ export function playlists(root, args, context) {
 }
 
 export function friends(root, args, context) {
-	return context.db
-		.collection("users")
-		.find({ _id: { $in: root.friends.map(id => new ObjectID(id)) } })
-		.map(({ _id, ...fields }) => ({ id: _id, ...fields }))
-		.toArray();
+	return !root.friends
+		? []
+		: context.db
+				.collection("users")
+				.find({ _id: { $in: root.friends.map(id => new ObjectID(id)) } })
+				.map(({ _id, ...fields }) => ({ id: _id, ...fields }))
+				.toArray();
 }
 
 export function blocked(root, args, context) {

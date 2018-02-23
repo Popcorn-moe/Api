@@ -56,7 +56,7 @@ export function searchUser(root, { name, limit }, context) {
 		: [];
 }
 
-export function searchAnime(root, { name, limit }) {
+export function searchAnime(root, { name, limit }, context) {
 	return name
 		? context.db
 				.collection("animes")
