@@ -27,6 +27,7 @@ export default class FileStorage {
 							"http://localhost:3030"}/uploads/${filename}`
 					)
 				);
+				stream.on("error", reject);
 			});
 		});
 	}

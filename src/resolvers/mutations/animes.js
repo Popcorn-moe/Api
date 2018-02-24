@@ -2,7 +2,7 @@ import { toId, now, needGroup, ADMIN } from "../util/index";
 import { ObjectID } from "mongodb";
 
 export function updateAnime(root, { id, anime }, context) {
-	transformAnime(anime, now(), context.storage).then(anime =>
+	return transformAnime(anime, now(), context.storage).then(anime =>
 		needGroup(context, ADMIN).then(() =>
 			context.db
 				.collection("animes")
@@ -14,7 +14,7 @@ export function updateAnime(root, { id, anime }, context) {
 
 export function addAnime(root, { anime }, context) {
 	const time = now();
-	transformAnime(anime, time, context.storage).then(anime => {
+	return transformAnime(anime, time, context.storage).then(anime => {
 		anime.posted_date = time;
 		anime._id = toId(anime.names[0]);
 		anime.tags = anime.tags.map(t => new ObjectID(t));
@@ -33,19 +33,15 @@ export function addAnime(root, { anime }, context) {
 }
 
 function transformAnime(anime, time, storage) {
-	return Promise.all([anime.cover, anime.background])
-		.then(([cover, background]) =>
-			Promise.all([
-				cover && storage.save(cover),
-				background && storage.save(background)
-			])
-		)
-		.then(([cover, background]) => {
-			if (cover) anime.cover = cover;
-			if (background) anime.background = background;
-			anime.edit_date = time;
-			return anime;
-		});
+	return Promise.all([
+		anime.cover.then(cover => cover && storage.save(cover)),
+		anime.background.then(background => background && storage.save(background))
+	]).then(([cover, background]) => {
+		if (cover) anime.cover = cover;
+		if (background) anime.background = background;
+		anime.edit_date = time;
+		return anime;
+	});
 }
 
 export function addSeason(root, { anime, season }, context) {
