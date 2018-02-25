@@ -48,6 +48,7 @@
     "graphql-iso-date": "^3.5.0",
     "graphql-subscriptions": "^0.5.7",
     "graphql-tools": "^1.2.1",
+    "md5": "^2.2.1",
     "memoizee": "^0.4.11",
     "mime": "^1.6.0",
     "mongodb": "^2.2.34",
