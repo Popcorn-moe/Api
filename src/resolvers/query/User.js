@@ -35,6 +35,8 @@ export function notifications(root, args, context) {
 export function avatar({ avatar, email }, args, context) {
 	return (
 		avatar ||
-		`https://www.gravatar.com/avatar/${md5(email.toLowerCase().trim())}`
+		`https://www.gravatar.com/avatar/${md5(
+			email.toLowerCase().trim()
+		)}?d=identicon`
 	);
 }
