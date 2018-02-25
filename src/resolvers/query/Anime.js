@@ -25,8 +25,9 @@ export function medias(root, args, context) {
 		.toArray();
 }
 
-export function seasons(root, args, context) {
-	return root.seasons.map(season => season && { anime: root.id, ...season });
+export function seasons({ seasons, id }, args, context) {
+	if (seasons) return seasons.map(season => season && { anime: id, ...season });
+	else return [];
 }
 
 export function season(root, { season }, context) {

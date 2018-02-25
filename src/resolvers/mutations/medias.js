@@ -41,7 +41,7 @@ export function linkMedia(root, { media, anime, season, episode }, context) {
 	return needGroup(context, ADMIN).then(() =>
 		context.db
 			.collection("animes")
-			.updateOne({ _id: new ObjectID(anime) }, update)
+			.updateOne({ _id: anime }, update)
 			.then(({ matchedCount }) => matchedCount == 1)
 	);
 }
