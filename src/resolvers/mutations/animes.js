@@ -45,7 +45,7 @@ function transformAnime(anime, time, storage) {
 }
 
 export function addSeason(root, { anime, season }, context) {
-	let seasonNb = season.season;
+	const seasonNb = season.season;
 	delete season.season;
 	const time = now();
 	season.edit_date = time;
@@ -55,7 +55,14 @@ export function addSeason(root, { anime, season }, context) {
 			.collection("animes")
 			.updateOne(
 				{ _id: anime },
-				{ $set: { [`seasons.${seasonNb.toString()}`]: season } }
+				{
+					$push: {
+						seasons: {
+							$each: [season],
+							$position: seasonNb
+						}
+					}
+				}
 			)
 			.then(() => ({ anime, ...season }))
 	);
