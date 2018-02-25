@@ -30,6 +30,7 @@ export {
 	Anime,
 	News,
 	Media,
+	Season,
 	PlaylistElem,
 	PlaylistAnimeElem,
 	PlaylistMediaElem,

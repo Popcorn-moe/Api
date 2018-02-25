@@ -1,6 +1,6 @@
 import { addAnime, addSeason, updateAnime } from "./animes";
 import { addAuthor, deleteAuthor, updateAuthor } from "./authors";
-import { addMedia, linkMedia } from "./medias";
+import { addMedia, updateMedia, linkMedia } from "./medias";
 import { addNews, updateNews, deleteNews } from "./news";
 import { delNotification } from "./notifications";
 import { addTag, deleteTag, updateTag } from "./tags";
@@ -23,6 +23,7 @@ export {
 	updateAuthor,
 	//MEDIA
 	addMedia,
+	updateMedia,
 	linkMedia,
 	//NEWS
 	addNews,

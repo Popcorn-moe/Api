@@ -97,11 +97,7 @@ export function anime(root, { id }, context) {
 		.find({ _id: id })
 		.limit(1)
 		.map(({ _id, ...fields }) => ({ id: _id, ...fields }))
-		.next()
-		.then(e => {
-			console.log(e);
-			return e;
-		});
+		.next();
 }
 
 export function news(root, args, context) {

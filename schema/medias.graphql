@@ -1,11 +1,13 @@
 type Media implements Dated {
 	id: ID!
+	name: String
 	comments: [Comment!]!
 	type: MediaType!
 	rate: Float!
 	release_date: DateTime
 	edit_date: DateTime!
 	posted_date: DateTime!
+	content: String
 	comment(content: String!): ID!
 	linkTo(anime: ID!, season: Int = null, episode: Int = null): Boolean!
 }
@@ -26,11 +28,21 @@ type Comment {
 }
 
 input MediaInput {
+	name: String
 	type: MediaType!
 	release_date: DateTime
+	content: String
+}
+
+input MediaUpdate {
+	name: String
+	type: MediaType
+	release_date: DateTime
+	content: String
 }
 
 extend type Mutation {
 	addMedia(media: MediaInput!): Media!
+	updateMedia(id: ID!, media: MediaUpdate!): ID!
 	linkMedia(media: ID!, anime: ID!, season: Int = null, episode: Int = null): Boolean!
 }

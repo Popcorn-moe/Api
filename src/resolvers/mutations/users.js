@@ -25,7 +25,6 @@ export function setAvatar(root, { file }, context) {
 		return context.user
 			.then(user =>
 				context.storage.save(file).then(url => {
-					console.log(url);
 					user.avatar = url;
 					return user.save();
 				})

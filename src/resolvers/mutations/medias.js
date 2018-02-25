@@ -1,4 +1,5 @@
 import { now, needGroup, ADMIN } from "../util/index";
+import { ObjectID } from "mongodb";
 
 export function addMedia(root, { media }, context) {
 	media.comments = [];
@@ -13,12 +14,25 @@ export function addMedia(root, { media }, context) {
 	);
 }
 
+export function updateMedia(root, { id, media }, context) {
+	media.edit_date = now();
+	return needGroup(context, ADMIN).then(() =>
+		context.db
+			.collection("medias")
+			.updateOne({ _id: new ObjectID(id) }, { $set: media })
+			.then(() => id)
+	);
+}
+
 export function linkMedia(root, { media, anime, season, episode }, context) {
 	let update;
-	if (season && episode) {
+	if (season !== null && episode !== null) {
 		update = {
 			$push: {
-				[`seasons.${season.toString()}.episodes.${episode.toString()}`]: media
+				[`seasons.${season.toString()}.episodes`]: {
+					$each: [media],
+					$position: episode
+				}
 			}
 		};
 	} else {
@@ -27,7 +41,7 @@ export function linkMedia(root, { media, anime, season, episode }, context) {
 	return needGroup(context, ADMIN).then(() =>
 		context.db
 			.collection("animes")
-			.updateOne({ _id: anime }, update)
+			.updateOne({ _id: new ObjectID(anime) }, update)
 			.then(({ matchedCount }) => matchedCount == 1)
 	);
 }
