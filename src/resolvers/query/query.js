@@ -100,6 +100,14 @@ export function anime(root, { id }, context) {
 		.next();
 }
 
+export function slider(root, args, context) {
+	return context.db
+		.collection("slider")
+		.find()
+		.map(({ _id, ...fields }) => ({ id: _id, ...fields }))
+		.toArray();
+}
+
 export function news(root, args, context) {
 	return context.db
 		.collection("news")

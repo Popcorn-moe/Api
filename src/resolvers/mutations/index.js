@@ -4,6 +4,7 @@ import { addMedia, updateMedia, linkMedia } from "./medias";
 import { addNews, updateNews, deleteNews } from "./news";
 import { delNotification } from "./notifications";
 import { addTag, deleteTag, updateTag } from "./tags";
+import { addSlide } from "./slider";
 import {
 	acceptFriendRequest,
 	delFriend,
@@ -40,7 +41,9 @@ export {
 	delFriend,
 	sendFriendsRequests,
 	setAvatar,
-	updateUsers
+	updateUsers,
+	//SLIDER
+	addSlide
 };
 
 export function hello(root, { name }, context) {

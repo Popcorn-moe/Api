@@ -1,0 +1,22 @@
+type Slide {
+    id: ID!
+    title: String!
+    desc: String!
+    image: Url!
+}
+
+input SlideInput {
+    title: String
+    desc: String
+    image: Upload
+}
+
+extend type Query {
+    slider: [Slide]!
+}
+
+extend type Mutation {
+    addSlide(slide: SlideInput!): ID!
+    delSlide(id: ID!): Result!
+    editSlide(id: ID!, slide: SlideInput!): Result!
+}
