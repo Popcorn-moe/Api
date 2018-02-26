@@ -10,6 +10,7 @@ type Anime implements Dated {
 	addSeason(season: SeasonInput!): Season!
 	cover: Url
 	background: Url
+	desc: String
 
 	release_date: DateTime
 	edit_date: DateTime!
