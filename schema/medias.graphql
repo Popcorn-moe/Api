@@ -15,7 +15,9 @@ type Media implements Dated {
 enum MediaType {
 	EPISODE
 	TRAILER
-	SONG
+	OPENING
+	ENDING
+	OST
 	FILM
 }
 
