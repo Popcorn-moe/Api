@@ -1,11 +1,13 @@
 type Slide {
     id: ID!
+    index: Int!
     title: String!
     desc: String!
-    image: Url!
+    image: Url
 }
 
 input SlideInput {
+    index: Int!
     title: String
     desc: String
     image: Upload
@@ -17,6 +19,6 @@ extend type Query {
 
 extend type Mutation {
     addSlide(slide: SlideInput!): ID!
-    delSlide(id: ID!): Result!
-    editSlide(id: ID!, slide: SlideInput!): Result!
+    delSlide(id: ID!): ID!
+    editSlide(id: ID!, slide: SlideInput!): ID!
 }
