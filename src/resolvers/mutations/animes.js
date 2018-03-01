@@ -2,8 +2,8 @@ import { toId, now, needGroup, ADMIN } from "../util/index";
 import { ObjectID } from "mongodb";
 
 export function updateAnime(root, { id, anime }, context) {
-	return transformAnime(id, anime, now(), context.storage).then(anime =>
-		needGroup(context, ADMIN).then(() =>
+	return needGroup(context, ADMIN).then(() =>
+		transformAnime(id, anime, now(), context.storage).then(anime =>
 			context.db
 				.collection("animes")
 				.updateOne({ _id: id }, { $set: anime })
@@ -15,22 +15,22 @@ export function updateAnime(root, { id, anime }, context) {
 export function addAnime(root, { anime }, context) {
 	const time = now();
 	const id = toId(anime.names[0]);
-	return transformAnime(id, anime, time, context.storage).then(anime => {
-		anime.posted_date = time;
-		anime._id = id;
-		anime.tags = anime.tags.map(t => new ObjectID(t));
-		anime.authors = anime.authors.map(a => new ObjectID(a));
-		return needGroup(context, ADMIN).then(() =>
-			context.db
+	return needGroup(context, ADMIN).then(() =>
+		transformAnime(id, anime, time, context.storage).then(anime => {
+			anime.posted_date = time;
+			anime._id = id;
+			anime.tags = anime.tags.map(t => new ObjectID(t));
+			anime.authors = anime.authors.map(a => new ObjectID(a));
+			return context.db
 				.collection("animes")
 				.insertOne({
 					...anime,
 					medias: [],
 					seasons: []
 				})
-				.then(({ insertedId }) => insertedId)
-		);
-	});
+				.then(({ insertedId }) => insertedId);
+		})
+	);
 }
 
 function transformAnime(id, anime, time, storage) {
