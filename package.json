@@ -58,6 +58,7 @@
     "passport": "^0.4.0",
     "passport-anonymous": "^1.0.1",
     "passport-jwt": "^3.0.1",
+    "sharp": "^0.19.1",
     "subscriptions-transport-sse": "^0.7.11"
   }
 }

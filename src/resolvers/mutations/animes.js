@@ -1,5 +1,6 @@
 import { toId, now, needGroup, ADMIN } from "../util/index";
 import { ObjectID } from "mongodb";
+import sharp from "sharp";
 
 export function updateAnime(root, { id, anime }, context) {
 	return needGroup(context, ADMIN).then(() =>
@@ -36,10 +37,22 @@ export function addAnime(root, { anime }, context) {
 function transformAnime(id, anime, time, storage) {
 	return Promise.all([
 		anime.cover &&
-			anime.cover.then(cover => cover && storage.save(`${id}_cover`, cover)),
+			anime.cover.then(cover =>
+				storage.save(
+					`${id}_cover`,
+					cover,
+					sharp()
+						.resize(180, 250)
+						.jpeg({ progressive: true, optimiseScans: true })
+				)
+			),
 		anime.background &&
-			anime.background.then(
-				background => background && storage.save(`${id}_background`, background)
+			anime.background.then(background =>
+				storage.save(
+					`${id}_background`,
+					background,
+					sharp().jpeg({ progressive: true, optimiseScans: true })
+				)
 			)
 	]).then(([cover, background]) => {
 		if (cover) anime.cover = cover;
