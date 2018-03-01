@@ -2,7 +2,7 @@ import { needGroup, ADMIN } from "../util/index";
 import { ObjectID } from "mongodb";
 
 export function addAuthor(root, { author }, context) {
-	if (author.picture) author.picture = context.storage.getUrl(author.picture);
+	if (author.picture) author.picture = context.storage.save(author.picture);
 	return needGroup(context, ADMIN).then(() =>
 		context.db
 			.collection("authors")
@@ -12,7 +12,7 @@ export function addAuthor(root, { author }, context) {
 }
 
 export function updateAuthor(root, { id, author }, context) {
-	if (author.picture) author.picture = context.storage.getUrl(author.picture);
+	if (author.picture) author.picture = context.storage.save(author.picture);
 	return needGroup(context, ADMIN).then(() =>
 		context.db
 			.collection("authors")

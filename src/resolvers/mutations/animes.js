@@ -34,8 +34,11 @@ export function addAnime(root, { anime }, context) {
 
 function transformAnime(anime, time, storage) {
 	return Promise.all([
-		anime.cover.then(cover => cover && storage.save(cover)),
-		anime.background.then(background => background && storage.save(background))
+		anime.cover && anime.cover.then(cover => cover && storage.save(cover)),
+		anime.background &&
+			anime.background.then(
+				background => background && storage.save(background)
+			)
 	]).then(([cover, background]) => {
 		if (cover) anime.cover = cover;
 		if (background) anime.background = background;
