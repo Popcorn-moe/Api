@@ -1,12 +1,12 @@
+import Storage from "./Storage";
 import express from "express";
-import { pseudoRandomBytes } from "crypto";
 import mime from "mime";
 import { join } from "path";
 import { createWriteStream } from "fs";
-import { promisify } from "util";
 
-export default class FileStorage {
+export default class FileStorage extends Storage {
 	constructor(dest) {
+		super();
 		this.dest = dest;
 	}
 
@@ -14,21 +14,19 @@ export default class FileStorage {
 		app.use("/uploads", express.static(this.dest));
 	}
 
-	save({ mimetype, stream }) {
+	write(filename, mimetype, stream) {
 		return new Promise((resolve, reject) => {
-			pseudoRandomBytes(16, (err, raw) => {
-				if (err) return reject(err);
-				const filename = `${raw.toString("hex")}.${mime.extension(mimetype)}`;
-				const fstream = createWriteStream(join(this.dest, filename));
-				stream.pipe(fstream);
-				stream.on("end", _ =>
-					resolve(
-						`${process.env.API_URL ||
-							"http://localhost:3030"}/uploads/${filename}`
-					)
-				);
-				stream.on("error", reject);
-			});
+			const wstream = createWriteStream(
+				join(this.dest, `${filename}.${mime.extension(mimetype)}`)
+			);
+			stream.pipe(wstream);
+			stream.on("end", _ =>
+				resolve(
+					`${process.env.API_URL ||
+						"http://localhost:3030"}/uploads/${filename}`
+				)
+			);
+			stream.on("error", reject);
 		});
 	}
 }

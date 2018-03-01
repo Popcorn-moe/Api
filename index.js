@@ -27,14 +27,38 @@ import { join } from "path";
 import { MongoClient } from "mongodb";
 import JwtStrategy from "./src/auth/JwtStrategy";
 import AnonymousStrategy from "passport-anonymous";
-import { FileStorage } from "./src/storage";
+import { FileStorage, MinioStorage } from "./src/storage";
 
+const {
+	MINIO_ENDPOINT,
+	MINIO_PORT,
+	MINIO_KEY,
+	MINIO_SECRET,
+	MINIO_SECURE,
+	MINIO_BUCKET
+} = process.env;
 memoize(schema);
 instrument(schema);
 
 const url = "mongodb://localhost:27017/popcornmoe_backend";
 const app = express();
-const storage = new FileStorage(join(__dirname, "uploads"));
+let storage;
+
+if (MINIO_ENDPOINT) {
+	console.log("Using Minio Storage");
+	storage = new MinioStorage({
+		endPoint: MINIO_ENDPOINT,
+		port: MINIO_PORT,
+		secure: MINIO_SECURE === "true",
+		accessKey: MINIO_KEY,
+		secretKey: MINIO_SECRET,
+		bucketName: MINIO_BUCKET
+	});
+} else {
+	console.log("Using File Storage");
+	storage = new FileStorage(join(__dirname, "uploads"));
+}
+
 export const pubsub = new PubSub();
 
 storage.register(app);

@@ -2,23 +2,33 @@ import { needGroup, ADMIN } from "../util/index";
 import { ObjectID } from "mongodb";
 
 export function addAuthor(root, { author }, context) {
-	if (author.picture) author.picture = context.storage.save(author.picture);
-	return needGroup(context, ADMIN).then(() =>
-		context.db
-			.collection("authors")
-			.insertOne(author)
-			.then(({ insertedId }) => insertedId)
-	);
+	const id = new ObjectID();
+	return Promise.resolve(author.picture)
+		.then(picture => picture && context.storage.save(id, picture))
+		.then(picture => {
+			author.picture = picture;
+			author._id = id;
+			return needGroup(context, ADMIN).then(() =>
+				context.db
+					.collection("authors")
+					.insertOne(author)
+					.then(({ insertedId }) => insertedId)
+			);
+		});
 }
 
 export function updateAuthor(root, { id, author }, context) {
-	if (author.picture) author.picture = context.storage.save(author.picture);
-	return needGroup(context, ADMIN).then(() =>
-		context.db
-			.collection("authors")
-			.updateOne({ _id: new ObjectID(id) }, { $set: author })
-			.then(() => id)
-	);
+	return Promise.resolve(author.picture)
+		.then(picture => picture && context.storage.save(id, picture))
+		.then(picture => {
+			author.picture = picture;
+			return needGroup(context, ADMIN).then(() =>
+				context.db
+					.collection("authors")
+					.updateOne({ _id: new ObjectID(id) }, { $set: author })
+					.then(() => id)
+			);
+		});
 }
 
 export function deleteAuthor(root, { id }, context) {

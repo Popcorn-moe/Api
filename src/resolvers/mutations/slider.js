@@ -2,11 +2,13 @@ import { needGroup, ADMIN } from "../util/index";
 import { ObjectID } from "mongodb";
 
 export function addSlide(root, { slide }, context) {
+	const id = new ObjectID();
 	return needGroup(context, ADMIN).then(() =>
 		Promise.resolve(slide.image)
-			.then(image => image && context.storage.save(image))
+			.then(image => image && context.storage.save(id, image))
 			.then(image => {
 				if (image) slide.image = image;
+				slide._id = id;
 				context.db
 					.collection("slider")
 					.update({ index: { $gte: slide.index } }, { $inc: { index: 1 } });
@@ -21,7 +23,7 @@ export function addSlide(root, { slide }, context) {
 export function editSlide(root, { id, slide }, context) {
 	return needGroup(context, ADMIN).then(() =>
 		Promise.resolve(slide.image)
-			.then(image => image && context.storage.save(image))
+			.then(image => image && context.storage.save(id, image))
 			.then(image => {
 				if (image) slide.image = image;
 				context.db

@@ -2,7 +2,7 @@ import { toId, now, needGroup, ADMIN } from "../util/index";
 import { ObjectID } from "mongodb";
 
 export function updateAnime(root, { id, anime }, context) {
-	return transformAnime(anime, now(), context.storage).then(anime =>
+	return transformAnime(id, anime, now(), context.storage).then(anime =>
 		needGroup(context, ADMIN).then(() =>
 			context.db
 				.collection("animes")
@@ -14,9 +14,10 @@ export function updateAnime(root, { id, anime }, context) {
 
 export function addAnime(root, { anime }, context) {
 	const time = now();
-	return transformAnime(anime, time, context.storage).then(anime => {
+	const id = toId(anime.names[0]);
+	return transformAnime(id, anime, time, context.storage).then(anime => {
 		anime.posted_date = time;
-		anime._id = toId(anime.names[0]);
+		anime._id = id;
 		anime.tags = anime.tags.map(t => new ObjectID(t));
 		anime.authors = anime.authors.map(a => new ObjectID(a));
 		return needGroup(context, ADMIN).then(() =>
@@ -32,12 +33,13 @@ export function addAnime(root, { anime }, context) {
 	});
 }
 
-function transformAnime(anime, time, storage) {
+function transformAnime(id, anime, time, storage) {
 	return Promise.all([
-		anime.cover && anime.cover.then(cover => cover && storage.save(cover)),
+		anime.cover &&
+			anime.cover.then(cover => cover && storage.save(`${id}_cover`, cover)),
 		anime.background &&
 			anime.background.then(
-				background => background && storage.save(background)
+				background => background && storage.save(`${id}_background`, background)
 			)
 	]).then(([cover, background]) => {
 		if (cover) anime.cover = cover;

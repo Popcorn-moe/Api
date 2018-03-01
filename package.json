@@ -51,6 +51,7 @@
     "md5": "^2.2.1",
     "memoizee": "^0.4.11",
     "mime": "^1.6.0",
+    "minio": "^4.0.0",
     "mongodb": "^2.2.34",
     "morgan": "^1.9.0",
     "node-dogstatsd": "0.0.6",
