@@ -43,7 +43,7 @@ function transformAnime(id, anime, time, storage) {
 					cover,
 					sharp()
 						.resize(180, 250)
-						.jpeg({ progressive: true, optimiseScans: true })
+						.jpeg({ progressive: true, quality: 100, optimiseScans: true })
 				)
 			),
 		anime.background &&
@@ -51,7 +51,7 @@ function transformAnime(id, anime, time, storage) {
 				storage.save(
 					`${id}_background`,
 					background,
-					sharp().jpeg({ progressive: true, optimiseScans: true })
+					sharp().jpeg({ progressive: true, quality: 100, optimiseScans: true })
 				)
 			)
 	]).then(([cover, background]) => {
