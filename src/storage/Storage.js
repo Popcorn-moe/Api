@@ -3,7 +3,7 @@ export default class Storage {
 
 	save(filename, { mimetype, stream }, ...transforms) {
 		return this.write(
-			filename,
+			filename + "",
 			mimetype,
 			transforms.reduce((c, fn) => c.pipe(fn), stream)
 		);
