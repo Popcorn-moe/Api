@@ -105,7 +105,15 @@ export function slider(root, args, context) {
 		.collection("slider")
 		.find()
 		.map(({ _id, ...fields }) => ({ id: _id, ...fields }))
-		.toArray();
+		.toArray()
+		.then(slides => {
+			const maxIndex = slides.reduce((c, v) => Math.max(c, v.index), 0);
+			const iSlides = new Array(maxIndex + 1);
+			for (const slide of slides) {
+				iSlides[slide.index] = slide;
+			}
+			return iSlides;
+		});
 }
 
 export function news(root, args, context) {

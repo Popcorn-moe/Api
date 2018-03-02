@@ -1,6 +1,5 @@
 type Slide {
     id: ID!
-    index: Int!
     title: String!
     desc: String!
     image: Url

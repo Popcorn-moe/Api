@@ -9,13 +9,15 @@ export function addSlide(root, { slide }, context) {
 			.then(image => {
 				if (image) slide.image = image;
 				slide._id = id;
-				context.db
-					.collection("slider")
-					.update({ index: { $gte: slide.index } }, { $inc: { index: 1 } });
-				return context.db
-					.collection("slider")
-					.insertOne(slide)
-					.then(({ insertedId }) => insertedId);
+				return Promise.all([
+					context.db
+						.collection("slider")
+						.update({ index: { $gte: slide.index } }, { $inc: { index: 1 } }),
+					context.db
+						.collection("slider")
+						.insertOne(slide)
+						.then(({ insertedId }) => insertedId)
+				]).then(([, res]) => res);
 			})
 	);
 }
@@ -26,9 +28,6 @@ export function editSlide(root, { id, slide }, context) {
 			.then(image => image && context.storage.save(id, image))
 			.then(image => {
 				if (image) slide.image = image;
-				context.db
-					.collection("slider")
-					.update({ index: { $gte: slide.index } }, { $inc: { index: 1 } });
 				return context.db
 					.collection("slider")
 					.updateOne({ _id: new ObjectID(id) }, { $set: slide })
