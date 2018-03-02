@@ -21,7 +21,8 @@ export default class FileStorage extends Storage {
 			stream.pipe(wstream);
 			stream.on("end", _ =>
 				resolve(
-					`${process.env.API_URL || "http://localhost:3030"}/uploads/${file}`
+					`${process.env.API_URL ||
+						"http://localhost:3030"}/uploads/${file}?${new Date().getTime()}`
 				)
 			);
 			stream.on("error", reject);

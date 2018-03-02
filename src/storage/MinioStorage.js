@@ -21,7 +21,7 @@ export default class MinioStorage extends Storage {
 				_ =>
 					`${this.client.protocol}//${this.client.host}:${this.client.port}/${
 						this.bucketName
-					}/${filename}`
+					}/${filename}?${new Date().getTime()}`
 			);
 	}
 }
