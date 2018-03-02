@@ -16,14 +16,12 @@ export default class FileStorage extends Storage {
 
 	write(filename, mimetype, stream) {
 		return new Promise((resolve, reject) => {
-			const wstream = createWriteStream(
-				join(this.dest, `${filename}.${mime.extension(mimetype)}`)
-			);
+			const file = `${filename}.${mime.extension(mimetype)}`;
+			const wstream = createWriteStream(join(this.dest, file));
 			stream.pipe(wstream);
 			stream.on("end", _ =>
 				resolve(
-					`${process.env.API_URL ||
-						"http://localhost:3030"}/uploads/${filename}`
+					`${process.env.API_URL || "http://localhost:3030"}/uploads/${file}`
 				)
 			);
 			stream.on("error", reject);

@@ -16,7 +16,7 @@ export function addSlide(root, { slide }, context) {
 					context.db
 						.collection("slider")
 						.insertOne(slide)
-						.then(({ insertedId }) => insertedId)
+						.then(({ insertedId }) => ({ id: insertedId, ...slide }))
 				]).then(([, res]) => res);
 			})
 	);
@@ -30,8 +30,8 @@ export function editSlide(root, { id, slide }, context) {
 				if (image) slide.image = image;
 				return context.db
 					.collection("slider")
-					.updateOne({ _id: new ObjectID(id) }, { $set: slide })
-					.then(() => id);
+					.findOneAndUpdate({ _id: new ObjectID(id) }, { $set: slide })
+					.then(({ value: slide }) => ({ id, ...slide }));
 			})
 	);
 }
@@ -41,7 +41,7 @@ export function delSlide(root, { id }, context) {
 		context.db
 			.collection("slider")
 			.findOneAndDelete({ _id: new ObjectID(id) })
-			.then(({ value: { index, id } }) => {
+			.then(({ value: { index } }) => {
 				context.db
 					.collection("slider")
 					.update({ index: { $gte: index } }, { $inc: { index: -1 } });
