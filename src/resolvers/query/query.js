@@ -75,6 +75,15 @@ export function authors(root, args, context) {
 		.toArray();
 }
 
+export function author(root, { id }, context) {
+	return context.db
+		.collection("authors")
+		.find({ _id: new ObjectID(id) })
+		.limit(1)
+		.map(({ _id, ...fields }) => ({ id: _id, ...fields }))
+		.next();
+}
+
 export function animes(root, { limit, sort }, context) {
 	return context.db
 		.collection("animes")
