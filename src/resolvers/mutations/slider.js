@@ -31,7 +31,7 @@ export function editSlide(root, { id, slide }, context) {
 				return context.db
 					.collection("slider")
 					.findOneAndUpdate({ _id: new ObjectID(id) }, { $set: slide })
-					.then(({ value: slide }) => ({ id, ...slide }));
+					.then(({ value }) => ({ id, ...value, ...slide }));
 			})
 	);
 }
