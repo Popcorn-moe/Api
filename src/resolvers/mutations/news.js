@@ -10,8 +10,7 @@ export function addNews(root, { news }, context) {
 				if (cover) news.cover = cover;
 				news.posted_date = now();
 				news._id = id;
-				return;
-				context.db
+				return context.db
 					.collection("news")
 					.insertOne(news)
 					.then(({ insertedId }) => insertedId);
@@ -34,8 +33,7 @@ export function updateNews(root, { id, news }, context) {
 		.then(cover => cover && context.storage.save(id, cover))
 		.then(cover => {
 			if (cover) news.cover = cover;
-			return;
-			context.db
+			return context.db
 				.collection("news")
 				.updateOne({ _id: new ObjectID(id) }, { $set: news })
 				.then(() => id);
