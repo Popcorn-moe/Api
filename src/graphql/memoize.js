@@ -6,7 +6,8 @@ const stats = new StatsD();
 
 export default function memoize(schema) {
 	forEachField(schema, (field, typeName, fieldName) => {
-		if (field.resolve) {
+		if (field.resolve && typeName !== "Mutation") {
+			//TODO: Tempoary fix #rustine
 			field.resolve.typeName = typeName;
 			field.resolve.fieldName = fieldName;
 			field.resolve = mem(field.resolve, {
