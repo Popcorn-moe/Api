@@ -14,106 +14,105 @@ const IMAGE_MIME_TYPES = [
 	"image/svg+xml" // SVG images (vector images)
 ];
 
-export function setAvatar(root, { file }, context) {
+export async function setAvatar(root, { file }, context) {
 	needAuth(context);
-	return file.then(file => {
-		if (!IMAGE_MIME_TYPES.includes(file.mimetype)) {
-			return {
-				error: `MimeType ${file.mimetype} is not and image Mime Type`
-			};
-		}
-		return context.user
-			.then(user =>
-				context.storage.save(user.id, file).then(url => {
-					user.avatar = url;
-					return user.save();
-				})
-			)
-			.then(() => ({
-				error: null
-			}));
-	});
+
+	file = await file;
+
+	if (!IMAGE_MIME_TYPES.includes(file.mimetype)) {
+		return { error: `MimeType ${file.mimetype} is not and image Mime Type` };
+	}
+
+	const user = await context.user;
+	const url = await context.storage.save(user.id, file);
+	user.avatar = url;
+	await user.save();
+
+	return { error: null };
 }
 
-export function updateUsers(root, { users }, context) {
-	return needGroup(context, ADMIN)
-		.then(() =>
-			Promise.all(
-				users.map(user =>
-					context.db
-						.collection("users")
-						.updateOne({ _id: new ObjectID(user.id) }, { $set: user })
-				)
-			)
+export async function updateUsers(root, { users }, context) {
+	await needGroup(context, ADMIN);
+
+	await Promise.all(
+		users.map(user =>
+			context.db
+				.collection("users")
+				.updateOne({ _id: new ObjectID(user.id) }, { $set: user })
 		)
-		.then(() => users.map(({ id }) => id));
-}
-
-export function sendFriendsRequests(root, { to }, context) {
-	needAuth(context);
-	return context.user.then(user =>
-		context.db
-			.collection("users")
-			.find({ _id: { $in: to.map(u => new ObjectID(u)) } })
-			.map(({ _id, ...fields }) => ({ id: _id, ...fields }))
-			.toArray()
-			.then(
-				founds =>
-					founds.length > 0
-						? notifyFriendRequests(
-								founds.map(u => ({ _from: user, user: u })),
-								context
-							)
-						: []
-			)
 	);
+
+	return users.map(({ id }) => id);
 }
 
-export function acceptFriendRequest(root, { notif }, context) {
+export async function sendFriendsRequests(root, { to }, context) {
 	needAuth(context);
+
+	const user = await context.user;
+
+	const founds = await context.db
+		.collection("users")
+		.find({ _id: { $in: to.map(u => new ObjectID(u)) } })
+		.map(({ _id, ...fields }) => ({ id: _id, ...fields }))
+		.toArray();
+
+	return founds.length > 0
+		? notifyFriendRequests(founds.map(u => ({ _from: user, user: u })), context)
+		: [];
+}
+
+export async function acceptFriendRequest(root, { notif }, context) {
+	needAuth(context);
+
+	const { value } = await context.db
+		.collection("notifications")
+		.findOneAndDelete({ _id: new ObjectID(notif) });
+
 	return {
-		error: context.db
-			.collection("notifications")
-			.findOneAndDelete({ _id: new ObjectID(notif) })
-			.then(
-				({ value }) =>
-					value
-						? addFriend(null, { user: value._from }, context).error
-						: "This notification does not exist"
-			)
+		error: value
+			? addFriend(null, { user: value._from }, context).error
+			: "This notification does not exist"
 	};
 }
 
-export function delFriend(root, { friend }, context) {
+export async function delFriend(root, { friend }, context) {
 	needAuth(context);
-	return context.user.then(u => {
-		const index = u.friends.findIndex(f => f == friend);
-		if (index === -1) return false;
-		context.db
-			.collection("users")
-			.updateOne({ _id: new ObjectID(friend) }, { $pull: { friends: u._id } });
-		u.friends.splice(index, 1);
-		return u.save();
-	});
+
+	const user = await context.user;
+	const index = user.friends.findIndex(f => f == friend);
+
+	if (index === -1) return false;
+
+	await context.db
+		.collection("users")
+		.updateOne({ _id: new ObjectID(friend) }, { $pull: { friends: u._id } });
+
+	user.friends.splice(index, 1);
+	return user.save();
 }
 
-function addFriend(root, { user }, context) {
+export async function addFriend(root, { user: other }, context) {
 	needAuth(context);
-	return context.user.then(u => {
-		if (u.id == user) return { error: "You can't be friend with yourself!" };
-		if (!u.friends) u.friends = [];
-		if (u.friends.filter(u => u == user).length > 0)
-			return { error: "You are already friends" };
-		context.db
-			.collection("users")
-			.updateOne(
-				{ _id: new ObjectID(user) },
-				{ $addToSet: { friends: u.id } },
-				{ upsert: true }
-			);
-		u.friends.push(new ObjectID(user));
-		newFriendEvent({ user: u.id, friend: new ObjectID(user) }, context);
-		newFriendEvent({ user: new ObjectID(user), friend: u.id }, context);
-		return !u.save() ? { error: null } : { error: "nothing to save" };
-	});
+
+	const user = await context.user;
+
+	if (user.id == other) return { error: "You can't be friend with yourself!" };
+	if (!user.friends) user.friends = [];
+
+	if (user.friends.includes(other)) return { error: "You are already friends" };
+
+	await context.db
+		.collection("users")
+		.updateOne(
+			{ _id: new ObjectID(other) },
+			{ $addToSet: { friends: user.id } },
+			{ upsert: true }
+		);
+
+	user.friends.push(new ObjectID(other));
+
+	newFriendEvent({ user: user.id, friend: new ObjectID(other) }, context);
+	newFriendEvent({ user: new ObjectID(other), friend: user.id }, context);
+
+	return { error: (await u.save()) ? "nothing to save" : null };
 }

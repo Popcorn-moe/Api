@@ -1,52 +1,46 @@
 import { needGroup, ADMIN } from "../util/index";
 import { ObjectID } from "mongodb";
 
-export function addSlide(root, { slide }, context) {
+export async function addSlide(root, { slide }, context) {
+	await needGroup(context, ADMIN);
+
 	const id = new ObjectID();
-	return needGroup(context, ADMIN).then(() =>
-		Promise.resolve(slide.image)
-			.then(image => image && context.storage.save(id, image))
-			.then(image => {
-				if (image) slide.image = image;
-				slide._id = id;
-				return Promise.all([
-					context.db
-						.collection("slider")
-						.update({ index: { $gte: slide.index } }, { $inc: { index: 1 } }),
-					context.db
-						.collection("slider")
-						.insertOne(slide)
-						.then(({ insertedId }) => ({ id: insertedId, ...slide }))
-				]).then(([, res]) => res);
-			})
-	);
+
+	if (slide.image) slide.image = await context.storage.save(id, slide.image);
+
+	slide._id = id;
+
+	await context.db
+		.collection("slider")
+		.update({ index: { $gte: slide.index } }, { $inc: { index: 1 } });
+
+	return context.db
+		.collection("slider")
+		.insertOne(slide)
+		.then(({ insertedId }) => ({ id: insertedId, ...slide }));
 }
 
-export function editSlide(root, { id, slide }, context) {
-	return needGroup(context, ADMIN).then(() =>
-		Promise.resolve(slide.image)
-			.then(image => image && context.storage.save(id, image))
-			.then(image => {
-				if (image) slide.image = image;
-				return context.db
-					.collection("slider")
-					.findOneAndUpdate({ _id: new ObjectID(id) }, { $set: slide })
-					.then(({ value }) => ({ id, ...value, ...slide }));
-			})
-	);
+export async function editSlide(root, { id, slide }, context) {
+	await needGroup(context, ADMIN);
+
+	if (slide.image) slide.image = await context.storage.save(id, slide.image);
+
+	return context.db
+		.collection("slider")
+		.findOneAndUpdate({ _id: new ObjectID(id) }, { $set: slide })
+		.then(({ value }) => ({ id, ...value, ...slide }));
 }
 
-export function delSlide(root, { id }, context) {
-	return needGroup(context, ADMIN).then(() =>
-		context.db
-			.collection("slider")
-			.findOneAndDelete({ _id: new ObjectID(id) })
-			.then(({ value: { index } }) => {
-				context.db
-					.collection("slider")
-					.update({ index: { $gte: index } }, { $inc: { index: -1 } });
-				return id;
-			})
-			.then(() => id)
-	);
+export async function delSlide(root, { id }, context) {
+	await needGroup(context, ADMIN);
+
+	const { value: { index } } = await context.db
+		.collection("slider")
+		.findOneAndDelete({ _id: new ObjectID(id) });
+
+	await context.db
+		.collection("slider")
+		.update({ index: { $gte: index } }, { $inc: { index: -1 } });
+
+	return id;
 }
