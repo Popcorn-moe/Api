@@ -9,28 +9,29 @@ export function newFriendEvent({ user, friend }, context) {
 		type: "NEW_FRIEND",
 		friend
 	};
+
+	// TODO: Add subscription
 	return context.db
 		.collection("events")
 		.insertOne(event)
-		.then(({ insertedId }) => {
-			return insertedId; //TODO: add subscription
-		});
+		.then(({ insertedId }) => insertedId);
 }
 
-export function messageEvent({ message }, context) {
+export async function messageEvent({ message }, context) {
 	needAuth(context);
-	return context.user.then(({ _id }) => {
-		const event = {
-			user: new ObjectID(_id),
-			date: now(),
-			type: "MESSAGE",
-			message
-		};
-		return context.db
-			.collection("events")
-			.insertOne(event)
-			.then(({ insertedId }) => {
-				return insertedId; //TODO: add subscription
-			});
-	});
+
+	const { _id } = await context.user;
+
+	const event = {
+		user: new ObjectID(_id),
+		date: now(),
+		type: "MESSAGE",
+		message
+	};
+
+	// TODO: Add subscription
+	return context.db
+		.collection("events")
+		.insertOne(event)
+		.then(({ insertedId }) => insertedId);
 }
