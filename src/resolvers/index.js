@@ -6,6 +6,7 @@ import * as Anime from "./query/Anime";
 import * as News from "./query/News";
 import * as Media from "./query/Media";
 import * as Season from "./query/Season";
+import * as Comment from "./query/Comment";
 import * as Author from "./query/Author";
 
 import {
@@ -34,6 +35,7 @@ export {
 	News,
 	Media,
 	Season,
+	Comment,
 	PlaylistElem,
 	PlaylistAnimeElem,
 	PlaylistMediaElem,

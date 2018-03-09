@@ -1,14 +1,14 @@
 type Media implements Dated {
 	id: ID!
 	name: String
-	comments: [Comment!]!
+	comments(limit: Int!, offset: Int = 0): [Comment!]!
 	type: MediaType!
 	rate: Float!
 	release_date: DateTime
 	edit_date: DateTime!
 	posted_date: DateTime!
 	content: String
-	comment(content: String!): ID!
+	comment(content: String!, reply_to: ID = null): Comment!
 	linkTo(anime: ID!, season: Int = null, episode: Int = null): Boolean!
 }
 
@@ -27,6 +27,7 @@ type Comment {
 	content: String!
 	posted: DateTime!
 	edited: DateTime
+	reply_to: ID
 }
 
 input MediaInput {
