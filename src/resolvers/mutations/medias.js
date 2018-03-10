@@ -24,6 +24,15 @@ export function updateMedia(root, { id, media }, context) {
 	);
 }
 
+export function deleteMedia(root, { id }, context) {
+	return needGroup(context, ADMIN).then(() =>
+		context.db
+			.collection("medias")
+			.deleteOne({ _id: new ObjectID(id) })
+			.then(() => id)
+	);
+}
+
 export function linkMedia(root, { media, anime, season, episode }, context) {
 	let update;
 	if (season !== null && episode !== null) {

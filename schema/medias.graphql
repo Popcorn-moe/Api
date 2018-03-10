@@ -48,4 +48,5 @@ extend type Mutation {
 	addMedia(media: MediaInput!): Media!
 	updateMedia(id: ID!, media: MediaUpdate!): ID!
 	linkMedia(media: ID!, anime: ID!, season: Int = null, episode: Int = null): Boolean!
+	deleteMedia(id: ID!): ID!
 }
