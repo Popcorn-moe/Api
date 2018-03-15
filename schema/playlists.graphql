@@ -12,5 +12,5 @@ type PlaylistAnimeElem {
 }
 
 type PlaylistMediaElem {
-    media: Media!
+    media: IMedia!
 }

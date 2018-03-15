@@ -51,7 +51,7 @@ type MediaWatchEvent implements Event {
     user: User!
     date: Date!
     type: EventType!
-    media: Media!
+    media: IMedia!
 }
 
 extend type Query {

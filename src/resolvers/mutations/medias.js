@@ -6,6 +6,7 @@ export function addMedia(root, { media }, context) {
 	media.rate = 0;
 	media.edit_date = now();
 	media.posted_date = now();
+	console.log(media);
 	return needGroup(context, ADMIN).then(() =>
 		context.db
 			.collection("medias")
@@ -34,23 +35,31 @@ export function deleteMedia(root, { id }, context) {
 }
 
 export function linkMedia(root, { media, anime, season, episode }, context) {
-	let update;
-	if (season !== null && episode !== null) {
-		update = {
-			$push: {
-				[`seasons.${season.toString()}.episodes`]: {
-					$each: [media],
-					$position: episode
-				}
-			}
-		};
-	} else {
-		update = { $push: { medias: media } };
-	}
 	return needGroup(context, ADMIN).then(() =>
-		context.db
-			.collection("animes")
-			.updateOne({ _id: anime }, update)
-			.then(({ matchedCount }) => matchedCount == 1)
+		Promise.all([
+			context.db.collection("animes").updateOne(
+				{ _id: anime },
+				season !== null && episode !== null
+					? {
+							$push: {
+								[`seasons.${season.toString()}.episodes`]: {
+									$each: [media],
+									$position: episode
+								}
+							}
+						}
+					: { $push: { medias: media } }
+			),
+			context.db
+				.collection("medias")
+				.updateOne(
+					{ _id: new ObjectID(media) },
+					{ $set: { anime, episode, season } }
+				)
+		]).then(
+			([{ matchedCount: animeCount }, { matchedCount: mediaCount }]) =>
+				animeCount == 1 && mediaCount == 1
+		)
 	);
 }
+//.then(({ matchedCount }) => matchedCount == 1)

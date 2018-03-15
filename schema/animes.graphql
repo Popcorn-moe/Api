@@ -4,7 +4,7 @@ type Anime implements Dated {
 	authors: [Author!]!
 	tags: [Tag!]!
 	status: AnimeStatus
-	medias: [Media!]!
+	medias: [IMedia!]!
 	seasons: [Season]!
 	season(season: Int!): Season
 	addSeason(season: SeasonInput!): Season!
@@ -20,7 +20,7 @@ type Anime implements Dated {
 type Season implements Dated {
 	anime: ID!
 	name: String!
-	episodes: [Media!]!
+	episodes: [IMedia!]!
 	release_date: DateTime
 	edit_date: DateTime!
 	posted_date: DateTime!
@@ -38,6 +38,8 @@ extend type Query {
 	anime(id: ID!): Anime
 	searchAnime(name: String!, limit: Int = 10): [Anime!]!
 	searchAnimes(limit: Int = 50, skip: Int = 0, name: String, order_by: String, status: AnimeStatus, type: MediaType, authors: [ID], year: Int, tags: [ID!]): [Anime!]!
+	lastEpisodes(limit: Int = 50): [IMedia!]!
+	lastTrailers(limit: Int = 50): [IMedia!]!
 }
 
 input AnimeInput {

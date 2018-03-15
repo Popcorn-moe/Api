@@ -4,7 +4,6 @@ import * as Subscription from "./subscription";
 import * as User from "./query/User";
 import * as Anime from "./query/Anime";
 import * as News from "./query/News";
-import * as Media from "./query/Media";
 import * as Season from "./query/Season";
 import * as Comment from "./query/Comment";
 import * as Author from "./query/Author";
@@ -23,6 +22,8 @@ import {
 
 import { Event, NewFriendEvent, AnimeFollowEvent } from "./query/events";
 
+import { IMedia, Media, Episode } from "./query/medias";
+
 import { Upload, Url, Date, Time, DateTime } from "./types";
 
 export {
@@ -33,7 +34,9 @@ export {
 	Anime,
 	Author,
 	News,
+	IMedia,
 	Media,
+	Episode,
 	Season,
 	Comment,
 	PlaylistElem,

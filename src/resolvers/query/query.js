@@ -109,6 +109,24 @@ export function anime(root, { id }, context) {
 		.next();
 }
 
+export function lastEpisodes(root, { limit }, context) {
+	return context.db
+		.collection("medias")
+		.find({ type: "EPISODE" })
+		.limit(limit)
+		.map(({ _id, ...fields }) => ({ id: _id, ...fields }))
+		.toArray();
+}
+
+export function lastTrailers(root, { limit }, context) {
+	return context.db
+		.collection("medias")
+		.find({ type: "TRAILER" })
+		.limit(limit)
+		.map(({ _id, ...fields }) => ({ id: _id, ...fields }))
+		.toArray();
+}
+
 export function slider(root, args, context) {
 	return context.db
 		.collection("slider")
