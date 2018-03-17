@@ -2,14 +2,15 @@ interface IMedia {
 	id: ID!
 	anime: Anime!
 	name: String
-	comments(limit: Int!, offset: Int = 0): [Comment!]!
 	type: MediaType!
 	rate: Float!
 	release_date: DateTime
 	edit_date: DateTime!
 	posted_date: DateTime!
 	content: String
-	comment(content: String!, reply_to: ID = null): Comment!
+	replies_count: Int
+	replies(limit: Int!, offset: Int = 0): [Comment!]!
+	comment(content: String!, reply_to: ID): Comment!
 	linkTo(anime: ID!, season: Int = null, episode: Int = null): Boolean!
 }
 
@@ -17,14 +18,15 @@ type Media implements IMedia {
 	id: ID!
 	anime: Anime!
 	name: String
-	comments(limit: Int!, offset: Int = 0): [Comment!]!
 	type: MediaType!
 	rate: Float!
 	release_date: DateTime
 	edit_date: DateTime!
 	posted_date: DateTime!
 	content: String
-	comment(content: String!, reply_to: ID = null): Comment!
+	replies_count: Int
+	replies(limit: Int!, offset: Int = 0): [Comment!]!
+	comment(content: String!, reply_to: ID): Comment!
 	linkTo(anime: ID!, season: Int = null, episode: Int = null): Boolean!
 }
 
@@ -32,14 +34,15 @@ type Episode implements IMedia {
 	id: ID!
 	anime: Anime!
 	name: String
-	comments(limit: Int!, offset: Int = 0): [Comment!]!
 	type: MediaType!
 	rate: Float!
 	release_date: DateTime
 	edit_date: DateTime!
 	posted_date: DateTime!
 	content: String
-	comment(content: String!, reply_to: ID = null): Comment!
+	replies_count: Int
+	replies(limit: Int!, offset: Int = 0): [Comment!]
+	comment(content: String!, reply_to: ID): Comment!
 	linkTo(anime: ID!, season: Int = null, episode: Int = null): Boolean!
 	episode: Int
 	season: Int
@@ -60,7 +63,8 @@ type Comment {
 	content: String!
 	posted: DateTime!
 	edited: DateTime
-	reply_to: ID
+	replies_count: Int
+	replies(limit: Int!, offset: Int = 0): [Comment!]!
 }
 
 input MediaInput {
