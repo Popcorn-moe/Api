@@ -1,4 +1,6 @@
+import { needAuth, now } from "../../util";
 import { linkMedia } from "../../mutations/medias";
+import { ObjectID } from "mongodb";
 
 export function __resolveType({ type }) {
 	return type === "EPISODE" ? "Episode" : "Media";
@@ -17,30 +19,38 @@ export function anime({ anime }, args, context) {
 		.next();
 }
 
-export function comment(root, { content, reply_to }, context) {
+export function comment({ id }, { content }, context) {
 	needAuth(context);
 	const comment = {
 		content,
 		posted: now(),
 		edited: null,
-		reply_to: new ObjectID(reply_to || root.id),
-		reply: !!reply_to,
+		reply_type: "MEDIA",
+		reply_to: new ObjectID(id),
 		user: new ObjectID(context.user.id)
 	};
 	return context.db
 		.collection("comments")
 		.insertOne(comment)
-		.then(({ insertedId, ...o }) => ({
-			...o,
+		.then(({ insertedId }) => ({
+			...comment,
 			id: insertedId
 		}));
 }
 
-export function replies(root, { limit, offset }, context) {
+export function comments_count({ id }, args, context) {
 	return context.db
 		.collection("comments")
-		.find({ reply_type: "MEDIA", reply_to: root.id })
-		.limit(Math.min(limit, 50))
+		.find({ reply_type: "MEDIA", reply_to: new ObjectID(id) })
+		.count();
+}
+
+export function comments({ id }, { limit, offset }, context) {
+	return context.db
+		.collection("comments")
+		.find({ reply_type: "MEDIA", reply_to: new ObjectID(id) })
+		.map(({ _id, ...fields }) => ({ id: _id, ...fields }))
+		.limit(limit)
 		.skip(offset || 0)
 		.toArray();
 }

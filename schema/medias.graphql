@@ -8,9 +8,9 @@ interface IMedia {
 	edit_date: DateTime!
 	posted_date: DateTime!
 	content: String
-	replies_count: Int
-	replies(limit: Int!, offset: Int = 0): [Comment!]!
-	comment(content: String!, reply_to: ID): Comment!
+	comments_count: Int
+	comments(limit: Int = 50, offset: Int = 0): [Comment!]!
+	comment(content: String!): Comment!
 	linkTo(anime: ID!, season: Int = null, episode: Int = null): Boolean!
 }
 
@@ -24,9 +24,9 @@ type Media implements IMedia {
 	edit_date: DateTime!
 	posted_date: DateTime!
 	content: String
-	replies_count: Int
-	replies(limit: Int!, offset: Int = 0): [Comment!]!
-	comment(content: String!, reply_to: ID): Comment!
+	comments_count: Int
+	comments(limit: Int = 50, offset: Int = 0): [Comment!]!
+	comment(content: String!): Comment!
 	linkTo(anime: ID!, season: Int = null, episode: Int = null): Boolean!
 }
 
@@ -40,9 +40,9 @@ type Episode implements IMedia {
 	edit_date: DateTime!
 	posted_date: DateTime!
 	content: String
-	replies_count: Int
-	replies(limit: Int!, offset: Int = 0): [Comment!]
-	comment(content: String!, reply_to: ID): Comment!
+	comments_count: Int
+	comments(limit: Int = 50, offset: Int = 0): [Comment!]!
+	comment(content: String!): Comment!
 	linkTo(anime: ID!, season: Int = null, episode: Int = null): Boolean!
 	episode: Int
 	season: Int
@@ -57,16 +57,6 @@ enum MediaType {
 	FILM
 }
 
-type Comment {
-	id: ID!
-	user: User!
-	content: String!
-	posted: DateTime!
-	edited: DateTime
-	replies_count: Int
-	replies(limit: Int!, offset: Int = 0): [Comment!]!
-}
-
 input MediaInput {
 	name: String
 	type: MediaType!
@@ -79,6 +69,10 @@ input MediaUpdate {
 	type: MediaType
 	release_date: DateTime
 	content: String
+}
+
+extend type Query {
+	media(id: ID!): IMedia!
 }
 
 extend type Mutation {

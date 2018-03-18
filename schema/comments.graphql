@@ -1,0 +1,14 @@
+type Comment {
+	id: ID!
+	user: User!
+	content: String!
+	posted: DateTime!
+	edited: DateTime
+	replies_count: Int
+	replies(limit: Int = 50, offset: Int = 0): [Comment!]!
+    reply(content: String!): Comment!
+}
+
+extend type Query {
+	comment(id: ID!): Comment!
+}
