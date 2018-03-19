@@ -39,7 +39,7 @@ export function user(root, { name }, context) {
 export function userById(root, { id }, context) {
 	return context.db
 		.collection("users")
-		.find({ id: new ObjectID(id) })
+		.find({ _id: new ObjectID(id) })
 		.limit(1)
 		.map(({ _id, ...fields }) => ({ id: _id, ...fields }))
 		.next();
