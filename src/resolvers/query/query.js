@@ -109,10 +109,10 @@ export function anime(root, { id }, context) {
 		.next();
 }
 
-export function media(root, { id }, context) {
+export function media(root, { media, anime, episode, season }, context) {
 	return context.db
 		.collection("medias")
-		.find({ _id: new ObjectID(id) })
+		.find(media ? { _id: new ObjectID(media) } : { anime, episode, season })
 		.limit(1)
 		.map(({ _id, ...fields }) => ({ id: _id, ...fields }))
 		.next();
