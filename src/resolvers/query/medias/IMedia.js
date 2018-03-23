@@ -21,21 +21,23 @@ export function anime({ anime }, args, context) {
 
 export function comment({ id }, { content }, context) {
 	needAuth(context);
-	const comment = {
-		content,
-		posted: now(),
-		edited: null,
-		reply_type: "MEDIA",
-		reply_to: new ObjectID(id),
-		user: new ObjectID(context.user.id)
-	};
-	return context.db
-		.collection("comments")
-		.insertOne(comment)
-		.then(({ insertedId }) => ({
-			...comment,
-			id: insertedId
-		}));
+	return context.user.then(({ id: userId }) => {
+		const comment = {
+			content,
+			posted: now(),
+			edited: null,
+			reply_type: "MEDIA",
+			reply_to: new ObjectID(id),
+			user: new ObjectID(userId)
+		};
+		return context.db
+			.collection("comments")
+			.insertOne(comment)
+			.then(({ insertedId }) => ({
+				...comment,
+				id: insertedId
+			}));
+	});
 }
 
 export function comments_count({ id }, args, context) {
