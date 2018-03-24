@@ -12,9 +12,9 @@ export default class HasGroupDirective extends SchemaDirectiveVisitor {
 
 			const index = GROUPS.indexOf(group);
 			if (index === -1)
-				throw new Error(`Group ${group} not in ${groups.join(",")}`);
+				throw new Error(`Group ${group} not in ${GROUPS.join(",")}`);
 			return context.user.then(user => {
-				if (groups.indexOf(user.group) >= index)
+				if (GROUPS.indexOf(user.group) >= index)
 					return resolve.call(this, root, args, context);
 				else return Promise.reject(`Need group ${group}`);
 			});
