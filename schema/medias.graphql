@@ -1,6 +1,6 @@
 interface IMedia {
 	id: ID!
-	anime: Anime! @link(collection: "animes")
+	anime: Anime! @link(collection: "animes", objectId: false)
 	name: String
 	type: MediaType!
 	rate: Float!

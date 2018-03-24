@@ -26,7 +26,7 @@ type AnimeFollowEvent implements Event {
 	user: User!
 	date: Date!
 	type: EventType!
-	anime: Anime! @link(collection: "animes")
+	anime: Anime! @link(collection: "animes", objectId: false)
 }
 
 type NewFriendEvent implements Event {

@@ -4,7 +4,7 @@ import { ObjectID } from "mongodb";
 
 export default class LinkDirective extends SchemaDirectiveVisitor {
 	visitFieldDefinition(field) {
-		const { collection } = this.args;
+		const { collection, objectId = true } = this.args;
 		const fieldName = this.visitedType.name;
 		const { type } = this.visitedType.astNode;
 		const isList =
@@ -18,7 +18,7 @@ export default class LinkDirective extends SchemaDirectiveVisitor {
 						.find({
 							_id: {
 								$in: root[fieldName].map(
-									id => (ObjectID.isValid(id) ? new ObjectID(id) : id)
+									id => (objectId ? new ObjectID(id) : id)
 								)
 							}
 						})
@@ -28,9 +28,7 @@ export default class LinkDirective extends SchemaDirectiveVisitor {
 					return context.db
 						.collection(collection)
 						.findOne({
-							_id: ObjectID.isValid(root[fieldName])
-								? new ObjectID(root[fieldName])
-								: root[fieldName]
+							_id: objectId ? new ObjectID(root[fieldName]) : root[fieldName]
 						})
 						.then(({ _id, ...fields }) => ({ id: _id, ...fields }));
 			} else return type.kind == "NonNullType" ? [] : null;
