@@ -12,7 +12,6 @@ export default class LinkDirective extends SchemaDirectiveVisitor {
 
 		field.resolve = (root, args, context) => {
 			if (root[fieldName]) {
-				console.log(ObjectID.isValid(root[fieldName]));
 				if (isList)
 					return context.db
 						.collection(collection)
