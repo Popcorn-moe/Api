@@ -3,26 +3,16 @@ import * as Mutation from "./mutations";
 import * as Subscription from "./subscription";
 import * as User from "./query/User";
 import * as Anime from "./query/Anime";
-import * as News from "./query/News";
-import * as Season from "./query/Season";
 import * as Comment from "./query/Comment";
 import * as Author from "./query/Author";
 
-import {
-	PlaylistElem,
-	PlaylistAnimeElem,
-	PlaylistMediaElem
-} from "./query/playlists";
+import { PlaylistElem } from "./query/playlists";
 
-import {
-	Notification,
-	NotifAnimeFollowContent,
-	NotifFriendRequestContent
-} from "./query/notifications";
+import { Notification } from "./query/notifications";
 
-import { Event, NewFriendEvent, AnimeFollowEvent } from "./query/events";
+import { Event } from "./query/events";
 
-import { IMedia, Media, Episode } from "./query/medias";
+import { IMedia } from "./query/medias";
 
 import { Upload, Url, Date, Time, DateTime } from "./types";
 
@@ -33,21 +23,11 @@ export {
 	User,
 	Anime,
 	Author,
-	News,
 	IMedia,
-	Media,
-	Episode,
-	Season,
 	Comment,
 	PlaylistElem,
-	PlaylistAnimeElem,
-	PlaylistMediaElem,
 	Notification,
-	NotifAnimeFollowContent,
-	NotifFriendRequestContent,
 	Event,
-	NewFriendEvent,
-	AnimeFollowEvent,
 	//types
 	Upload,
 	Url,

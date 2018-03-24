@@ -10,15 +10,6 @@ export function linkTo(root, { anime, season, episode }, context) {
 	return linkMedia(root, { media: root.id, anime, season, episode }, context);
 }
 
-export function anime({ anime }, args, context) {
-	return context.db
-		.collection("animes")
-		.find({ _id: anime })
-		.limit(1)
-		.map(({ _id, ...fields }) => ({ id: _id, ...fields }))
-		.next();
-}
-
 export function comment({ id }, { content }, context) {
 	needAuth(context);
 	return context.user.then(({ id: userId }) => {

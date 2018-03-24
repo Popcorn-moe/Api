@@ -2,7 +2,7 @@ type News {
 	id: ID!
 	name: String!
 	cover: Url
-	author: User!
+	author: User! @link(collection: "users")
 	content: String!
 	posted_date: DateTime!
 }

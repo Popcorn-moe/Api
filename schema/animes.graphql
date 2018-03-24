@@ -1,10 +1,10 @@
 type Anime implements Dated {
 	id: ID!
 	names: [String!]!
-	authors: [Author!]!
-	tags: [Tag!]!
+	authors: [Author!]! @link(collection: "authors")
+	tags: [Tag!]! @link(collection: "tags")
 	status: AnimeStatus
-	medias: [IMedia!]!
+	medias: [IMedia!]! @link(collection: "medias")
 	seasons: [Season]!
 	season(season: Int!): Season
 	addSeason(season: SeasonInput!): Season!
@@ -20,7 +20,7 @@ type Anime implements Dated {
 type Season implements Dated {
 	anime: ID!
 	name: String!
-	episodes: [IMedia!]!
+	episodes: [IMedia!]! @link(collection: "medias")
 	release_date: DateTime
 	edit_date: DateTime!
 	posted_date: DateTime!

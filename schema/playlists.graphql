@@ -8,9 +8,9 @@ type Playlist {
 union PlaylistElem = PlaylistAnimeElem | PlaylistMediaElem
 
 type PlaylistAnimeElem {
-	anime: Anime!
+	anime: Anime! @link(collection: "animes")
 }
 
 type PlaylistMediaElem {
-	media: IMedia!
+	media: IMedia! @link(collection: "medias")
 }

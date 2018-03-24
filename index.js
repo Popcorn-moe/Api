@@ -15,6 +15,7 @@ import {
 	instrumentMiddleware
 } from "./src/graphql/monitor";
 import memoize from "./src/graphql/memoize";
+import heritFromInterface from "./src/graphql/heritFromInterface";
 
 import { execute, subscribe } from "graphql";
 import { PubSub } from "graphql-subscriptions";
@@ -37,6 +38,8 @@ const {
 	MINIO_SECURE,
 	MINIO_BUCKET
 } = process.env;
+
+heritFromInterface(schema);
 memoize(schema);
 instrument(schema);
 

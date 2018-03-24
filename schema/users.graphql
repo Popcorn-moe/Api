@@ -5,12 +5,12 @@ type User {
 	group: UserGroup!
 	newsletter: Boolean!
 	account_registered: Boolean!
-	playlists: [Playlist!]!
+	playlists: [Playlist!]! @link(collection: "playlists")
 	avatar: Url
 	ratings: [AnimeRating!]!
 	rating_for(id: ID!): AnimeRating
-	friends: [User!]!
-	blocked: [User!]!
+	friends: [User!]! @link(collection: "users")
+	blocked: [User!]! @link(collection: "users")
 	notifications: [Notification!]!
 }
 

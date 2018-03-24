@@ -8,7 +8,7 @@ enum EventType {
 
 interface Event {
 	id: ID!
-	user: User!
+	user: User! @link(collection: "users")
 	date: Date!
 	type: EventType!
 }
@@ -26,7 +26,7 @@ type AnimeFollowEvent implements Event {
 	user: User!
 	date: Date!
 	type: EventType!
-	anime: Anime!
+	anime: Anime! @link(collection: "animes")
 }
 
 type NewFriendEvent implements Event {
@@ -34,7 +34,7 @@ type NewFriendEvent implements Event {
 	user: User!
 	date: Date!
 	type: EventType!
-	friend: User!
+	friend: User! @link(collection: "users")
 }
 
 type PlaylistAddEvent implements Event {
@@ -42,7 +42,7 @@ type PlaylistAddEvent implements Event {
 	user: User!
 	date: Date!
 	type: EventType!
-	playlist: Playlist!
+	playlist: Playlist! @link(collection: "playlists")
 	element: PlaylistElem!
 }
 
@@ -51,7 +51,7 @@ type MediaWatchEvent implements Event {
 	user: User!
 	date: Date!
 	type: EventType!
-	media: IMedia!
+	media: IMedia! @link(collection: "medias")
 }
 
 extend type Query {

@@ -1,7 +1,7 @@
 interface Notification {
 	id: ID!
 	date: Date!
-	user: User!
+	user: User! @link(collection: "users")
 	type: NotifType
 }
 
@@ -25,7 +25,7 @@ type NotifAnimeFollowContent implements Notification {
 	date: Date!
 	user: User!
 	type: NotifType
-	anime: Anime!
+	anime: Anime! @link(collection: "animes")
 }
 
 type NotifFriendRequestContent implements Notification {
@@ -33,7 +33,7 @@ type NotifFriendRequestContent implements Notification {
 	date: Date!
 	user: User!
 	type: NotifType
-	_from: User!
+	_from: User! @link(collection: "users")
 }
 
 extend type Mutation {

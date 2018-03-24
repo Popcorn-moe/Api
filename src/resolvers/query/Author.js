@@ -5,7 +5,6 @@ export function picture({ picture, id }, args, context) {
 }
 
 export function animes({ id }, { limit, sort }, context) {
-	console.log(id);
 	return context.db
 		.collection("animes")
 		.find({ authors: id.toString() }) //TODO: Not legal
