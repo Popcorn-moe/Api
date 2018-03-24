@@ -1,4 +1,4 @@
-import { getNotifications } from "./query";
+import { getNotifications } from "./Query";
 import md5 from "md5";
 
 export function notifications(root, args, context) {

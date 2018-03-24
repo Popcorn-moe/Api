@@ -1,5 +1,5 @@
 import { ObjectID } from "mongodb";
-import { addSeason as mAddSeason } from "../mutations/animes";
+import { addSeason as mAddSeason } from "./Mutations/animes";
 
 export function seasons({ seasons, id }, args, context) {
 	if (seasons) return seasons.map(season => season && { anime: id, ...season });

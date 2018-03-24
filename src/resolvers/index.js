@@ -1,18 +1,16 @@
-import * as Query from "./query/query";
-import * as Mutation from "./mutations";
-import * as Subscription from "./subscription";
-import * as User from "./query/User";
-import * as Anime from "./query/Anime";
-import * as Comment from "./query/Comment";
-import * as Author from "./query/Author";
+import * as Query from "./Query";
+import * as Mutation from "./Mutations";
+import * as Subscription from "./Subscription";
+import * as User from "./User";
+import * as Anime from "./Anime";
+import * as Comment from "./Comment";
+import * as Author from "./Author";
+import * as PlaylistElem from "./PlaylistElem";
+import * as Notification from "./Notification";
 
-import { PlaylistElem } from "./query/playlists";
+import * as Event from "./Event";
 
-import { Notification } from "./query/notifications";
-
-import { Event } from "./query/events";
-
-import { IMedia } from "./query/medias";
+import * as IMedia from "./IMedia";
 
 import { Upload, Url, Date, Time, DateTime } from "./types";
 

@@ -1,5 +1,5 @@
-import { userById } from "./query";
-import { needAuth, now } from "../util";
+import { userById } from "./Query";
+import { needAuth, now } from "./util";
 import { ObjectID } from "mongodb";
 
 export function user({ user }, args, context) {

@@ -1,4 +1,4 @@
-import { needAuth } from "../util/index";
+import { needAuth } from "./util";
 import { ObjectID } from "mongodb";
 
 export function me(root, args, context) {

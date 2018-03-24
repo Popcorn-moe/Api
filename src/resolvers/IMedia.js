@@ -1,5 +1,5 @@
-import { needAuth, now } from "../../util";
-import { linkMedia } from "../../mutations/medias";
+import { needAuth, now } from "./util";
+import { linkMedia } from "./Mutations/medias";
 import { ObjectID } from "mongodb";
 
 export function __resolveType({ type }) {
