@@ -1,63 +1,59 @@
 enum EventType {
-    MESSAGE
-    ANIME_FOLLOW
-    NEW_FRIEND
-    PLAYLIST_ADD
-    MEDIA_WATCH
+	MESSAGE
+	ANIME_FOLLOW
+	NEW_FRIEND
+	PLAYLIST_ADD
+	MEDIA_WATCH
 }
 
 interface Event {
-    id: ID!
-    user: User!
-    date: Date!
-    type: EventType!
+	id: ID!
+	user: User!
+	date: Date!
+	type: EventType!
 }
 
 type MessageEvent implements Event {
-    id: ID!
-    user: User!
-    date: Date!
-    type: EventType!
-    message: String!
+	id: ID!
+	user: User!
+	date: Date!
+	type: EventType!
+	message: String!
 }
 
 type AnimeFollowEvent implements Event {
-    id: ID!
-    user: User!
-    date: Date!
-    type: EventType!
-    anime: Anime!
+	id: ID!
+	user: User!
+	date: Date!
+	type: EventType!
+	anime: Anime!
 }
 
 type NewFriendEvent implements Event {
-    id: ID!
-    user: User!
-    date: Date!
-    type: EventType!
-    friend: User!
+	id: ID!
+	user: User!
+	date: Date!
+	type: EventType!
+	friend: User!
 }
 
 type PlaylistAddEvent implements Event {
-    id: ID!
-    user: User!
-    date: Date!
-    type: EventType!
-    playlist: Playlist!
-    element: PlaylistElem!
+	id: ID!
+	user: User!
+	date: Date!
+	type: EventType!
+	playlist: Playlist!
+	element: PlaylistElem!
 }
 
 type MediaWatchEvent implements Event {
-    id: ID!
-    user: User!
-    date: Date!
-    type: EventType!
-    media: IMedia!
+	id: ID!
+	user: User!
+	date: Date!
+	type: EventType!
+	media: IMedia!
 }
 
 extend type Query {
-    events(user: ID): [Event]!
-}
-
-extend type Mutation {
-
+	events(user: ID): [Event]!
 }

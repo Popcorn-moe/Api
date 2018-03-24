@@ -1,10 +1,8 @@
-import { needGroup, ADMIN } from "../util/index";
 import { ObjectID } from "mongodb";
 
 export function addAuthor(root, { author }, context) {
 	const id = new ObjectID();
-	return needGroup(context, ADMIN)
-		.then(() => Promise.resolve(author.picture))
+	return Promise.resolve(author.picture)
 		.then(picture => picture && context.storage.save(id, picture))
 		.then(picture => {
 			author.picture = picture;
@@ -18,8 +16,7 @@ export function addAuthor(root, { author }, context) {
 }
 
 export function updateAuthor(root, { id, author }, context) {
-	return needGroup(context, ADMIN)
-		.then(() => Promise.resolve(author.picture))
+	return Promise.resolve(author.picture)
 		.then(picture => picture && context.storage.save(id, picture))
 		.then(picture => {
 			author.picture = picture;
@@ -31,10 +28,8 @@ export function updateAuthor(root, { id, author }, context) {
 }
 
 export function deleteAuthor(root, { id }, context) {
-	return needGroup(context, ADMIN).then(() =>
-		context.db
-			.collection("authors")
-			.deleteOne({ _id: new ObjectID(id) })
-			.then(() => id)
-	);
+	return context.db
+		.collection("authors")
+		.deleteOne({ _id: new ObjectID(id) })
+		.then(() => id);
 }

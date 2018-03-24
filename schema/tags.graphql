@@ -23,7 +23,7 @@ input TagUpdate {
 }
 
 extend type Mutation {
-	addTag(tag: TagInput!): ID!
-	updateTag(id: ID!, tag: TagUpdate!): ID!
-	deleteTag(id: ID!): ID!
+	addTag(tag: TagInput!): ID! @hasGroup(group: ADMIN)
+	updateTag(id: ID!, tag: TagUpdate!): ID! @hasGroup(group: ADMIN)
+	deleteTag(id: ID!): ID! @hasGroup(group: ADMIN)
 }

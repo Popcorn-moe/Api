@@ -1,37 +1,33 @@
-import { toId, now, needGroup, ADMIN } from "../util/index";
+import { toId, now } from "../util";
 import { ObjectID } from "mongodb";
 import sharp from "sharp";
 
 export function updateAnime(root, { id, anime }, context) {
-	return needGroup(context, ADMIN).then(() =>
-		transformAnime(id, anime, now(), context.storage).then(anime =>
-			context.db
-				.collection("animes")
-				.updateOne({ _id: id }, { $set: anime })
-				.then(() => id)
-		)
+	return transformAnime(id, anime, now(), context.storage).then(anime =>
+		context.db
+			.collection("animes")
+			.updateOne({ _id: id }, { $set: anime })
+			.then(() => id)
 	);
 }
 
 export function addAnime(root, { anime }, context) {
 	const time = now();
 	const id = toId(anime.names[0]);
-	return needGroup(context, ADMIN).then(() =>
-		transformAnime(id, anime, time, context.storage).then(anime => {
-			anime.posted_date = time;
-			anime._id = id;
-			anime.tags = anime.tags.map(t => new ObjectID(t));
-			anime.authors = anime.authors.map(a => new ObjectID(a));
-			return context.db
-				.collection("animes")
-				.insertOne({
-					...anime,
-					medias: [],
-					seasons: []
-				})
-				.then(({ insertedId }) => insertedId);
-		})
-	);
+	return transformAnime(id, anime, time, context.storage).then(anime => {
+		anime.posted_date = time;
+		anime._id = id;
+		anime.tags = anime.tags.map(t => new ObjectID(t));
+		anime.authors = anime.authors.map(a => new ObjectID(a));
+		return context.db
+			.collection("animes")
+			.insertOne({
+				...anime,
+				medias: [],
+				seasons: []
+			})
+			.then(({ insertedId }) => insertedId);
+	});
 }
 
 function transformAnime(id, anime, time, storage) {
@@ -68,20 +64,18 @@ export function addSeason(root, { anime, season }, context) {
 	const time = now();
 	season.edit_date = time;
 	season.posted_date = time;
-	return needGroup(context, ADMIN).then(() =>
-		context.db
-			.collection("animes")
-			.updateOne(
-				{ _id: anime },
-				{
-					$push: {
-						seasons: {
-							$each: [season],
-							$position: seasonNb
-						}
+	return context.db
+		.collection("animes")
+		.updateOne(
+			{ _id: anime },
+			{
+				$push: {
+					seasons: {
+						$each: [season],
+						$position: seasonNb
 					}
 				}
-			)
-			.then(() => ({ anime, ...season }))
-	);
+			}
+		)
+		.then(() => ({ anime, ...season }));
 }

@@ -1,7 +1,7 @@
 type Kyun {
-    url: String
+	url: String
 }
 
 extend type Query {
-    moe(moe: String!): Kyun!
+	moe(moe: String!): Kyun!
 }

@@ -1,3 +1,5 @@
+directive @hasGroup(group: UserGroup) on FIELD_DEFINITION
+
 interface Dated {
 	release_date: DateTime
 	edit_date: DateTime!
@@ -5,8 +7,8 @@ interface Dated {
 }
 
 enum Sort {
-	NONE,
-	ASC,
+	NONE
+	ASC
 	DSC
 }
 
@@ -17,6 +19,7 @@ type Result {
 type Query {
 	version: String
 }
+
 type Mutation {
 	hello(name: String): String
 }

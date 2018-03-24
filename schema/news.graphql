@@ -20,7 +20,7 @@ input NewsInput {
 }
 
 extend type Mutation {
-	addNews(news: NewsInput!): ID!
-	deleteNews(id: ID!): ID!
-	updateNews(id: ID!, news: NewsInput!): ID!
+	addNews(news: NewsInput!): ID! @hasGroup(group: ADMIN)
+	deleteNews(id: ID!): ID! @hasGroup(group: ADMIN)
+	updateNews(id: ID!, news: NewsInput!): ID! @hasGroup(group: ADMIN)
 }

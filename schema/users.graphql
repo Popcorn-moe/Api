@@ -1,7 +1,7 @@
 type User {
 	id: ID!
 	login: String!
-	email: String!
+	email: String @hasGroup(group: ADMIN)
 	group: UserGroup!
 	newsletter: Boolean!
 	account_registered: Boolean!
@@ -15,8 +15,8 @@ type User {
 }
 
 enum UserGroup {
-	ADMIN,
-	MODERATOR,
+	ADMIN
+	MODERATOR
 	VIEWER
 }
 

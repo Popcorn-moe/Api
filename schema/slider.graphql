@@ -1,23 +1,23 @@
 type Slide {
-    id: ID!
-    title: String!
-    desc: String!
-    image: Url
+	id: ID!
+	title: String!
+	desc: String!
+	image: Url
 }
 
 input SlideInput {
-    index: Int!
-    title: String
-    desc: String
-    image: Upload
+	index: Int!
+	title: String
+	desc: String
+	image: Upload
 }
 
 extend type Query {
-    slider: [Slide]!
+	slider: [Slide]!
 }
 
 extend type Mutation {
-    addSlide(slide: SlideInput!): Slide!
-    delSlide(id: ID!): ID!
-    editSlide(id: ID!, slide: SlideInput!): Slide!
+	addSlide(slide: SlideInput!): Slide! @hasGroup(group: ADMIN)
+	delSlide(id: ID!): ID! @hasGroup(group: ADMIN)
+	editSlide(id: ID!, slide: SlideInput!): Slide! @hasGroup(group: ADMIN)
 }

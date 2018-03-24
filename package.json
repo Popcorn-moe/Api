@@ -8,11 +8,11 @@
     "test": "jest --collectCoverageFrom='src/**'",
     "flowgen": "babel-node build/flow.js",
     "check": "flow check",
-    "format": "prettier --write 'index.js' 'build/**/*.js' 'src/**/*.js' 'test/**/*.js'",
+    "format": "prettier --write 'index.js' 'schema/*.graphql' 'build/**/*.js' 'src/**/*.js' 'test/**/*.js'",
     "precommit": "lint-staged"
   },
   "lint-staged": {
-    "*.js": [
+    "*.{js,graphql}": [
       "prettier --write",
       "git add"
     ]
@@ -21,8 +21,8 @@
     "type": "git",
     "url": "git+https://github.com/Popcorn-moe/Popcorn.moe-Backend.git"
   },
-  "author": "",
-  "license": "UNLICENSED",
+  "author": "Popcorn-moe",
+  "license": "GPL-3.0",
   "bugs": {
     "url": "https://github.com/Popcorn-moe/Popcorn.moe-Backend/issues"
   },
@@ -47,7 +47,7 @@
     "graphql": "^0.11.7",
     "graphql-iso-date": "^3.5.0",
     "graphql-subscriptions": "^0.5.7",
-    "graphql-tools": "^1.2.1",
+    "graphql-tools": "^2.23.1",
     "md5": "^2.2.1",
     "memoizee": "^0.4.11",
     "mime": "^1.6.0",

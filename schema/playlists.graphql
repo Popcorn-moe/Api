@@ -1,16 +1,16 @@
 type Playlist {
-    id: ID!
-    author: User!
-    name: String!
-    medias: [PlaylistElem!]!
+	id: ID!
+	author: User!
+	name: String!
+	medias: [PlaylistElem!]!
 }
 
 union PlaylistElem = PlaylistAnimeElem | PlaylistMediaElem
 
 type PlaylistAnimeElem {
-    anime: Anime!
+	anime: Anime!
 }
 
 type PlaylistMediaElem {
-    media: IMedia!
+	media: IMedia!
 }

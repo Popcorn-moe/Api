@@ -12,6 +12,7 @@ interface IMedia {
 	comments(limit: Int = 50, offset: Int = 0): [Comment!]!
 	comment(content: String!): Comment!
 	linkTo(anime: ID!, season: Int = null, episode: Int = null): Boolean!
+		@hasGroup(group: ADMIN)
 }
 
 type Media implements IMedia {
@@ -28,6 +29,7 @@ type Media implements IMedia {
 	comments(limit: Int = 50, offset: Int = 0): [Comment!]!
 	comment(content: String!): Comment!
 	linkTo(anime: ID!, season: Int = null, episode: Int = null): Boolean!
+		@hasGroup(group: ADMIN)
 }
 
 type Episode implements IMedia {
@@ -44,6 +46,7 @@ type Episode implements IMedia {
 	comments(limit: Int = 50, offset: Int = 0): [Comment!]!
 	comment(content: String!): Comment!
 	linkTo(anime: ID!, season: Int = null, episode: Int = null): Boolean!
+		@hasGroup(group: ADMIN)
 	episode: Int
 	season: Int
 }
@@ -76,8 +79,13 @@ extend type Query {
 }
 
 extend type Mutation {
-	addMedia(media: MediaInput!): IMedia!
-	updateMedia(id: ID!, media: MediaUpdate!): ID!
-	linkMedia(media: ID!, anime: ID!, season: Int = null, episode: Int = null): Boolean!
-	deleteMedia(id: ID!): ID!
+	addMedia(media: MediaInput!): IMedia! @hasGroup(group: ADMIN)
+	updateMedia(id: ID!, media: MediaUpdate!): ID! @hasGroup(group: ADMIN)
+	linkMedia(
+		media: ID!
+		anime: ID!
+		season: Int = null
+		episode: Int = null
+	): Boolean! @hasGroup(group: ADMIN)
+	deleteMedia(id: ID!): ID! @hasGroup(group: ADMIN)
 }

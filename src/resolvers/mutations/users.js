@@ -1,9 +1,4 @@
-import {
-	needAuth,
-	needGroup,
-	ADMIN,
-	notifyFriendRequests
-} from "../util/index";
+import { needAuth, notifyFriendRequests } from "../util/index";
 import { newFriendEvent } from "./events";
 import { ObjectID } from "mongodb";
 
@@ -36,17 +31,13 @@ export function setAvatar(root, { file }, context) {
 }
 
 export function updateUsers(root, { users }, context) {
-	return needGroup(context, ADMIN)
-		.then(() =>
-			Promise.all(
-				users.map(user =>
-					context.db
-						.collection("users")
-						.updateOne({ _id: new ObjectID(user.id) }, { $set: user })
-				)
-			)
+	return Promise.all(
+		users.map(user =>
+			context.db
+				.collection("users")
+				.updateOne({ _id: new ObjectID(user.id) }, { $set: user })
 		)
-		.then(() => users.map(({ id }) => id));
+	).then(() => users.map(({ id }) => id));
 }
 
 export function sendFriendsRequests(root, { to }, context) {
