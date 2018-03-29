@@ -7,8 +7,7 @@ export function addAuthor(root, { author }, context) {
 		.then(picture => {
 			author.picture = picture;
 			author._id = id;
-			return;
-			context.db
+			return context.db
 				.collection("authors")
 				.insertOne(author)
 				.then(({ insertedId }) => insertedId);
