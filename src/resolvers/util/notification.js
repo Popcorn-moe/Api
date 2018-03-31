@@ -32,24 +32,3 @@ export function notifyAnimeFollow({ user, anime }, context) {
 			return insertedId;
 		});
 }
-
-export function notifyFriendRequests(requests, context) {
-	const date = now();
-	const type = "FRIEND_REQUEST";
-	const notifs = requests.map(r => ({
-		user: new ObjectID(r.user.id),
-		date,
-		type,
-		_from: new ObjectID(r._from._id)
-	}));
-	return context.db
-		.collection("notifications")
-		.insertMany(notifs)
-		.then(({ insertedIds }) => {
-			context.pubsub.publish(
-				"notification",
-				requests.map(r => ({ user: r.user, date, type, _from: r._from }))
-			);
-			return insertedIds;
-		});
-}

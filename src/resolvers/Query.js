@@ -186,28 +186,6 @@ export function getNotifications(root, { user }, context) {
 		.toArray();
 }
 
-export function friendRequests(root, args, context) {
-	needAuth(context);
-	return context.user.then(user =>
-		context.db
-			.collection("notifications")
-			.find({ user: user._id, type: "FRIEND_REQUEST" })
-			.map(({ _id, ...fields }) => ({ id: _id, ...fields }))
-			.toArray()
-	);
-}
-
-export function pendingFriendRequests(root, args, context) {
-	needAuth(context);
-	return context.user.then(user =>
-		context.db
-			.collection("notifications")
-			.find({ _from: user._id, type: "FRIEND_REQUEST" })
-			.map(({ _id, ...fields }) => ({ id: _id, ...fields }))
-			.toArray()
-	);
-}
-
 export function searchAnimes(
 	root,
 	{ limit, skip, name, order_by, status, type, authors, year, tags },

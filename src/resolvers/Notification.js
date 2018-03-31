@@ -6,8 +6,6 @@ export function __resolveType(obj) {
 			return "NotifMessageContent";
 		case "ANIME_FOLLOW":
 			return "NotifAnimeFollowContent";
-		case "FRIEND_REQUEST":
-			return "NotifFriendRequestContent";
 	}
 }
 

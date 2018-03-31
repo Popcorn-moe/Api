@@ -9,7 +9,6 @@ type User {
 	avatar: Url
 	ratings: [AnimeRating!]!
 	rating_for(id: ID!): AnimeRating
-	friends: [User!]! @link(collection: "users")
 	blocked: [User!]! @link(collection: "users")
 	notifications: [Notification!]!
 }
@@ -38,9 +37,6 @@ input UserInput {
 extend type Mutation {
 	setAvatar(file: Upload!): Result!
 	updateUsers(users: [UserInput!]!): [ID!]!
-	acceptFriendRequest(notif: ID!): Result!
-	sendFriendsRequests(to: [ID!]!): [ID!]!
-	delFriend(friend: ID!): Boolean
 	blockUser(user: ID!): Boolean
 	unlockUser(user: ID!): Boolean
 }
@@ -51,6 +47,4 @@ extend type Query {
 	user(name: String!): User!
 	userById(id: ID!): User!
 	searchUser(name: String!, limit: Int = 10): [User!]!
-	friendRequests: [NotifFriendRequestContent!]!
-	pendingFriendRequests: [NotifFriendRequestContent!]!
 }

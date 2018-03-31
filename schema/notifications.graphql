@@ -8,7 +8,6 @@ interface Notification {
 enum NotifType {
 	MESSAGE
 	ANIME_FOLLOW
-	FRIEND_REQUEST
 	ROOM_INVITE
 }
 
@@ -26,14 +25,6 @@ type NotifAnimeFollowContent implements Notification {
 	user: User!
 	type: NotifType
 	anime: Anime! @link(collection: "animes", objectId: false)
-}
-
-type NotifFriendRequestContent implements Notification {
-	id: ID!
-	date: Date!
-	user: User!
-	type: NotifType
-	_from: User! @link(collection: "users")
 }
 
 extend type Mutation {

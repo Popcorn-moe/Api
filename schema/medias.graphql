@@ -73,7 +73,7 @@ input MediaUpdate {
 }
 
 extend type Query {
-	media(media: ID, anime: ID, episode: Int, season: Int): IMedia!
+	media(media: ID, anime: ID, episode: Int, season: Int): IMedia
 }
 
 extend type Mutation {
