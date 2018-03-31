@@ -31,24 +31,30 @@ export function addAnime(root, { anime }, context) {
 }
 
 function transformAnime(id, anime, time, storage) {
+	const sharpOptions = { progressive: true, quality: 100, optimiseScans: true };
 	return Promise.all([
 		anime.cover &&
 			anime.cover.then(cover =>
-				storage.save(
-					`${id}_cover`,
-					cover,
-					sharp()
-						.resize(180, 250)
-						.jpeg({ progressive: true, quality: 100, optimiseScans: true })
-				)
+				Promise.all([
+					storage.save(
+						`${id}_cover`,
+						cover,
+						sharp()
+							.resize(150, 210)
+							.jpeg(sharpOptions)
+					),
+					storage.save(
+						`${id}_cover_big`,
+						cover,
+						sharp()
+							.resize(600, 840)
+							.jpeg(sharpOptions)
+					)
+				]).then(([small]) => small)
 			),
 		anime.background &&
 			anime.background.then(background =>
-				storage.save(
-					`${id}_background`,
-					background,
-					sharp().jpeg({ progressive: true, quality: 100, optimiseScans: true })
-				)
+				storage.save(`${id}_background`, background, sharp().jpeg(sharpOptions))
 			)
 	]).then(([cover, background]) => {
 		if (cover) anime.cover = cover;
