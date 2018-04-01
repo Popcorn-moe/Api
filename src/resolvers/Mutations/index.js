@@ -6,7 +6,7 @@ import { delNotification } from "./notifications";
 import { addTag, deleteTag, updateTag } from "./tags";
 import { addSlide, editSlide, delSlide } from "./slider";
 
-import { setAvatar, updateUsers } from "./users";
+import { setAvatar, updateUsers, follow, unfollow } from "./users";
 
 export {
 	//ANIME
@@ -35,6 +35,8 @@ export {
 	//USER
 	setAvatar,
 	updateUsers,
+	follow,
+	unfollow,
 	//SLIDER
 	addSlide,
 	editSlide,

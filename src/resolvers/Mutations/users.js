@@ -39,3 +39,20 @@ export function updateUsers(root, { users }, context) {
 		)
 	).then(() => users.map(({ id }) => id));
 }
+
+export async function follow(root, { id }, { user }) {
+	const me = await user;
+	if (!me.follows) me.follows = [];
+	if (me.follows.findIndex(f => f.toString() == id) !== -1) return true;
+	me.follows.push(new ObjectID(id));
+	return me.save().then(() => true);
+}
+
+export async function unfollow(root, { id }, { user }) {
+	const me = await user;
+	if (!me.follows) me.follows = [];
+	const follower = me.follows.findIndex(f => f.toString() == id);
+	if (follower === -1) return true;
+	me.follows.splice(follower, 1);
+	return me.save().then(() => true);
+}

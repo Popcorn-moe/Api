@@ -10,7 +10,10 @@ type User {
 	ratings: [AnimeRating!]!
 	rating_for(id: ID!): AnimeRating
 	blocked: [User!]! @link(collection: "users")
+	follows: [User!]! @link(collection: "users")
+	followers: [User!]!
 	notifications: [Notification!]!
+	isFollower(id: ID!): Boolean!
 }
 
 enum UserGroup {
@@ -36,9 +39,11 @@ input UserInput {
 
 extend type Mutation {
 	setAvatar(file: Upload!): Result!
-	updateUsers(users: [UserInput!]!): [ID!]!
+	updateUsers(users: [UserInput!]!): [ID!]! @hasGroup(group: ADMIN)
 	blockUser(user: ID!): Boolean
 	unlockUser(user: ID!): Boolean
+	follow(id: ID!): Boolean! @hasGroup(group: VIEWER)
+	unfollow(id: ID!): Boolean! @hasGroup(group: VIEWER)
 }
 
 extend type Query {
