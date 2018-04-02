@@ -31,7 +31,7 @@ export function addAnime(root, { anime }, context) {
 }
 
 function transformAnime(id, anime, time, storage) {
-	const sharpOptions = { progressive: true, quality: 100, optimiseScans: true };
+	const sharpOptions = { progressive: true, quality: 75, optimiseScans: true };
 	return Promise.all([
 		anime.cover &&
 			anime.cover.then(cover =>
