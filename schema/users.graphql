@@ -1,7 +1,7 @@
 type User {
 	id: ID!
 	login: String!
-	email: String @hasGroup(group: ADMIN)
+	email: String @auth(group: ADMIN, error: false)
 	group: UserGroup!
 	newsletter: Boolean!
 	account_registered: Boolean!
