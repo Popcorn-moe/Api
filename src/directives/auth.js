@@ -3,16 +3,16 @@ import { defaultFieldResolver } from "graphql";
 
 const GROUPS = ["VIEWER", "MODERATOR", "ADMIN"];
 
-export default class HasGroupDirective extends SchemaDirectiveVisitor {
+export default class AuthDirective extends SchemaDirectiveVisitor {
 	visitFieldDefinition(field) {
-		const { group } = this.args;
+		const { requires } = this.args;
 		const { resolve = defaultFieldResolver } = field;
 		field.resolve = function(root, args, context, info) {
 			if (!context.user) throw new Error("User not authenticated");
 
-			const index = GROUPS.indexOf(group);
+			const index = GROUPS.indexOf(requires);
 			if (index === -1)
-				throw new Error(`Group ${group} not in ${GROUPS.join(",")}`);
+				throw new Error(`Group ${requires} not in ${GROUPS.join(",")}`);
 			return context.user.then(user => {
 				if (GROUPS.indexOf(user.group) >= index)
 					return resolve.call(this, root, args, context, info);

@@ -28,7 +28,7 @@ input AuthorUpdate {
 }
 
 extend type Mutation {
-	addAuthor(author: AuthorInput!): ID! @hasGroup(group: ADMIN)
-	updateAuthor(id: ID!, author: AuthorUpdate!): ID! @hasGroup(group: ADMIN)
-	deleteAuthor(id: ID!): ID! @hasGroup(group: ADMIN)
+	addAuthor(author: AuthorInput!): ID! @auth(requires: ADMIN)
+	updateAuthor(id: ID!, author: AuthorUpdate!): ID! @auth(requires: ADMIN)
+	deleteAuthor(id: ID!): ID! @auth(requires: ADMIN)
 }

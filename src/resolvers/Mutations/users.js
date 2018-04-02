@@ -1,4 +1,3 @@
-import { needAuth, notifyFriendRequests } from "../util/index";
 import { newFriendEvent } from "./events";
 import { ObjectID } from "mongodb";
 
@@ -10,7 +9,6 @@ const IMAGE_MIME_TYPES = [
 ];
 
 export function setAvatar(root, { file }, context) {
-	needAuth(context);
 	return file.then(file => {
 		if (!IMAGE_MIME_TYPES.includes(file.mimetype)) {
 			return {

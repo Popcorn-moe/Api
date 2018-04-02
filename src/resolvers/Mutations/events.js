@@ -1,8 +1,7 @@
-import { now, needAuth } from "../util";
+import { now } from "../util";
 import { ObjectID } from "mongodb";
 
 export function messageEvent({ message }, context) {
-	needAuth(context);
 	return context.user.then(({ _id }) => {
 		const event = {
 			user: new ObjectID(_id),

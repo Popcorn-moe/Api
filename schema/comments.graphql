@@ -6,9 +6,9 @@ type Comment {
 	edited: DateTime
 	replies_count: Int
 	replies(limit: Int = 50, offset: Int = 0): [Comment!]!
-	reply(content: String!): Comment!
+	reply(content: String!): Comment! @auth
 }
 
 extend type Query {
-	comment(id: ID!): Comment!
+	comment(id: ID!): Comment! @auth
 }

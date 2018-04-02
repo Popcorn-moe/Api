@@ -28,7 +28,7 @@ type NotifAnimeFollowContent implements Notification {
 }
 
 extend type Mutation {
-	delNotification(notif: ID!): Result!
+	delNotification(notif: ID!): Result! @auth
 }
 
 extend type Query {

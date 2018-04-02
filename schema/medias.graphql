@@ -10,7 +10,7 @@ interface IMedia {
 	content: String
 	comments_count: Int
 	comments(limit: Int = 50, offset: Int = 0): [Comment!]!
-	comment(content: String!): Comment!
+	comment(content: String!): Comment! @auth
 	linkTo(anime: ID!, season: Int = null, episode: Int = null): Boolean!
 		@hasGroup(group: ADMIN)
 }
@@ -77,13 +77,13 @@ extend type Query {
 }
 
 extend type Mutation {
-	addMedia(media: MediaInput!): IMedia! @hasGroup(group: ADMIN)
-	updateMedia(id: ID!, media: MediaUpdate!): ID! @hasGroup(group: ADMIN)
+	addMedia(media: MediaInput!): IMedia! @auth(requires: ADMIN)
+	updateMedia(id: ID!, media: MediaUpdate!): ID! @auth(requires: ADMIN)
 	linkMedia(
 		media: ID!
 		anime: ID!
 		season: Int = null
 		episode: Int = null
-	): Boolean! @hasGroup(group: ADMIN)
-	deleteMedia(id: ID!): ID! @hasGroup(group: ADMIN)
+	): Boolean! @auth(requires: ADMIN)
+	deleteMedia(id: ID!): ID! @auth(requires: ADMIN)
 }

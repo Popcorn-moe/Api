@@ -1,4 +1,4 @@
-directive @hasGroup(group: UserGroup) on FIELD_DEFINITION
+directive @auth(requires: UserGroup! = VIEWER) on FIELD_DEFINITION
 
 interface Dated {
 	release_date: DateTime

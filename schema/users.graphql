@@ -38,12 +38,12 @@ input UserInput {
 }
 
 extend type Mutation {
-	setAvatar(file: Upload!): Result!
-	updateUsers(users: [UserInput!]!): [ID!]! @hasGroup(group: ADMIN)
+	setAvatar(file: Upload!): Result! @auth
+	updateUsers(users: [UserInput!]!): [ID!]! @auth(requires: ADMIN)
 	blockUser(user: ID!): Boolean
 	unlockUser(user: ID!): Boolean
-	follow(id: ID!): Boolean! @hasGroup(group: VIEWER)
-	unfollow(id: ID!): Boolean! @hasGroup(group: VIEWER)
+	follow(id: ID!): Boolean! @auth
+	unfollow(id: ID!): Boolean! @auth
 }
 
 extend type Query {

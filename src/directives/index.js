@@ -1,4 +1,4 @@
-import hasGroup from "./hasGroup";
+import auth from "./auth";
 import link from "./link";
 
-export { hasGroup, link };
+export { auth, link };

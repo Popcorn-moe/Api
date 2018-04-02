@@ -1,4 +1,4 @@
-import { needAuth, now } from "./util";
+import { now } from "./util";
 import { linkMedia } from "./Mutations/medias";
 import { ObjectID } from "mongodb";
 
@@ -11,7 +11,6 @@ export function linkTo(root, { anime, season, episode }, context) {
 }
 
 export function comment({ id }, { content }, context) {
-	needAuth(context);
 	return context.user.then(({ id: userId }) => {
 		const comment = {
 			content,

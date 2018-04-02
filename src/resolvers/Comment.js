@@ -1,5 +1,5 @@
 import { userById } from "./Query";
-import { needAuth, now } from "./util";
+import { now } from "./util";
 import { ObjectID } from "mongodb";
 
 export function user({ user }, args, context) {
@@ -24,7 +24,6 @@ export function replies_count({ id }, args, context) {
 }
 
 export function reply({ reply_type, id }, { content }, context) {
-	needAuth(context);
 	if (reply_type == "COMMENT")
 		throw new Error("Cannot make a comment of comment");
 	return context.user.then(({ id: userId }) => {

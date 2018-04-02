@@ -17,7 +17,7 @@ extend type Query {
 }
 
 extend type Mutation {
-	addSlide(slide: SlideInput!): Slide! @hasGroup(group: ADMIN)
-	delSlide(id: ID!): ID! @hasGroup(group: ADMIN)
-	editSlide(id: ID!, slide: SlideInput!): Slide! @hasGroup(group: ADMIN)
+	addSlide(slide: SlideInput!): Slide! @auth(requires: ADMIN)
+	delSlide(id: ID!): ID! @auth(requires: ADMIN)
+	editSlide(id: ID!, slide: SlideInput!): Slide! @auth(requires: ADMIN)
 }

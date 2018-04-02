@@ -48,3 +48,7 @@ type MediaWatchEvent implements Event {
 extend type Query {
 	events(user: ID): [Event]!
 }
+
+extend type Mutation {
+	messageEvent(message: String!): ID!
+}

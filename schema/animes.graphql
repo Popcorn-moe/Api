@@ -4,7 +4,7 @@ type Anime implements Dated {
 	authors: [Author!]! @link(collection: "authors")
 	tags: [Tag!]! @link(collection: "tags")
 	status: AnimeStatus
-	medias: [IMedia!]! @link(collection: "medias")
+	medias: [Media!]! @link(collection: "medias")
 	seasons: [Season]!
 	season(season: Int!): Season
 	addSeason(season: SeasonInput!): Season!
@@ -20,7 +20,7 @@ type Anime implements Dated {
 type Season implements Dated {
 	anime: ID!
 	name: String!
-	episodes: [IMedia!]! @link(collection: "medias")
+	episodes: [Episode!]! @link(collection: "medias")
 	release_date: DateTime
 	edit_date: DateTime!
 	posted_date: DateTime!
@@ -70,7 +70,7 @@ input SeasonInput {
 }
 
 extend type Mutation {
-	addAnime(anime: AnimeInput!): ID! @hasGroup(group: ADMIN)
-	updateAnime(id: ID!, anime: AnimeInput!): ID! @hasGroup(group: ADMIN)
-	addSeason(anime: ID!, season: SeasonInput!): Season! @hasGroup(group: ADMIN)
+	addAnime(anime: AnimeInput!): ID! @auth(requires: ADMIN)
+	updateAnime(id: ID!, anime: AnimeInput!): ID! @auth(requires: ADMIN)
+	addSeason(anime: ID!, season: SeasonInput!): Season! @auth(requires: ADMIN)
 }
