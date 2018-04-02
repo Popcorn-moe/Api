@@ -40,14 +40,14 @@ function transformAnime(id, anime, time, storage) {
 						`${id}_cover`,
 						cover,
 						sharp()
-							.resize(150, 210)
+							.resize(180, 250)
 							.jpeg(sharpOptions)
 					),
 					storage.save(
 						`${id}_cover_big`,
 						cover,
 						sharp()
-							.resize(600, 840)
+							.resize(720, 1000)
 							.jpeg(sharpOptions)
 					)
 				])

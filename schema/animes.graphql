@@ -1,7 +1,7 @@
 type Cover {
-	# 150x210
+	# 180x250
 	normal: Url
-	# 600x840
+	# 720x1000
 	big: Url
 }
 
