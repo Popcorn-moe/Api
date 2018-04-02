@@ -7,6 +7,7 @@ type User {
 	account_registered: Boolean!
 	playlists: [Playlist!]! @link(collection: "playlists")
 	avatar: Url
+	background: Url
 	ratings: [AnimeRating!]!
 	rating_for(id: ID!): AnimeRating
 	blocked: [User!]! @link(collection: "users")
@@ -39,6 +40,7 @@ input UserInput {
 
 extend type Mutation {
 	setAvatar(file: Upload!): Result! @auth
+	setBackground(file: Upload!): Result! @auth
 	updateUsers(users: [UserInput!]!): [ID!]! @auth(requires: ADMIN)
 	blockUser(user: ID!): Boolean
 	unlockUser(user: ID!): Boolean

@@ -1,5 +1,5 @@
 type Kyun {
-	url: String
+	url: Url
 }
 
 extend type Query {

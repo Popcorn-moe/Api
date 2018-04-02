@@ -12,13 +12,33 @@ export function setAvatar(root, { file }, context) {
 	return file.then(file => {
 		if (!IMAGE_MIME_TYPES.includes(file.mimetype)) {
 			return {
-				error: `MimeType ${file.mimetype} is not and image Mime Type`
+				error: `MimeType ${file.mimetype} is not an image Mime Type`
 			};
 		}
 		return context.user
 			.then(user =>
-				context.storage.save(user.id, file).then(url => {
+				context.storage.save(`${user.id}_avatar`, file).then(url => {
 					user.avatar = url;
+					return user.save();
+				})
+			)
+			.then(() => ({
+				error: null
+			}));
+	});
+}
+
+export function setBackground(root, { file }, context) {
+	return file.then(file => {
+		if (!IMAGE_MIME_TYPES.includes(file.mimetype)) {
+			return {
+				error: `MimeType ${file.mimetype} is not an image Mime Type`
+			};
+		}
+		return context.user
+			.then(user =>
+				context.storage.save(`${user.id}_background`, file).then(url => {
+					user.background = url;
 					return user.save();
 				})
 			)
@@ -43,7 +63,8 @@ export async function follow(root, { id }, { user }) {
 	if (!me.follows) me.follows = [];
 	if (me.follows.findIndex(f => f.toString() == id) !== -1) return true;
 	me.follows.push(new ObjectID(id));
-	return me.save().then(() => true);
+	await me.save();
+	return true;
 }
 
 export async function unfollow(root, { id }, { user }) {
@@ -52,5 +73,6 @@ export async function unfollow(root, { id }, { user }) {
 	const follower = me.follows.findIndex(f => f.toString() == id);
 	if (follower === -1) return true;
 	me.follows.splice(follower, 1);
-	return me.save().then(() => true);
+	await me.save();
+	return true;
 }
