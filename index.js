@@ -29,6 +29,7 @@ import { MongoClient } from "mongodb";
 import JwtStrategy from "./src/auth/JwtStrategy";
 import AnonymousStrategy from "passport-anonymous";
 import { FileStorage, MinioStorage } from "./src/storage";
+import DBMigrate from "db-migrate";
 
 const {
 	MINIO_ENDPOINT,
@@ -93,33 +94,48 @@ SubscriptionServer(
 	}
 );
 
-MongoClient.connect(url).then(db => {
-	app.use((req, res, next) => {
-		req.db = db;
-		req.storage = storage;
-		req.pubsub = pubsub;
-		next();
-	});
-	app.post(
-		"/graphql",
-		passport.authenticate(["jwt", "anonymous"]),
-		apolloUploadExpress(),
-		instrumentMiddleware((req, res, next) =>
-			graphqlExpress({
-				schema,
-				context: req,
-				tracing: true,
-				formatError(e) {
-					console.error(e);
-					return e;
-				}
-			})(req, res, next)
-		)
-	);
-	passport.use(new JwtStrategy(db.collection("users")));
-
-	console.log("Connected on mongodb");
+const dbm = DBMigrate.getInstance(true, {
+	config: {
+		defaultEnv: "mongo",
+		mongo: url
+	}
 });
+
+dbm.up().then(
+	() => {
+		MongoClient.connect(url).then(db => {
+			app.use((req, res, next) => {
+				req.db = db;
+				req.storage = storage;
+				req.pubsub = pubsub;
+				next();
+			});
+			app.post(
+				"/graphql",
+				passport.authenticate(["jwt", "anonymous"]),
+				apolloUploadExpress(),
+				instrumentMiddleware((req, res, next) =>
+					graphqlExpress({
+						schema,
+						context: req,
+						tracing: true,
+						formatError(e) {
+							console.error(e);
+							return e;
+						}
+					})(req, res, next)
+				)
+			);
+			passport.use(new JwtStrategy(db.collection("users")));
+
+			console.log("Connected on mongodb");
+		});
+	},
+	e => {
+		console.error("Migration failed", e);
+		dbm.down().then(() => process.exit(-1));
+	}
+);
 
 app.listen(3030, () => console.log("Listening on port 3030"));
 

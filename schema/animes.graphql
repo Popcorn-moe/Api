@@ -1,3 +1,10 @@
+type Cover {
+	# 150x210
+	normal: Url
+	# 600x840
+	big: Url
+}
+
 type Anime implements Dated {
 	id: ID!
 	names: [String!]!
@@ -8,7 +15,7 @@ type Anime implements Dated {
 	seasons: [Season]!
 	season(season: Int!): Season
 	addSeason(season: SeasonInput!): Season!
-	cover: Url
+	cover: Cover!
 	background: Url
 	desc: String
 

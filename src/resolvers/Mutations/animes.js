@@ -50,14 +50,17 @@ function transformAnime(id, anime, time, storage) {
 							.resize(600, 840)
 							.jpeg(sharpOptions)
 					)
-				]).then(([small]) => small)
+				])
 			),
 		anime.background &&
 			anime.background.then(background =>
 				storage.save(`${id}_background`, background, sharp().jpeg(sharpOptions))
 			)
-	]).then(([cover, background]) => {
-		if (cover) anime.cover = cover;
+	]).then(([[normal, big] = [], background]) => {
+		anime.cover = {
+			normal,
+			big
+		};
 		if (background) anime.background = background;
 		anime.edit_date = time;
 		return anime;
