@@ -12,7 +12,7 @@ interface IMedia {
 	comments(limit: Int = 50, offset: Int = 0): [Comment!]!
 	comment(content: String!): Comment! @auth
 	linkTo(anime: ID!, season: Int = null, episode: Int = null): Boolean!
-		@auth(group: ADMIN)
+		@auth(requires: ADMIN)
 }
 
 type Media implements IMedia {

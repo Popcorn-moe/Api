@@ -1,6 +1,7 @@
 directive @auth(
 	requires: UserGroup! = VIEWER
 	error: Boolean! = true
+	allowIsMe: Boolean! = false
 ) on FIELD_DEFINITION
 
 interface Dated {

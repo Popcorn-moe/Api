@@ -5,7 +5,7 @@ const GROUPS = ["VIEWER", "MODERATOR", "ADMIN"];
 
 export default class AuthDirective extends SchemaDirectiveVisitor {
 	visitFieldDefinition(field) {
-		const { requires, error } = this.args;
+		const { requires, error, allowIsMe } = this.args;
 		const { resolve = defaultFieldResolver } = field;
 		field.resolve = function(root, args, context, info) {
 			if (!context.user) {
@@ -20,7 +20,10 @@ export default class AuthDirective extends SchemaDirectiveVisitor {
 				else return null;
 			}
 			return context.user.then(user => {
-				if (GROUPS.indexOf(user.group) >= index)
+				if (
+					(allowIsMe && root.id.toString() === user.id.toString()) ||
+					GROUPS.indexOf(user.group) >= index
+				)
 					return resolve.call(this, root, args, context, info);
 				else {
 					if (error) return Promise.reject(`Need group ${group}`);

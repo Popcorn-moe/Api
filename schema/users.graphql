@@ -1,7 +1,18 @@
+type DiscordAccount {
+	id: ID!
+	username: String!
+	discriminator: String!
+}
+
+type TwitterAccount {
+	id: ID!
+	username: String!
+}
+
 type User {
 	id: ID!
 	login: String!
-	email: String @auth(group: ADMIN, error: false)
+	email: String @auth(requires: ADMIN, error: false, allowIsMe: true)
 	group: UserGroup!
 	newsletter: Boolean!
 	account_registered: Boolean!
@@ -15,6 +26,11 @@ type User {
 	followers: [User!]!
 	notifications: [Notification!]!
 	isFollower(id: ID!): Boolean!
+
+	# SSO
+
+	discord: DiscordAccount @auth(requires: ADMIN, error: false, allowIsMe: true)
+	twitter: TwitterAccount @auth(requires: ADMIN, error: false, allowIsMe: true)
 }
 
 enum UserGroup {
