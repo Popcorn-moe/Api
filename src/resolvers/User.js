@@ -15,10 +15,10 @@ export function avatar({ avatar, email }, args, context) {
 	);
 }
 
-export function followers({ _id }, args, { db }) {
+export function followers({ id }, args, { db }) {
 	return db
 		.collection("users")
-		.find({ follows: _id })
+		.find({ follows: new ObjectID(id) })
 		.map(({ _id, ...fields }) => ({ id: _id, ...fields }))
 		.toArray();
 }
