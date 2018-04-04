@@ -1,5 +1,6 @@
 enum EventType {
 	MESSAGE
+	USER_FOLLOW
 	ANIME_FOLLOW
 	PLAYLIST_ADD
 	MEDIA_WATCH
@@ -18,6 +19,14 @@ type MessageEvent implements Event {
 	date: Date!
 	type: EventType!
 	message: String!
+}
+
+type UserFollowEvent implements Event {
+	id: ID!
+	user: User!
+	date: Date!
+	type: EventType!
+	follow: User! @link(collection: "users")
 }
 
 type AnimeFollowEvent implements Event {

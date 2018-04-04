@@ -1,4 +1,4 @@
-import { newFriendEvent } from "./events";
+import { userFollowEvent } from "./events";
 import { ObjectID } from "mongodb";
 
 const IMAGE_MIME_TYPES = [
@@ -58,16 +58,17 @@ export function updateUsers(root, { users }, context) {
 	).then(() => users.map(({ id }) => id));
 }
 
-export async function follow(root, { id }, { user }) {
+export async function follow(root, { id }, { user, db }) {
 	const me = await user;
 	if (!me.follows) me.follows = [];
 	if (me.follows.findIndex(f => f.toString() == id) !== -1) return true;
 	me.follows.push(new ObjectID(id));
+	userFollowEvent(id, { user, db });
 	await me.save();
 	return true;
 }
 
-export async function unfollow(root, { id }, { user }) {
+export async function unfollow(root, { id }, { user, db }) {
 	const me = await user;
 	if (!me.follows) me.follows = [];
 	const follower = me.follows.findIndex(f => f.toString() == id);

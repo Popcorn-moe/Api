@@ -17,3 +17,19 @@ export function messageEvent({ message }, context) {
 			});
 	});
 }
+
+export function userFollowEvent(user, context) {
+	return context.user.then(({ _id }) => {
+		const event = {
+			user: new ObjectID(_id),
+			type: "USER_FOLLOW",
+			follow: new ObjectID(user)
+		};
+		return context.db
+			.collection("events")
+			.findOneAndUpdate(event, { ...event, date: now() }, { upsert: true })
+			.then(({ insertedId }) => {
+				return insertedId; //TODO: add subscription
+			});
+	});
+}

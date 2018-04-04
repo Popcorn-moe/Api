@@ -221,6 +221,7 @@ export function events(root, { user }, context) {
 		.collection("events")
 		.find({ user: new ObjectID(user) })
 		.map(({ _id, ...fields }) => ({ id: _id, ...fields }))
+		.sort({ date: -1 })
 		.toArray();
 }
 
