@@ -5,13 +5,21 @@ import { addNews, updateNews, deleteNews } from "./news";
 import { delNotification } from "./notifications";
 import { addTag, deleteTag, updateTag } from "./tags";
 import { addSlide, editSlide, delSlide } from "./slider";
+import {
+	addAnimeToPlaylist,
+	addMediaToPlaylist,
+	addPlaylist,
+	remPlaylist
+} from "./playlist";
 
 import {
 	setAvatar,
 	setBackground,
 	updateUsers,
 	follow,
-	unfollow
+	unfollow,
+	followAnime,
+	unfollowAnime
 } from "./users";
 
 export {
@@ -19,6 +27,11 @@ export {
 	addAnime,
 	addSeason,
 	updateAnime,
+	//PLAYLIST,
+	addAnimeToPlaylist,
+	addMediaToPlaylist,
+	addPlaylist,
+	remPlaylist,
 	//AUTHOR
 	addAuthor,
 	deleteAuthor,
@@ -44,6 +57,8 @@ export {
 	updateUsers,
 	follow,
 	unfollow,
+	followAnime,
+	unfollowAnime,
 	//SLIDER
 	addSlide,
 	editSlide,

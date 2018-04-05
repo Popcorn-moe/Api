@@ -27,6 +27,8 @@ type User {
 	notifications: [Notification!]!
 	isFollower(id: ID!): Boolean!
 
+	animeFollows: [Anime!]! @link(collection: "animes")
+
 	# SSO
 
 	discord: DiscordAccount @auth(requires: ADMIN, error: false, allowIsMe: true)
@@ -62,6 +64,8 @@ extend type Mutation {
 	unlockUser(user: ID!): Boolean
 	follow(id: ID!): Boolean! @auth
 	unfollow(id: ID!): Boolean! @auth
+	followAnime(anime: ID!): Boolean @auth
+	unfollowAnime(anime: ID!): Boolean @auth
 }
 
 extend type Query {

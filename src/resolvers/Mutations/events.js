@@ -33,3 +33,19 @@ export function userFollowEvent(user, context) {
 			});
 	});
 }
+
+export function animeFollowEvent(anime, context) {
+	return context.user.then(({ _id }) => {
+		const event = {
+			user: new ObjectID(_id),
+			type: "ANIME_FOLLOW",
+			anime: anime
+		};
+		return context.db
+			.collection("events")
+			.findOneAndUpdate(event, { ...event, date: now() }, { upsert: true })
+			.then(({ insertedId }) => {
+				return insertedId; //TODO: add subscription
+			});
+	});
+}

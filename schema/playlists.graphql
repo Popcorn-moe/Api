@@ -1,16 +1,27 @@
 type Playlist {
 	id: ID!
-	author: User!
+	owner: User!
 	name: String!
-	medias: [PlaylistElem!]!
+	elements: [PlaylistElem!]!
 }
 
 union PlaylistElem = PlaylistAnimeElem | PlaylistMediaElem
 
 type PlaylistAnimeElem {
 	anime: Anime! @link(collection: "animes", objectId: false)
+	date: Date!
 }
 
 type PlaylistMediaElem {
 	media: IMedia! @link(collection: "medias")
+	date: Date!
+}
+
+extend type Mutation {
+	addPlaylist(name: String!): ID!
+	remPlaylist(id: ID!): ID!
+	addAnimeToPlaylist(playlist: ID!, anime: ID!): PlaylistElem!
+	addMediaToPlaylist(playlist: ID!, media: ID!): PlaylistElem!
+	remAnimeFromPlaylist(playlist: ID!, anime: ID): ID!
+	remMediaFromPlaylist(playlist: ID!, anime: ID): ID!
 }
