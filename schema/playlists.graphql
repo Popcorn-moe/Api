@@ -23,5 +23,5 @@ extend type Mutation {
 	addAnimeToPlaylist(playlist: ID!, anime: ID!): PlaylistElem!
 	addMediaToPlaylist(playlist: ID!, media: ID!): PlaylistElem!
 	remAnimeFromPlaylist(playlist: ID!, anime: ID): ID!
-	remMediaFromPlaylist(playlist: ID!, anime: ID): ID!
+	remMediaFromPlaylist(playlist: ID!, media: ID): ID!
 }

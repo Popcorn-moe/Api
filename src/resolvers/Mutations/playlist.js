@@ -62,3 +62,31 @@ export function addMediaToPlaylist(root, { playlist, media }, { user, db }) {
 		)
 		.then(() => element);
 }
+
+export function remAnimeFromPlaylist(root, { playlist, anime }, { user, db }) {
+	return db
+		.collection("playlists")
+		.updateOne(
+			{
+				_id: new ObjectID(playlist)
+			},
+			{
+				$pull: { elements: { anime } }
+			}
+		)
+		.then(() => element);
+}
+
+export function remMadiaFromPlaylist(root, { playlist, anime }, { user, db }) {
+	return db
+		.collection("playlists")
+		.updateOne(
+			{
+				_id: new ObjectID(playlist)
+			},
+			{
+				$pull: { elements: { media: new ObjectID(media) } }
+			}
+		)
+		.then(() => element);
+}

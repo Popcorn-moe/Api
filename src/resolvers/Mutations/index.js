@@ -9,7 +9,9 @@ import {
 	addAnimeToPlaylist,
 	addMediaToPlaylist,
 	addPlaylist,
-	remPlaylist
+	remPlaylist,
+	remAnimeFromPlaylist,
+	remMadiaFromPlaylist
 } from "./playlist";
 
 import {
@@ -32,6 +34,8 @@ export {
 	addMediaToPlaylist,
 	addPlaylist,
 	remPlaylist,
+	remAnimeFromPlaylist,
+	remMadiaFromPlaylist,
 	//AUTHOR
 	addAuthor,
 	deleteAuthor,
