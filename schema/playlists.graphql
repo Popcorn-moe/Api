@@ -17,6 +17,10 @@ type PlaylistMediaElem {
 	date: Date!
 }
 
+extend type Query {
+	getPlaylist(id: ID!): Playlist!
+}
+
 extend type Mutation {
 	addPlaylist(name: String!): ID! @auth
 	remPlaylist(id: ID!): ID! @auth

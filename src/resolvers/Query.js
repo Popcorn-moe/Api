@@ -144,6 +144,15 @@ export function lastTrailers(root, { limit }, context) {
 		.toArray();
 }
 
+export function getPlaylist(root, { id }, { db }) {
+	return db
+		.collection("playlists")
+		.find({ _id: new ObjectID(id) })
+		.limit(1)
+		.map(({ _id, ...fields }) => ({ id: _id, ...fields }))
+		.toArray();
+}
+
 export function slider(root, args, context) {
 	return context.db
 		.collection("slider")
