@@ -27,7 +27,7 @@ type User {
 	notifications: [Notification!]!
 	isFollower(id: ID!): Boolean!
 
-	animeFollows: [Anime!]! @link(collection: "animes")
+	animeFollows: [Anime!]! @link(collection: "animes", objectId: false)
 
 	# SSO
 

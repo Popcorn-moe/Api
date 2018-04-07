@@ -77,7 +77,7 @@ export function remAnimeFromPlaylist(root, { playlist, anime }, { user, db }) {
 		.then(() => element);
 }
 
-export function remMadiaFromPlaylist(root, { playlist, anime }, { user, db }) {
+export function remMediaFromPlaylist(root, { playlist, anime }, { user, db }) {
 	return db
 		.collection("playlists")
 		.updateOne(

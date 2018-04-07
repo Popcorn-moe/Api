@@ -11,7 +11,7 @@ import {
 	addPlaylist,
 	remPlaylist,
 	remAnimeFromPlaylist,
-	remMadiaFromPlaylist
+	remMediaFromPlaylist
 } from "./playlist";
 
 import {
@@ -35,7 +35,7 @@ export {
 	addPlaylist,
 	remPlaylist,
 	remAnimeFromPlaylist,
-	remMadiaFromPlaylist,
+	remMediaFromPlaylist,
 	//AUTHOR
 	addAuthor,
 	deleteAuthor,

@@ -82,7 +82,7 @@ export async function followAnime(root, { anime }, { user, db }) {
 	const me = await user;
 	if (!me.animeFollows) me.animeFollows = [];
 	if (me.animeFollows.findIndex(f => f.toString() == anime) !== -1) return true;
-	me.animeFollows.push(new ObjectID(anime));
+	me.animeFollows.push(anime);
 	animeFollowEvent(anime, { user, db });
 	await me.save();
 	return true;
@@ -91,7 +91,7 @@ export async function followAnime(root, { anime }, { user, db }) {
 export async function unfollowAnime(root, { anime: id }, { user, db }) {
 	const me = await user;
 	if (!me.animeFollows) me.animeFollows = [];
-	const anime = me.animeFollows.findIndex(f => f.toString() == id);
+	const anime = me.animeFollows.findIndex(f => f == id);
 	if (anime === -1) return true;
 	me.animeFollows.splice(anime, 1);
 	await me.save();
