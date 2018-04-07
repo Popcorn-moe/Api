@@ -27,7 +27,7 @@ type Media implements IMedia {
 	content: String
 	comments_count: Int
 	comments(limit: Int = 50, offset: Int = 0): [Comment!]!
-	comment(content: String!): Comment! @auth
+	comment(content: String!): Comment!
 	linkTo(anime: ID!, season: Int = null, episode: Int = null): Boolean!
 }
 
@@ -43,7 +43,7 @@ type Episode implements IMedia {
 	content: String
 	comments_count: Int
 	comments(limit: Int = 50, offset: Int = 0): [Comment!]!
-	comment(content: String!): Comment! @auth
+	comment(content: String!): Comment!
 	linkTo(anime: ID!, season: Int = null, episode: Int = null): Boolean!
 	episode: Int
 	season: Int
