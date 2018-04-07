@@ -2,7 +2,7 @@ type Playlist {
 	id: ID!
 	owner: User!
 	name: String!
-	elements: [PlaylistElem!]!
+	elements: [PlaylistElem!]
 }
 
 union PlaylistElem = PlaylistAnimeElem | PlaylistMediaElem
