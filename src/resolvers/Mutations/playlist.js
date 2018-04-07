@@ -7,7 +7,7 @@ export async function addPlaylist(root, { name }, { user, db }) {
 		.collection("playlists")
 		.insertOne({
 			name,
-			owner: new ObjectID(me._id)
+			owner: new ObjectID(me.id)
 		})
 		.then(({ insertedId }) => {
 			if (!me.playlists) me.playlists = [];

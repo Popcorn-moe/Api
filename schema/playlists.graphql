@@ -18,10 +18,10 @@ type PlaylistMediaElem {
 }
 
 extend type Mutation {
-	addPlaylist(name: String!): ID!
-	remPlaylist(id: ID!): ID!
-	addAnimeToPlaylist(playlist: ID!, anime: ID!): PlaylistElem!
-	addMediaToPlaylist(playlist: ID!, media: ID!): PlaylistElem!
-	remAnimeFromPlaylist(playlist: ID!, anime: ID): ID!
-	remMediaFromPlaylist(playlist: ID!, media: ID): ID!
+	addPlaylist(name: String!): ID! @auth
+	remPlaylist(id: ID!): ID! @auth
+	addAnimeToPlaylist(playlist: ID!, anime: ID!): PlaylistElem! @auth
+	addMediaToPlaylist(playlist: ID!, media: ID!): PlaylistElem! @auth
+	remAnimeFromPlaylist(playlist: ID!, anime: ID): ID! @auth
+	remMediaFromPlaylist(playlist: ID!, media: ID): ID! @auth
 }
