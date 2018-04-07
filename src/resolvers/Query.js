@@ -150,7 +150,7 @@ export function getPlaylist(root, { id }, { db }) {
 		.find({ _id: new ObjectID(id) })
 		.limit(1)
 		.map(({ _id, ...fields }) => ({ id: _id, ...fields }))
-		.toArray();
+		.next();
 }
 
 export function slider(root, args, context) {
