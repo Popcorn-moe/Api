@@ -1,7 +1,7 @@
 {
-  "name": "popcorn.moe-backend",
+  "name": "@popcorn.moe/api",
   "version": "1.0.0",
-  "description": "Popcorn.moe Backend",
+  "description": "Popcorn.moe Api",
   "main": "index.js",
   "scripts": {
     "start": "babel-node index.js",
@@ -20,14 +20,14 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/Popcorn-moe/Popcorn.moe-Backend.git"
+    "url": "git+https://github.com/Popcorn-moe/Api.git"
   },
   "author": "Popcorn-moe",
   "license": "GPL-3.0",
   "bugs": {
-    "url": "https://github.com/Popcorn-moe/Popcorn.moe-Backend/issues"
+    "url": "https://github.com/Popcorn-moe/Api/issues"
   },
-  "homepage": "https://github.com/Popcorn-moe/Popcorn.moe-Backend#readme",
+  "homepage": "https://github.com/Popcorn-moe/Api#readme",
   "devDependencies": {
     "babel-cli": "^6.26.0",
     "babel-jest": "^22.4.4",
