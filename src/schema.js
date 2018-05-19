@@ -11,5 +11,8 @@ export default makeExecutableSchema({
 		readFileSync(join(SCHEMA_DIR, file), "utf8")
 	),
 	resolvers,
-	schemaDirectives
+	schemaDirectives,
+	resolverValidationOptions: {
+		requireResolversForResolveType: false
+	}
 });
