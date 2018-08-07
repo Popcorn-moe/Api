@@ -16,7 +16,7 @@ export default class FileStorage extends Storage {
 
 	write(filename, mimetype, stream) {
 		return new Promise((resolve, reject) => {
-			const file = `${filename}.${mime.extension(mimetype)}`;
+			const file = `${filename}.${mime.getExtension(mimetype)}`;
 			const wstream = createWriteStream(join(this.dest, file));
 			stream.pipe(wstream);
 			stream.on("end", _ =>
