@@ -37,14 +37,15 @@ const {
 	MINIO_KEY,
 	MINIO_SECRET,
 	MINIO_SECURE,
-	MINIO_BUCKET
+	MINIO_BUCKET,
+
+	MONGO_URL = "mongodb://localhost:27017/popcornmoe_backend"
 } = process.env;
 
 heritFromInterface(schema);
 memoize(schema);
 instrument(schema);
 
-const url = "mongodb://localhost:27017/popcornmoe_backend";
 const app = express();
 let storage;
 
@@ -97,13 +98,13 @@ SubscriptionServer(
 const dbm = DBMigrate.getInstance(true, {
 	config: {
 		defaultEnv: "mongo",
-		mongo: url
+		mongo: MONGO_URL
 	}
 });
 
 dbm.up().then(
 	() => {
-		MongoClient.connect(url).then(db => {
+		MongoClient.connect(MONGO_URL).then(db => {
 			app.use((req, res, next) => {
 				req.db = db;
 				req.storage = storage;
