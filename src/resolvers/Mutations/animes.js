@@ -57,10 +57,12 @@ function transformAnime(id, anime, time, storage) {
 				storage.save(`${id}_background`, background, sharp().jpeg(sharpOptions))
 			)
 	]).then(([[normal, big] = [], background]) => {
-		anime.cover = {
-			normal,
-			big
-		};
+		if (normal && big) {
+			anime.cover = {
+				normal,
+				big
+			};
+		}
 		if (background) anime.background = background;
 		anime.edit_date = time;
 		return anime;
