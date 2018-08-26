@@ -2,7 +2,6 @@ enum EventType {
 	MESSAGE
 	USER_FOLLOW
 	ANIME_FOLLOW
-	PLAYLIST_ADD
 	MEDIA_WATCH
 }
 
@@ -35,15 +34,6 @@ type AnimeFollowEvent implements Event {
 	date: Date!
 	type: EventType!
 	anime: Anime! @link(collection: "animes", objectId: false)
-}
-
-type PlaylistAddEvent implements Event {
-	id: ID!
-	user: User!
-	date: Date!
-	type: EventType!
-	playlist: Playlist! @link(collection: "playlists")
-	element: PlaylistElem!
 }
 
 type MediaWatchEvent implements Event {

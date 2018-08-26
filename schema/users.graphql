@@ -16,7 +16,6 @@ type User {
 	group: UserGroup!
 	newsletter: Boolean!
 	account_registered: Boolean!
-	playlists: [Playlist!]! @link(collection: "playlists")
 	avatar: Url
 	background: Url
 	ratings: [AnimeRating!]!
@@ -27,12 +26,32 @@ type User {
 	notifications: [Notification!]!
 	isFollower(id: ID!): Boolean!
 
+	meta(anime: ID!): Meta
+	metas: [Meta!]
+
 	animeFollows: [Anime!]! @link(collection: "animes", objectId: false)
 
 	# SSO
 
 	discord: DiscordAccount @auth(requires: ADMIN, error: false, allowIsMe: true)
 	twitter: TwitterAccount @auth(requires: ADMIN, error: false, allowIsMe: true)
+}
+
+enum MetaAnimeStatus {
+	WATCHING
+	COMPLETED
+	ON_HOLD
+	WANT_TO_WATCH
+	DROPPED
+}
+
+type Meta {
+	anime: Anime! @link(collection: "animes", objectId: false)
+	status: MetaAnimeStatus
+}
+
+input MetaInput {
+	status: MetaAnimeStatus
 }
 
 enum UserGroup {
@@ -59,6 +78,7 @@ input UserInput {
 extend type Mutation {
 	setAvatar(file: Upload!): Result! @auth
 	setBackground(file: Upload!): Result! @auth
+	updateMeta(anime: ID!, meta: MetaInput!): Meta @auth
 	updateUsers(users: [UserInput!]!): [ID!]! @auth(requires: ADMIN)
 	blockUser(user: ID!): Boolean
 	unlockUser(user: ID!): Boolean

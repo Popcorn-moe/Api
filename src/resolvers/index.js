@@ -5,7 +5,6 @@ import * as User from "./User";
 import * as Anime from "./Anime";
 import * as Comment from "./Comment";
 import * as Author from "./Author";
-import * as PlaylistElem from "./PlaylistElem";
 import * as Notification from "./Notification";
 
 import * as Event from "./Event";
@@ -23,7 +22,6 @@ export {
 	Author,
 	IMedia,
 	Comment,
-	PlaylistElem,
 	Notification,
 	Event,
 	//types

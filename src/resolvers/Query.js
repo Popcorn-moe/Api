@@ -6,7 +6,7 @@ export function me(root, args, context) {
 				if (!user.friends) user.friends = [];
 				if (!user.blocked) user.blocked = [];
 				return user;
-			})
+		  })
 		: null;
 }
 
@@ -93,7 +93,7 @@ export function animes(root, { limit, sort }, context) {
 				? {}
 				: {
 						name: sort === "ASC" ? 1 : -1
-					}
+				  }
 		)
 		.map(({ _id, ...fields }) => ({ id: _id, ...fields }))
 		.toArray();
@@ -142,15 +142,6 @@ export function lastTrailers(root, { limit }, context) {
 		.limit(limit)
 		.map(({ _id, ...fields }) => ({ id: _id, ...fields }))
 		.toArray();
-}
-
-export function getPlaylist(root, { id }, { db }) {
-	return db
-		.collection("playlists")
-		.find({ _id: new ObjectID(id) })
-		.limit(1)
-		.map(({ _id, ...fields }) => ({ id: _id, ...fields }))
-		.next();
 }
 
 export function slider(root, args, context) {

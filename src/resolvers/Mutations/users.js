@@ -97,3 +97,12 @@ export async function unfollowAnime(root, { anime: id }, { user, db }) {
 	await me.save();
 	return true;
 }
+
+export async function updateMeta(root, { anime, meta }, { user }) {
+	const me = await user;
+	if (!me.metas) me.metas = {};
+	if (!me.metas[anime]) me.metas[anime] = {};
+	Object.assign(me.metas[anime], meta);
+	await me.save();
+	return me.metas[anime];
+}

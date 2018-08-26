@@ -2,8 +2,8 @@ import { getNotifications } from "./Query";
 import { ObjectID } from "mongodb";
 import md5 from "md5";
 
-export function notifications(root, args, context) {
-	return getNotifications(null, { user: root.id }, context);
+export function notifications({ id: user }, args, context) {
+	return getNotifications(null, user, context);
 }
 
 export function avatar({ avatar, email }, args, context) {
@@ -24,10 +24,24 @@ export function followers({ id }, args, { db }) {
 }
 
 export async function isFollower(root, { id }, { db }) {
-	return !!await db
+	return !!(await db
 		.collection("users")
 		.find({ _id: new ObjectID(id), follows: new ObjectID(root.id) })
 		.limit(1)
 		.map(({ _id }) => ({ id: _id }))
-		.next();
+		.next());
+}
+
+export function meta({ metas }, { anime }, context) {
+	return metas && metas.hasOwnProperty(anime) && metas[anime];
+}
+
+export function metas({ metas }, args, context) {
+	return (
+		metas &&
+		Object.keys(metas).map(anime => ({
+			...metas[anime],
+			anime
+		}))
+	);
 }

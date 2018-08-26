@@ -6,8 +6,6 @@ export function __resolveType(obj) {
 			return "UserFollowEvent";
 		case "ANIME_FOLLOW":
 			return "AnimeFollowEvent";
-		case "PLAYLIST_ADD":
-			return "PlaylistAddEvent";
 		case "MEDIA_WATCH":
 			return "MediaWatchEvent";
 	}
