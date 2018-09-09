@@ -8,7 +8,7 @@
     "test": "jest --collectCoverageFrom='src/**'",
     "flowgen": "babel-node build/flow.js",
     "check": "flow check",
-    "format": "prettier --write 'index.js' 'schema/*.graphql' 'build/**/*.js' 'migrations/**/*.js' 'src/**/*.js' 'test/**/*.js'",
+    "format": "prettier --write index.js schema/**.graphql build/**/**.js migrations/**/**.js src/**/**.js test/**/**.js",
     "precommit": "lint-staged",
     "migration": "node create-migration"
   },

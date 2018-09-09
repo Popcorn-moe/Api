@@ -39,7 +39,7 @@ export function linkMedia(root, { media, anime, season, episode }, context) {
 								$position: episode
 							}
 						}
-					}
+				  }
 				: { $push: { medias: media } }
 		),
 		context.db

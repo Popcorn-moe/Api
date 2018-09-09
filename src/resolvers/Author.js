@@ -14,7 +14,7 @@ export function animes({ id }, { limit, sort }, context) {
 				? {}
 				: {
 						name: sort === "ASC" ? 1 : -1
-					}
+				  }
 		)
 		.map(({ _id, ...fields }) => ({ id: _id, ...fields }))
 		.toArray();
