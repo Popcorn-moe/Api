@@ -1,6 +1,7 @@
 import { now } from "./util";
 import { linkMedia } from "./Mutations/medias";
 import { ObjectID } from "mongodb";
+import { rawUrl, isBayfiles } from "../bayfiles";
 
 export function __resolveType({ type }) {
 	return type === "EPISODE" ? "Episode" : "Media";
@@ -28,6 +29,10 @@ export function comment({ id }, { content }, context) {
 				id: insertedId
 			}));
 	});
+}
+
+export function content({ id }, { content }, context) {
+	return isBayfiles(content) ? rawUrl(content) : content;
 }
 
 export function comments_count({ id }, args, context) {
