@@ -138,7 +138,7 @@ dbm.up().then(
 	}
 );
 
-app.listen(3031, () => console.log("Listening on port 3030"));
+app.listen(3030, () => console.log("Listening on port 3030"));
 
 process.on("unhandledRejection", error =>
 	console.error("unhandledRejection", error)
