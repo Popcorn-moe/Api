@@ -5,6 +5,7 @@ import { addNews, updateNews, deleteNews } from "./news";
 import { delNotification } from "./notifications";
 import { addTag, deleteTag, updateTag } from "./tags";
 import { addSlide, editSlide, delSlide } from "./slider";
+import { deleteComment } from "./comments";
 
 import {
 	setAvatar,
@@ -53,7 +54,9 @@ export {
 	//SLIDER
 	addSlide,
 	editSlide,
-	delSlide
+	delSlide,
+	//COMMENTS
+	deleteComment
 };
 
 export function hello(root, { name }, context) {
