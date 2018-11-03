@@ -9,6 +9,10 @@ type Comment {
 	reply(content: String!): Comment! @auth
 }
 
+extend type Mutation {
+	deleteComment(id: ID!): ID! @auth
+}
+
 extend type Query {
 	comment(id: ID!): Comment! @auth
 }
